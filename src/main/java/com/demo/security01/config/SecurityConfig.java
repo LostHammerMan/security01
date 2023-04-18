@@ -1,0 +1,36 @@
+package com.demo.security01.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+@Configuration
+@EnableWebSecurity // 스프링 시큐리티 필터(SecurityConfig class)가 스프링 필터체인에 등록됨
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers("/user/**").authenticated()
+                .antMatchers("/manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .anyRequest().permitAll() // 그 외 다른 요청은 모두에게 열려있음
+                .and()
+                .formLogin()
+                .loginPage("/loginForm") // 로그인 페이지 화면
+                .usernameParameter("username") // default : username, 다른 파라미터로 바꾸려는 경우 해당 파라미터 이름으로 작성
+                .loginProcessingUrl("/login") // login 주소 호출 -> 시큐리티가 낚아채서 대신 로그인 진행 --> controller 에 login 만들지 않아도 됨
+                .defaultSuccessUrl("/");
+
+    }
+
+    @Bean
+    public BCryptPasswordEncoder encoder(){
+        return new BCryptPasswordEncoder();
+    }
+}
