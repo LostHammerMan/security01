@@ -1,6 +1,7 @@
 package com.demo.security01.service;
 
 import com.demo.security01.entity.User;
+import com.demo.security01.model.Role;
 import com.demo.security01.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +18,11 @@ public class UserService {
 
     public void save(User user){
 
-        log.info("user={}", user);
         String rawPwd = user.getPassword();
         String encPwd = encoder.encode(rawPwd);
-
         user.setPassword(encPwd);
+        user.setRole(Role.ADMIN);
+        log.info("user = {}", user);
         userRepository.save(user);
 
     }

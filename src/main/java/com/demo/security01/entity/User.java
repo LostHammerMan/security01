@@ -27,7 +27,7 @@ public class User {
     @Enumerated(EnumType.STRING) // ENUM 타입의 값이 글자 그대로 저장
     private Role role;
 
-    private Timestamp loginDate;
+//    private Timestamp loginDate;
 
     @CreationTimestamp
     private Timestamp createDate;

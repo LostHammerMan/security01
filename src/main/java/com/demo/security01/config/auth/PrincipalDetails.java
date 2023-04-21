@@ -31,11 +31,15 @@ public class PrincipalDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collect = new ArrayList<>();
         collect.add(new GrantedAuthority() {
+           /* @Override
+            public String getAuthority() {
+                return null;
+            }*/
 
             // ENUM 타입을 사용한 경우 ENUM 을 toString() 으로 변환한 뒤 권한 지정
             @Override
             public String getAuthority() {
-                return user.getRole().toString();
+                return user.getRole().getAuthority();
             }
         });
 

@@ -1,11 +1,12 @@
 package com.demo.security01.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
 @Getter
-@RequiredArgsConstructor
-public enum Role {
+public enum Role implements GrantedAuthority {
 //    ROLE_ADMIN, ROLE_MANAGER
 
     USER("ROLE_USER"),
@@ -15,4 +16,13 @@ public enum Role {
 //    MANAGER("ROLE_MANAGER", "매니저");
 
     private final String role;
+
+    private Role(String role){
+        this.role = role;
+    }
+
+    @Override
+    public String getAuthority() {
+        return role;
+    }
 }

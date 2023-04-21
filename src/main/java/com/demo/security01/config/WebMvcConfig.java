@@ -1,3 +1,4 @@
+/*
 package com.demo.security01.config;
 
 import org.springframework.boot.web.servlet.view.MustacheViewResolver;
@@ -9,7 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     // mustache 연결 설정
-    @Override
+    */
+/*@Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         MustacheViewResolver resolver = new MustacheViewResolver();
         resolver.setCharset("UTF-8");
@@ -18,5 +20,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolver.setSuffix(".html");
 
         registry.viewResolver(resolver);
-    }
+
+
+    }*//*
+
 }
+*/
