@@ -1,8 +1,7 @@
 package com.demo.security01.model;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 @Getter

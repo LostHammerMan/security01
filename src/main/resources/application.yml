@@ -22,7 +22,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
@@ -33,4 +33,28 @@ spring:
     user:
       name: user
       password: 1234
+  output:
+    ansi:
+      enabled: always
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+    static-path-pattern: /static/**
+    # http hidden method 사용(form 태그에서 지원하지 않는 method="PUT" or "DELETE" 사용
+    hidden-method:
+      filter:
+        enabled: true
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+
+logging:
+  level:
+    root: info
+
+
+
+
 

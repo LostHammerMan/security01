@@ -10,6 +10,12 @@
   <link rel="stylesheet" href="/static/css/bootstrap.css">
   <script src="/static/js/jquery-3.6.4.min.js"></script>
   <script src="/static/js/bootstrap.js"></script>
+<%--  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>--%>
+
+  <script src="/static/js/mustache.js" type="module"></script>
+ <%-- <script src="/static/js/mustache.js.pre" type="module"></script>
+  <script src="/static/js/mustache.js.post" type="module"></script>--%>
   <title>Title</title>
+
 
 </head>

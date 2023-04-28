@@ -2,6 +2,7 @@ package com.demo.security01.config.auth;
 
 import com.demo.security01.entity.User;
 import com.demo.security01.model.Role;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,7 +18,7 @@ import java.util.Collection;
 // Security Session -> Authentication 객체 -> UserDetails 타입이어야 함
 // PrincipalDetails implements UserDetails 하면 PrincipalDetails 의 타입은 UserDetails 가 됨
 
-
+@Getter
 public class PrincipalDetails implements UserDetails {
 
     private User user; // 컴포지션
