@@ -32,7 +32,8 @@ public class JoinValidator implements Validator {
 
         JoinUserDto joinUserDto = (JoinUserDto) target;
         checkUsername(joinUserDto.getUsername(), errors);
-
+        checkPwd(joinUserDto.getPassword(), errors);
+//        checkEmail(joinUserDto.getEmail(), errors);
     }
 
     // username validation(공백, 정규식, 존재여부)
@@ -48,4 +49,24 @@ public class JoinValidator implements Validator {
             errors.rejectValue("username", "UsernameExist");
         }
     }
+
+    // password validation
+    private void checkPwd(String password, Errors errors){
+
+        String pwdRegExp = "^([a-zA-Z0-9@$!%?&]){4,}$";
+
+        if (!StringUtils.hasText(password)){
+            errors.rejectValue("password", "NotBlank");
+        } else if (!Pattern.matches(pwdRegExp, password)) {
+            errors.rejectValue("password", "Pattern");
+        }
+    }
+
+    // email validation
+   /* private void checkEmail(String email, Errors errors){
+
+        if (!StringUtils.hasText(email)){
+            errors.rejectValue("email", "NotBlank");
+        }
+    }*/
 }
