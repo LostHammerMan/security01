@@ -17,8 +17,8 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component(value = "joinValidator")
-public class JoinValidator implements Validator {
+//@Component(value = "joinValidator")
+public class JoinValidator2 implements Validator {
 
     private final UserService userService;
 
@@ -38,7 +38,6 @@ public class JoinValidator implements Validator {
 
         checkUsername(joinUserDto.getUsername(), errors);
         checkPwd(joinUserDto.getPassword(), errors);
-        checkEmail(joinUserDto, errors);
     }
 
     // username validation(공백, 정규식, 존재여부)
@@ -67,32 +66,6 @@ public class JoinValidator implements Validator {
         }
     }
 
-    private void checkEmail(JoinUserDto joinUserDto, Errors errors) {
-        String email_addr = joinUserDto.getEmail_id() + joinUserDto.getEmail_domain();
-        log.info("email_addr = {}", email_addr);
-
-        String auth_code = joinUserDto.getAuth_code();
-        log.info("auth_code = {}", auth_code);
-
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = servletRequestAttributes.getRequest().getSession();
-
-        @SuppressWarnings("unchecked")
-        Map<String, String> emailCheck = (Map<String, String>) session.getAttribute("emailCheck");
-        log.info("emailCheck = {}", emailCheck);
-
-        if (!emailCheck.containsKey(email_addr)) {
-            errors.rejectValue("email_addr", "NeedAuth");
-            return;
-        }
-
-        String session_auth_code = emailCheck.get(email_addr);
-        log.info("session_auth_code = {}", session_auth_code);
-
-        if (!auth_code.equals(session_auth_code)) {
-            errors.rejectValue("email_addr", "NotAuth");
-        }
-    }
 
     // email validation
    /* private void checkEmail(String email, Errors errors){
