@@ -1,5 +1,6 @@
 package com.demo.security01.validator;
 
+import com.demo.security01.entity.User;
 import com.demo.security01.model.dto.JoinUserDto;
 import com.demo.security01.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,7 @@ public class JoinValidator implements Validator {
         String auth_code = joinUserDto.getAuth_code();
         log.info("auth_code = {}", auth_code);
 
+
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = servletRequestAttributes.getRequest().getSession();
 
@@ -101,4 +103,15 @@ public class JoinValidator implements Validator {
             errors.rejectValue("email", "NotBlank");
         }
     }*/
+
+    // Controller 가 아닌 곳에서 request session 정보 가져오기
+    public User getSessionUser(){
+
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+
+        HttpSession session = servletRequestAttributes.getRequest().getSession(true);
+        return (User) session.getAttribute("UserVo");
+
+    }
 }
