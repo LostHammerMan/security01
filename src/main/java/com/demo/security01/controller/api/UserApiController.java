@@ -55,8 +55,6 @@ public class UserApiController {
         String authCode = (String) session.getAttribute("authCode");
         log.info("authCode = {}", authCode);
 
-
-
         if (!authCode.equals(inputAuthNum)){
             throw new IllegalArgumentException("인증코드가 일치하지 않음");
 //            throw new IllegalArgumentException(getMe);
@@ -67,8 +65,6 @@ public class UserApiController {
             throw new
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseEntityDto);*/
         }
-
-
 
         ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
                 .status(HttpStatus.OK.value())

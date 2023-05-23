@@ -1,14 +1,16 @@
 package com.demo.security01.config.handler;
 
 import com.demo.security01.model.dto.ResponseEntityDto;
-import com.demo.security01.model.utils.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
@@ -22,7 +24,8 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class HandlerExample {
 
-
+    @Autowired
+    MessageSourceAccessor messageSourceAccessor;
 
     @ExceptionHandler(NullPointerException.class)
     @ResponseBody
@@ -41,6 +44,7 @@ public class HandlerExample {
     // 없는 페이지의 경우
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handlerNoHandlerFoundException(NoHandlerFoundException e){
+        log.info("## handlerNoHandlerFoundException");
         return "error/errorMain";
     }
 
@@ -56,8 +60,9 @@ public class HandlerExample {
                 .build();*/
 
         ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
-                .status(ErrorCode.BAD_AUTH_REQUEST.getStatus().value())
-                .message(ErrorCode.BAD_AUTH_REQUEST.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+//                .message(ErrorCode.BAD_AUTH_REQUEST.getMessage())
+                .message(messageSourceAccessor.getMessage("error.badAuth"))
                 .localDateTime(LocalDateTime.now())
                 .build();
 

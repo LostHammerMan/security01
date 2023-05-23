@@ -1,12 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: seong
-  Date: 2023-05-12
-  Time: 오후 12:27
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+         pageEncoding="utf-8" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<c:set var="root" value="${pageContext.request.contextPath}/"/>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Title</title>
 </head>

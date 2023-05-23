@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -53,7 +52,7 @@ public class AdminController {
     }*/
 
     // 회원 목록 + 페이징
-    @GetMapping("/users")
+    @GetMapping("/userList")
     public String allUser(Criteria cri, Model model){
 
         // 전체 회원 수
@@ -71,7 +70,7 @@ public class AdminController {
         model.addAttribute("paging", paging);
         log.info("============ paging ================");
         log.info("paging = {}", paging);
-        return "admin/users";
+        return "admin/userList";
     }
 
     @GetMapping("/user/{id}")
@@ -106,7 +105,7 @@ public class AdminController {
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("user = {}", user);
 
-        return "redirect:/users";
+        return "redirect:/userList";
     }
 
     // 회원 삭제

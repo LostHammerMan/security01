@@ -19,15 +19,15 @@ public class LogFilter implements Filter {
         String dispatcherType = httpServletRequest.getDispatcherType().toString();
         Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
 
-        log.info("Request: {}, {}", requestURI, dispatcherType);
-        log.info("\t contentTye : {}", httpServletRequest.getContentType());
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            String value = httpServletRequest.getHeader(headerName);
-            log.info("\t {} : {}", headerName, value);
-        }
+        log.info("## Request: {} [ {} ]", requestURI, dispatcherType);
+//        log.info("\t contentTye : {}", httpServletRequest.getContentType());
+//        while (headerNames.hasMoreElements()) {
+//            String headerName = headerNames.nextElement();
+//            String value = httpServletRequest.getHeader(headerName);
+//            log.info("\t {} : {}", headerName, value);
+//        }
 
         chain.doFilter(request, response);
-        log.info("Response: {}, {}", requestURI, dispatcherType);
+        log.info("## Response: {} [ {} ]", requestURI, dispatcherType);
     }
 }
