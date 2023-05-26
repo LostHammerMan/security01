@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 @Slf4j
-//@RequestMapping("/user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 @Controller
 public class UserController {

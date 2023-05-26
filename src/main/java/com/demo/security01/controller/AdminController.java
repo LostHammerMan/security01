@@ -25,17 +25,18 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 @Controller
 public class AdminController {
 
     private final UserRepositoryCustomImpl userRepository;
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository2;
 
     private DispatcherServlet servlet;
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/main")
     @Secured("ROLE_ADMIN")
     public String admin(){
         log.info("admin controller called......");
@@ -73,6 +74,7 @@ public class AdminController {
         return "admin/userList";
     }
 
+    // 회원 수정 페이지
     @GetMapping("/user/{id}")
     public String findUser(@PathVariable int id, Role role, User user, Model model, HttpServletResponse response) throws IOException {
         User findUser = userRepository.findUser(user.getId());
@@ -105,11 +107,11 @@ public class AdminController {
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("user = {}", user);
 
-        return "redirect:/userList";
+        return "redirect:/admin/userList";
     }
 
     // 회원 삭제
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Object> deleteUser(@PathVariable int id){
         log.info("deleteUser called....");
@@ -165,7 +167,7 @@ public class AdminController {
         return ResponseEntity.ok(map);
     }*/
 
-    @GetMapping("/user/getUserList")
+    @GetMapping("/getUserList")
     @ResponseBody
     public ResponseEntity<Object> getUserList(Criteria cri) {
         log.info("getUserList called...");
