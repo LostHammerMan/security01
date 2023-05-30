@@ -8,6 +8,8 @@ public class Criteria {
 
     private int page; // 현재 페이지 번호
     private int perPageNum; // 페이지당 보여줄 게시글의 개수
+    private String type;
+    private String keyword;
 
     public int getPageStart(){
         // 특정 페이지의 범위를 정하는 구간, 현재 페이지의 게시글 시작 번호
@@ -20,6 +22,20 @@ public class Criteria {
         this.page = 1;
         this.perPageNum = 10;
     }
+
+    public Criteria(int page, int perPageNum, String type, String keyword){
+        this.page = page;
+        this.perPageNum = perPageNum;
+        this.type = type;
+        this.keyword = keyword;
+    }
+
+    /*public Criteria(int page, int perPageNum, String type, String keyword){
+        this.page = page;
+        this.perPageNum = perPageNum;
+        this.type = type;
+        this.keyword = keyword;
+    }*/
 
     // 현재 페이지 번호 page : getter, setter
     public int getPage(){
@@ -47,5 +63,24 @@ public class Criteria {
         }else {
             this.perPageNum = perPageNum;
         }
+
     }
+
+    public String getType(){
+        return type;
+    }
+
+    public String getKeyword(){
+        return keyword;
+    }
+
+    public void setType(String type){
+        this.type = type;
+    }
+
+    public void setKeyword(String keyword){
+        this.keyword = keyword;
+    }
+
+
 }

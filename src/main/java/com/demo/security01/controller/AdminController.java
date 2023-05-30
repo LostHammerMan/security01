@@ -55,14 +55,17 @@ public class AdminController {
     // 회원 목록 + 페이징
     @GetMapping("/userList")
     public String allUser(Criteria cri, Model model){
-
-        // 전체 회원 수
-        int userListCnt = userRepository.userListCnt();
-        log.info("userListCnt = {}", userListCnt);
+        log.info("========== userList called... ===========");
 
         // 페이징 객체
         Paging paging = new Paging();
         paging.setCri(cri);
+        log.info("paging1 = {}", paging);
+
+        // 전체 회원 수
+        int userListCnt = userRepository.userListCnt(cri);
+        log.info("userListCnt = {}", userListCnt);
+
         paging.setTotalCount(userListCnt);
 
         List<User> findAllUser = userRepository.findAllUser(cri);
@@ -70,18 +73,23 @@ public class AdminController {
         model.addAttribute("findAllUser", findAllUser);
         model.addAttribute("paging", paging);
         log.info("============ paging ================");
-        log.info("paging = {}", paging);
+
         return "admin/userList";
     }
 
     // 회원 수정 페이지
     @GetMapping("/user/{id}")
-    public String findUser(@PathVariable int id, Role role, User user, Model model, HttpServletResponse response) throws IOException {
+    public String findUser(@PathVariable int id, Role role, User user, int page, Model model, HttpServletResponse response) throws IOException {
+//    public String findUser(@PathVariable int id, Role role, User user, Criteria cri, Model model, HttpServletResponse response) throws IOException {
         User findUser = userRepository.findUser(user.getId());
         log.info("findUser={}", findUser);
 //        model.addAttribute("user_role", role.);
         model.addAttribute("findUser", findUser);
+        model.addAttribute("page", page);
+        //model.addAttribute("page", cri.getPage());
         return "admin/updateForm";
+
+
     }
 
     // <div class>
@@ -94,7 +102,7 @@ public class AdminController {
 
     // 회원수정
     @PutMapping("/user/{id}")
-    public String updateUser(@PathVariable int id, User user, AdminUpdateDto dto, @RequestParam("updateRole") String updateRole){
+    public String updateUser(@PathVariable int id, User user, AdminUpdateDto dto, @RequestParam("page") int page,@RequestParam("updateRole") String updateRole, Model model){
         log.info("=======updateUser called..=======");
         dto.setId(user.getId());
         dto.setRole(Enum.valueOf(Role.class, updateRole));
@@ -106,8 +114,9 @@ public class AdminController {
 //        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("user = {}", user);
+//        model.addAttribute("page", cri.getPage());
 
-        return "redirect:/admin/userList";
+        return "redirect:/admin/userList?page=" + page;
     }
 
     // 회원 삭제
@@ -167,11 +176,12 @@ public class AdminController {
         return ResponseEntity.ok(map);
     }*/
 
+    // 회원 삭제 후 리스트 다시 불러 오기
     @GetMapping("/getUserList")
     @ResponseBody
     public ResponseEntity<Object> getUserList(Criteria cri) {
         log.info("getUserList called...");
-        int userListCnt = userRepository.userListCnt();
+        int userListCnt = userRepository.userListCnt(cri);
         log.info("userListCnt = {}", userListCnt);
 
         // 페이징 객체
@@ -185,14 +195,10 @@ public class AdminController {
         model.addAttribute("paging", paging);
         log.info("============ paging ================");
         log.info("paging = {}", paging);*/
-
-
-
         Map<String, Object> map = new HashMap<>();
         List<User> userList = userRepository.findAllUser(cri);
 
         map.put("userList",  userList);
-
         log.info("{}", userList);
 
         return ResponseEntity.ok(map);
