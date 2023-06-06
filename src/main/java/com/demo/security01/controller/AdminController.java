@@ -1,21 +1,25 @@
 package com.demo.security01.controller;
 
+import com.demo.security01.config.converter.PagingConversionService;
+import com.demo.security01.config.converter.PagingConverter;
+import com.demo.security01.config.converter.PagingConverter2;
 import com.demo.security01.entity.User;
 import com.demo.security01.model.Role;
 import com.demo.security01.model.dto.AdminUpdateDto;
 import com.demo.security01.model.dto.paging.Criteria;
 import com.demo.security01.model.dto.paging.Paging;
-import com.demo.security01.repository.UserRepository;
 import com.demo.security01.repository.UserRepositoryCustomImpl;
+import com.demo.security01.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,13 +33,54 @@ import java.util.Map;
 @Controller
 public class AdminController {
 
+    private final AdminService adminService;
     private final UserRepositoryCustomImpl userRepository;
-//    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository2;
+//    private final ConversionService conversionService;
 
-    private DispatcherServlet servlet;
+    /*@InitBinder
+    public void init(WebDataBinder binder){
+        String objectName = binder.getObjectName();
+
+        if (objectName.equals("criteria")){
+            binder.setConversionService(conversionService);
+        }
+    }*/
+
+
+
+
+//    private final AuthenticationManager authenticationManager;
+//    private final UserRepository userRepository2;
+
+//    private DispatcherServlet servlet;
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    /*@InitBinder
+    public void init(WebDataBinder binder){
+        binder.setConversionService(conversionService);
+    }*/
+    /*@InitBinder
+    public void init(WebDataBinder binder){
+        log.info("======= initBinder Called......============");
+        String objectName = binder.getObjectName();
+        log.info("conversionService = {}", conversionService);
+
+        if (objectName.equals("criteria")){
+            Criteria cri = new Criteria();
+            conversionService.convert(cri.getPerPageNum(), Criteria.class);
+        }
+
+
+        if (objectName.equals("criteria")){
+            if (binder.getConversionService() == null){
+                binder.setConversionService(conversionService);
+                log.info("converter called...." + binder.getConversionService().toString());
+
+            }
+        }
+    }*/
+
+
     @GetMapping("/main")
     @Secured("ROLE_ADMIN")
     public String admin(){
@@ -54,22 +99,18 @@ public class AdminController {
 
     // 회원 목록 + 페이징
     @GetMapping("/userList")
-    public String allUser(Criteria cri, Model model){
+//    public String allUser(Criteria cri, Model model) {
+    public String allUser(@ModelAttribute Criteria cri, Model model) {
         log.info("========== userList called... ===========");
 
-        // 페이징 객체
-        Paging paging = new Paging();
-        paging.setCri(cri);
-        log.info("paging1 = {}", paging);
+       /* if (result.hasErrors()){
+            cri.setPerPageNum(10);
+        }*/
+        log.info("cri ={}", cri);
 
-        // 전체 회원 수
-        int userListCnt = userRepository.userListCnt(cri);
-        log.info("userListCnt = {}", userListCnt);
+        Paging paging = adminService.pagination(cri);
+        List<User> findAllUser = adminService.allUser(cri);
 
-        paging.setTotalCount(userListCnt);
-
-        List<User> findAllUser = userRepository.findAllUser(cri);
-        log.info("모든 유저 = {}", findAllUser);
         model.addAttribute("findAllUser", findAllUser);
         model.addAttribute("paging", paging);
         log.info("============ paging ================");
@@ -79,14 +120,13 @@ public class AdminController {
 
     // 회원 수정 페이지
     @GetMapping("/user/{id}")
-    public String findUser(@PathVariable int id, Role role, User user, int page, Model model, HttpServletResponse response) throws IOException {
+    public String findUser(@PathVariable int id, User user, int page, Model model, HttpServletResponse response) throws IOException {
 //    public String findUser(@PathVariable int id, Role role, User user, Criteria cri, Model model, HttpServletResponse response) throws IOException {
-        User findUser = userRepository.findUser(user.getId());
+//        User findUser = userRepository.findUser(user.getId());
+        User findUser = adminService.userDetails(user);
         log.info("findUser={}", findUser);
-//        model.addAttribute("user_role", role.);
         model.addAttribute("findUser", findUser);
         model.addAttribute("page", page);
-        //model.addAttribute("page", cri.getPage());
         return "admin/updateForm";
 
 
@@ -96,7 +136,8 @@ public class AdminController {
 
     @GetMapping("/findAllUser")
     public @ResponseBody List<User> findAll(){
-        return userRepository.findAllUser(new Criteria());
+        return adminService.allUser(new Criteria());
+//        return userRepository.findAllUser(new Criteria());
 
     }
 

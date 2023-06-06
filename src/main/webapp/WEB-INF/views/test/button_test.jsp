@@ -1,0 +1,39 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: seong
+  Date: 2023-06-02
+  Time: 오후 2:34
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Dropdowns</h2>
+  <p>The .dropdown class is used to indicate a dropdown menu.</p>
+  <p>Use the .dropdown-menu class to actually build the dropdown menu.</p>
+  <p>To open the dropdown menu, use a button or a link with a class of .dropdown-toggle and data-toggle="dropdown".</p>
+  <div class="dropdown">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      Dropdown button
+    </button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Link 1</a>
+      <a class="dropdown-item" href="#">Link 2</a>
+      <a class="dropdown-item" href="#">Link 3</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
