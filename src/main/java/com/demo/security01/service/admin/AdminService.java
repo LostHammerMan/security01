@@ -1,15 +1,13 @@
-package com.demo.security01.service;
+package com.demo.security01.service.admin;
 
 import com.demo.security01.entity.User;
 import com.demo.security01.model.dto.paging.Criteria;
 import com.demo.security01.model.dto.paging.Paging;
-import com.demo.security01.repository.UserRepositoryCustomImpl;
+import com.demo.security01.repository.user.UserRepositoryCustomImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.BindException;
-import java.util.HashMap;
 import java.util.List;
 
 @Service

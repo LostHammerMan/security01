@@ -1,42 +1,25 @@
 package com.demo.security01.config.converter;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Bean;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+@Slf4j
+public class PagingConversionService {
 
-public class PagingConversionService /*implements ConversionService*/ {
+    @Autowired
+    private ConversionService pagingConversion;
 
-    /*@Override
-    public boolean canConvert(Class<?> sourceType, Class<?> targetType) {
-        return false;
+    public void doConvert(String perPageNum){
+      /*  log.info("======== doConvert called..... =======");
+        log.info("perPageNum = {}", perPageNum);
+        Integer convertedPerPageNum = pagingConversion.convert(perPageNum, Integer.class);
+//        pagingConversion.canConvert()
+        log.info("convertedPerPageNum = {}", convertedPerPageNum);*/
+
+        DefaultConversionService defaultConversionService = new DefaultConversionService();
+        defaultConversionService.canConvert(String.class, Integer.class);
+//        defaultConversionService.addConverter();
     }
-
-    @Override
-    public boolean canConvert(TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return false;
-    }
-
-    @Override
-    public <T> T convert(Object source, Class<T> targetType) {
-        return null;
-    }
-
-    @Override
-    public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return null;
-    }
-
-    DefaultConversionService pagingConversionService = new DefaultConversionService();
-
-    @Bean
-    public ConversionService pagingConversionService(){
-        //pagingConversionService.addConverter(new PagingConverter());
-//        pagingConversionService.canConvert() // 변환 여부 확인하는 메서드
-        pagingConversionService.addConverter(new PagingConverter2());
-        return pagingConversionService;
-    }*/
 }

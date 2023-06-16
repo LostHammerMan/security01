@@ -3,12 +3,11 @@ package com.demo.security01.config.converter;
 import com.demo.security01.model.dto.paging.Criteria;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 // 스프링 부트 - @Component 으로 빈 등록 후 사용
 // 스프링 레거시 - Web Config 에 등록 후 사용
 @Slf4j
-public class PagingConverter implements Converter<String, Criteria> {
+public class PagingPerPageConverter implements Converter<String, Criteria> {
 
     // Converter<Source, Target>
     // String -> Criteria

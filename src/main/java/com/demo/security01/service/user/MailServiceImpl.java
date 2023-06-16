@@ -1,4 +1,4 @@
-package com.demo.security01.service;
+package com.demo.security01.service.user;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;

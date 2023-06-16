@@ -1,20 +1,24 @@
-package com.demo.security01.controller;
+package com.demo.security01.controller.user;
 
-import com.demo.security01.model.dto.JoinUserDto;
-import com.demo.security01.repository.UserRepositoryCustomImpl;
-import com.demo.security01.service.UserService;
+import com.demo.security01.entity.User;
+import com.demo.security01.model.dto.user.JoinUserDto;
+import com.demo.security01.model.dto.user.ModifyUserDto;
+import com.demo.security01.repository.user.UserRepositoryCustomImpl;
+import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Slf4j
 @RequestMapping("/user")
@@ -28,14 +32,16 @@ public class UserController {
     @Resource(name = "joinValidator")
     private Validator joinValidator;
 
-    @InitBinder
+//    @InitBinder(value = {"",""}) // validator 가 2개 이상의 dto 에 적용되는 경우
+    @InitBinder("joinUserDto") // 하나에만 적용하는 경우
     public void initBinder(WebDataBinder binder) {
-        log.info("======= initBinder Called......============");
+        binder.addValidators(joinValidator);
+        /*log.info("======= initBinder Called......============");
         String objectName = binder.getObjectName();
 
         if(objectName.equals("joinUserDto")) {
             binder.addValidators(joinValidator);
-        }
+        }*/
 //        } else if(objectName.equals("emailDto")) {
 //            binder.addValidators(emailValidator);
 //        }
@@ -53,18 +59,9 @@ public class UserController {
         return "user/joinForm";
     }
 
-    // 회원가입
-    /*@PostMapping("/join")
-    public String Join(User user) {
-
-        userService.save(user);
-        log.info("user = {}", user.getRole());
-        return "redirect:/loginForm";
-    }*/
-
     // dto 사용한 회원가입
     @PostMapping("/joinProc")
-    public String Join(@Valid @ModelAttribute("joinUserDto") JoinUserDto joinUserDto, BindingResult result) {
+    public String Join(@Valid @ModelAttribute("joinUserDto") JoinUserDto joinUserDto, BindingResult result, HttpServletRequest request) {
         log.info("=============joinProc called ============");
         log.info("join ={}", joinUserDto);
 
@@ -82,8 +79,31 @@ public class UserController {
         }
 
         userService.save(joinUserDto);
-        return "redirect:/loginForm";
+//        return "redirect:user/loginForm";
+        return "redirect:" + request.getContextPath() +"/user/loginForm";
     }
+
+    // 회원수정
+    @GetMapping("/modifyForm")
+    public String modifyForm(Principal principal, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, Model model){
+        String username = principal.getName();
+        User loginUser =  userService.userDetailsByUsername(username);
+        log.info("user = {}", loginUser);
+        model.addAttribute("loginUser", loginUser);
+//        User findUser = userService.userDetails(userId);
+//        log.info("findUser = {}", findUser);
+//        model.addAttribute("findUser", findUser);
+        return "user/modifyForm";
+    }
+
+    @PostMapping("/modifyProc")
+    public String modifyProc(@ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto){
+
+        return "user/modifyForm";
+    }
+
+
+
 
     @Secured("ROLE_ADMIN") // ROLE_ADMIN 권한만 접근 가능 , 메서드에 사용, 하나의 권한만 사용 가능
     @GetMapping("/info")

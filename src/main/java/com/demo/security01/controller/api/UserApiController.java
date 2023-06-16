@@ -1,8 +1,12 @@
 package com.demo.security01.controller.api;
 
-import com.demo.security01.model.dto.EmailDto;
-import com.demo.security01.model.dto.ResponseEntityDto;
-import com.demo.security01.service.MailServiceImpl;
+import com.demo.security01.entity.User;
+import com.demo.security01.entity.UserAddr;
+import com.demo.security01.model.dto.user.EmailDto;
+import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
+import com.demo.security01.model.dto.user.ModifyUserDto;
+import com.demo.security01.service.user.MailServiceImpl;
+import com.demo.security01.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +26,9 @@ public class UserApiController {
 
     @Autowired
     private MailServiceImpl mailService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/emailAuth")
     public String emailAuth(@RequestBody EmailDto emailDto, HttpSession session) throws Exception {
@@ -98,6 +106,17 @@ public class UserApiController {
 
 //        return new ResponseEntity<>(response, HttpStatus.OK); // 200*/
 
+    }
+
+    @PostMapping("/modifyAddr")
+    public String modifyAddr(@RequestBody ModifyUserDto modifyUserDto, Principal principal){
+        log.info("========= modifyAddr called ==========");
+        log.info("zipcode = {}", modifyUserDto.getZipCode());
+        log.info("postAddr1 = {}", modifyUserDto.getPostAddr1());
+        log.info("postAddr2 = {}", modifyUserDto.getPostAddr2());
+        userService.addrModify(modifyUserDto, principal.getName());
+
+        return "전송완료";
     }
 
 }

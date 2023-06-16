@@ -1,24 +1,18 @@
-package com.demo.security01.controller;
+package com.demo.security01.controller.admin;
 
-import com.demo.security01.config.converter.PagingConversionService;
-import com.demo.security01.config.converter.PagingConverter;
-import com.demo.security01.config.converter.PagingConverter2;
 import com.demo.security01.entity.User;
 import com.demo.security01.model.Role;
-import com.demo.security01.model.dto.AdminUpdateDto;
+import com.demo.security01.model.dto.admin.AdminUpdateDto;
 import com.demo.security01.model.dto.paging.Criteria;
 import com.demo.security01.model.dto.paging.Paging;
-import com.demo.security01.repository.UserRepositoryCustomImpl;
-import com.demo.security01.service.AdminService;
+import com.demo.security01.repository.user.UserRepositoryCustomImpl;
+import com.demo.security01.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,14 +29,22 @@ public class AdminController {
 
     private final AdminService adminService;
     private final UserRepositoryCustomImpl userRepository;
-//    private final ConversionService conversionService;
+//    private final PagingConversionService conversionService;
 
-    /*@InitBinder
+   /* @InitBinder
     public void init(WebDataBinder binder){
         String objectName = binder.getObjectName();
 
         if (objectName.equals("criteria")){
-            binder.setConversionService(conversionService);
+            binder.registerCustomEditor(String.class, new PropertyEditorSupport(){
+
+                @Override
+                public void setAsText(String text) throws IllegalArgumentException {
+                    conversionService.doConvert(text);
+                    log.info("convertedValue = {}", text);
+                    setValue(text);
+                }
+            });
         }
     }*/
 
@@ -102,7 +104,7 @@ public class AdminController {
 //    public String allUser(Criteria cri, Model model) {
     public String allUser(@ModelAttribute Criteria cri, Model model) {
         log.info("========== userList called... ===========");
-
+//        pagingConversionService.doConvert(String.valueOf(cri.getPerPageNum()));
        /* if (result.hasErrors()){
             cri.setPerPageNum(10);
         }*/

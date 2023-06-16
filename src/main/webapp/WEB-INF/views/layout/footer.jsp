@@ -6,11 +6,18 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="jumbotron text-center" style="margin-bottom: 0">
-    <p>create By Lss</p>
-    <p>📞 031-222-2222</p>
-    <p> ✔ 경기도 어딘가</p>
-</div>
+<style>
+    .footer {
+        float: bottom;
+    }
+</style>
+<footer class="footer">
+    <div class="jumbotron text-center" style="margin-top: 600px">
+        <p>create By Lss</p>
+        <p>📞 031-222-2222</p>
+        <p> ✔ 경기도 어딘가</p>
+    </div>
+</footer>
 
 </body>
 </html>

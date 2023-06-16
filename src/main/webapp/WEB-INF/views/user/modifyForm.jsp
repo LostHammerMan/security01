@@ -1,0 +1,300 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+         pageEncoding="utf-8" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<c:set var="root" value="${pageContext.request.contextPath}/"/>
+
+<c:import url="/WEB-INF/views/layout/header.jsp"/>
+<style>
+
+   #left-header {
+       background-color: #ccc4ff;
+   }
+
+   .profile-basic {
+       display: flex;
+   }
+
+   .profile-addr1 {
+       display: flex;
+       margin-bottom: 10px;
+   }
+
+   .profile-addr2 {
+       margin-bottom: 10px;
+   }
+
+   .profile-addr3 {
+       display: flex;
+       margin-bottom: 10px;
+
+   }
+
+   input.form-control {
+       width: 700px;
+       /*background-color: #1c7430;*/
+   }
+   /*form-control btn btn-primary*/
+   button.btn.btn-primary {
+       width: 70px;
+       margin-left: 20px;
+       /*background-color: #6e707e;*/
+   }
+
+   #addrFindBtn {
+       margin-left: 20px;
+       /*background-color: #1c7430;*/
+       width: 70px;
+   }
+
+
+</style>
+<div class="container bootstrap snippet">
+    <%--<div class="row">
+        <div class="col-sm-10"><h1>User name</h1></div>
+        <div class="col-sm-2"><a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a></div>
+    </div>--%>
+    <div class="row">
+        <div class="col-sm-3" id="left-header"><!--left col-->
+            <div class="text-center">
+                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                <h6>Upload a different photo...</h6>
+                <input type="file" class="text-center center-block file-upload">
+            </div></hr><br>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
+                <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
+            </div>
+
+
+            <%--<ul class="list-group">
+                <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> 78</li>
+            </ul>--%>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Social Media</div>
+                <div class="panel-body">
+                    <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
+                </div>
+            </div>
+
+        </div><!--/col-3-->
+        <div class="col-sm-9">
+            <%--<ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+                <li><a data-toggle="tab" href="#messages">Menu 1</a></li>
+                <li><a data-toggle="tab" href="#settings">Menu 2</a></li>
+            </ul>--%>
+
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <hr>
+                    <form class="form" action="##" method="post" id="registrationForm">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="username"><h4>Username</h4></label>
+                                    <div class="profile-basic">
+                                        <input type="text" class="form-control" name="username" id="username" value="${loginUser.username}" />
+                                        <button type="button" class="form-control btn btn-primary" id="usernameModifyBtn" name="usernameModifyBtn">수정</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="email"><h4>Email</h4></label>
+                                    <div class="profile-basic">
+                                        <input type="email" class="form-control" name="email" id="email" value="${loginUser.email}">
+                                        <button type="button" class="form-control btn btn-primary" id="emailModifyBtn" name="emailModifyBtn">수정</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="location"><h4>주소</h4></label>
+                                    <div class="profile-addr1">
+                                        <input type="text" class="form-control" id="sample2_postcode" name="sample2_postcode" placeholder="우편번호" value="${loginUser.userAddr.zipcode}">
+                                        <input type="button" class="form-control btn btn-secondary" id="addrFindBtn" name="addrFindBtn" onclick="sample2_execDaumPostcode()" value="검색"><br>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="profile-addr2">
+                                            <input type="text" class="form-control" id="sample2_address" name="sample2_address" placeholder="주소" value="${loginUser.userAddr.postAddr1}"><br>
+                                        </div>
+                                        <div class="profile-addr3">
+                                            <input type="text" class="form-control" id="sample2_detailAddress" name="sample2_detailAddress" placeholder="상세주소">
+<%--                                            <input type="text" class="form-control" id="sample2_extraAddress" placeholder="참고항목">--%>
+                                            <button type="button" class="form-control btn btn-primary" id="addrModifyBtn" name="addrModifyBtn">저장</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
+                        <div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
+                            <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()" alt="닫기 버튼">
+                        </div>
+
+                        <%--<div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                            </div>
+                        </div>--%>
+                    </form>
+
+
+                </div>
+
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+
+    </div><!--/col-9-->
+</div><!--/row-->
+
+
+<c:import url="/WEB-INF/views/layout/footer.jsp"/>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script>
+
+    // 우편번호 찾기 화면을 넣을 element
+    var element_layer = document.getElementById('layer');
+
+    function closeDaumPostcode() {
+        // iframe을 넣은 element를 안보이게 한다.
+        element_layer.style.display = 'none';
+    }
+
+    function sample2_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    // document.getElementById("sample2_extraAddress").value = extraAddr;
+
+                } /*else {
+                    document.getElementById("sample2_extraAddress").value = '';
+                }*/
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample2_postcode').value = data.zonecode;
+                document.getElementById("sample2_address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("sample2_detailAddress").focus();
+
+                // iframe을 넣은 element를 안보이게 한다.
+                // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
+                element_layer.style.display = 'none';
+            },
+            width : '100%',
+            height : '100%',
+            maxSuggestItems : 5
+        }).embed(element_layer);
+
+        // iframe을 넣은 element를 보이게 한다.
+        element_layer.style.display = 'block';
+
+        // iframe을 넣은 element의 위치를 화면의 가운데로 이동시킨다.
+        initLayerPosition();
+    }
+
+    // 브라우저의 크기 변경에 따라 레이어를 가운데로 이동시키고자 하실때에는
+    // resize이벤트나, orientationchange이벤트를 이용하여 값이 변경될때마다 아래 함수를 실행 시켜 주시거나,
+    // 직접 element_layer의 top,left값을 수정해 주시면 됩니다.
+    function initLayerPosition(){
+        var width = 300; //우편번호서비스가 들어갈 element의 width
+        var height = 400; //우편번호서비스가 들어갈 element의 height
+        var borderWidth = 5; //샘플에서 사용하는 border의 두께
+
+        // 위에서 선언한 값들을 실제 element에 넣는다.
+        element_layer.style.width = width + 'px';
+        element_layer.style.height = height + 'px';
+        element_layer.style.border = borderWidth + 'px solid';
+        // 실행되는 순간의 화면 너비와 높이 값을 가져와서 중앙에 뜰 수 있도록 위치를 계산한다.
+        element_layer.style.left = (((window.innerWidth || document.documentElement.clientWidth) - width)/2 - borderWidth) + 'px';
+        element_layer.style.top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
+    }
+</script>
+<script>
+<%--    주소 수정 이벤트--%>
+ $(function (){
+
+
+        /*sample2_postcode
+        sample2_address
+        sample2_detailAddress*/
+
+        $("#addrModifyBtn").on("click", function (){
+            let zipcodeVal = $("input[name=sample2_postcode]").val();
+            let postAddr1Val = $("input[name=sample2_address]").val();
+            let postAddr2Val = $("input[name=sample2_detailAddress]").val();
+
+            let data1 = {
+                "zipCode": zipcodeVal,
+                "postAddr1": postAddr1Val,
+                "postAddr2": postAddr2Val
+            }
+
+            $.ajax({
+                url: "${root}api/modifyAddr",
+                type: "POST",
+                data: JSON.stringify(data1),
+                contentType: 'application/json',
+                success: function (res){
+                    console.log(res.toString());
+                },
+                error: function (err){
+                    console.log(err);
+                }
+            })
+        });
+ })
+</script>
+</html>

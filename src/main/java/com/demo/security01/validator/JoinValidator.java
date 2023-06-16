@@ -1,8 +1,8 @@
 package com.demo.security01.validator;
 
 import com.demo.security01.entity.User;
-import com.demo.security01.model.dto.JoinUserDto;
-import com.demo.security01.service.UserService;
+import com.demo.security01.model.dto.user.JoinUserDto;
+import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

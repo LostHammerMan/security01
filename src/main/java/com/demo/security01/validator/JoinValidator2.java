@@ -1,18 +1,13 @@
 package com.demo.security01.validator;
 
-import com.demo.security01.model.dto.JoinUserDto;
-import com.demo.security01.service.UserService;
+import com.demo.security01.model.dto.user.JoinUserDto;
+import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Slf4j

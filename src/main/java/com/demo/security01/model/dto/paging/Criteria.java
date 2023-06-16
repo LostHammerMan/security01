@@ -1,14 +1,10 @@
 package com.demo.security01.model.dto.paging;
 
+import com.demo.security01.config.annotation.PagingAnno;
+import com.demo.security01.config.converter.PagingConverter2;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.TypeMismatchException;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.springframework.core.convert.converter.Converter;
 
 // 페이지 자체를 관리하는 객체, 페이지당 보여줄 개수 담당
 @ToString
@@ -16,15 +12,14 @@ import java.util.List;
 public class Criteria {
 
     private int page; // 현재 페이지 번호
-    private Integer perPageNum; // 페이지당 보여줄 게시글의 개수
-    private String type;
-    private String keyword;
 
-    public int getPageStart(){
-        // 특정 페이지의 범위를 정하는 구간, 현재 페이지의 게시글 시작 번호
-        // 0 ~ 10, 10 ~ 20
-        return (this.page -1) * perPageNum;
-    }
+    @PagingAnno
+    private Integer perPageNum; // 페이지당 보여줄 게시글의 개수
+
+    @PagingAnno
+    private String type;
+
+    private String keyword;
 
     public Criteria(){
         log.info("## Criteria 기본 생성자");
@@ -32,6 +27,14 @@ public class Criteria {
         this.page = 1;
         this.perPageNum = 10;
     }
+
+    public int getPageStart(){
+        // 특정 페이지의 범위를 정하는 구간, 현재 페이지의 게시글 시작 번호
+        // 0 ~ 10, 10 ~ 20
+        return (this.page -1) * perPageNum;
+    }
+
+
 
     /*public Criteria(int page, int perPageNum, String type, String keyword){
         this.page = page;
@@ -58,15 +61,15 @@ public class Criteria {
     }
 
     public void setPerPageNum(int perPageNum) {
-        log.info("## setPerPageNum, perPageNum = {}", perPageNum);
         /*if (perPageNumList.contains(perPageNum)){
             this.perPageNum = perPageNum;
         }else {
             this.perPageNum = 10;
         }*/
-        if (this.perPageNum != perPageNum){
+        /*if (this.perPageNum != perPageNum){
             this.perPageNum = perPageNum;
-        }
+        }*/
+        this.perPageNum = perPageNum;
     }
 
     public String getType(){
