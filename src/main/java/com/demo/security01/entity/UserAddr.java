@@ -16,7 +16,8 @@ public class UserAddr {
     @Column(name = "ADDR_IDX")
     private Long addrIdx;
 
-    private String zipcode;
+    @Column(name = "ZIPCODE")
+    private String zipCode;
 
     @Column(name = "POST_ADDR1")
     private String postAddr1;

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.http.HttpRequest;
 import java.security.Principal;
 
 @Slf4j
@@ -32,6 +33,10 @@ public class UserController {
     @Resource(name = "joinValidator")
     private Validator joinValidator;
 
+    @Resource(name = "modifyUserValidator")
+    private Validator modifyUserValidator;
+
+
 //    @InitBinder(value = {"",""}) // validator 가 2개 이상의 dto 에 적용되는 경우
     @InitBinder("joinUserDto") // 하나에만 적용하는 경우
     public void initBinder(WebDataBinder binder) {
@@ -45,6 +50,11 @@ public class UserController {
 //        } else if(objectName.equals("emailDto")) {
 //            binder.addValidators(emailValidator);
 //        }
+    }
+
+    @InitBinder("modifyUserDto")
+    public void initBinder2(WebDataBinder binder){
+        binder.addValidators(modifyUserValidator);
     }
 
     // 스프링 시큐리티가 해당 주소를 낚아챔 - Security Config 파일 생성 후 작동 안함
@@ -96,14 +106,36 @@ public class UserController {
         return "user/modifyForm";
     }
 
+    // 회원 이메일 수정
+    @PostMapping("/modifyEmail")
+    public String modifyEmail(@Valid @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, BindingResult result, HttpServletRequest request, Principal principal){
+        log.info("================ modifyEmail called... ================");
+        log.info("modifyEmail = {}", modifyUserDto.getModifiedEmailAddr());
+        log.info("authCode = {}", modifyUserDto.getAuthCode());
+
+        if (result.hasErrors()){
+            result.getFieldErrors().forEach(fieldError -> {
+                log.info("errorField = {}", fieldError.getField());
+                String[] errorCodeArr = fieldError.getCodes();
+                for (int i=0; i<errorCodeArr.length; i++) {
+                    log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
+                }
+                log.info("-----------------------------------------");
+            });
+
+            return "user/joinForm";
+        }
+
+        String username = principal.getName();
+        userService.emailModify(modifyUserDto, username);
+        return "redirect:" + request.getContextPath() +"/user/modifyForm";
+    }
+
     @PostMapping("/modifyProc")
     public String modifyProc(@ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto){
 
         return "user/modifyForm";
     }
-
-
-
 
     @Secured("ROLE_ADMIN") // ROLE_ADMIN 권한만 접근 가능 , 메서드에 사용, 하나의 권한만 사용 가능
     @GetMapping("/info")

@@ -30,25 +30,22 @@ public class UserApiController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/emailAuth")
-    public String emailAuth(@RequestBody EmailDto emailDto, HttpSession session) throws Exception {
-        log.info("=========== emailAuth called..... ==============");
-        log.info("sendAuthEmail, {}", emailDto);
+    @PostMapping("/modifyEmailAuth")
+    public String emailAuth(@RequestBody ModifyUserDto modifyUserDto, HttpSession session) throws Exception {
+        log.info("=========== Modify emailAuth called..... ==============");
 
-        String email_id = emailDto.getEmail_id();
-        String email_domain = emailDto.getEmail_domain();
-        String email_addr = email_id + email_domain;
-        log.info(email_addr);
+        String modifiedEmailAddr = modifyUserDto.getModifiedEmailAddr();
 //        log.info("email_addr = " + email_addr);
+        log.info("modifiedEmailAddr ={}", modifiedEmailAddr);
 
-        String code = mailService.sendSimpleMessage(email_addr);
+        String code = mailService.sendSimpleMessage(modifiedEmailAddr);
         log.info("code = {}", code);
 
         Map<String, String> emailCheck = new HashMap<>();
-        emailCheck.put(email_addr, code);
+        emailCheck.put(modifiedEmailAddr, code);
         log.info("emailCheck = {}", emailCheck);
 
-        session.setAttribute("emailCheck", emailCheck);
+        session.setAttribute("modifyEmailCheckOk", emailCheck);
         session.setAttribute("authCode", code);
 
         return code;
@@ -108,6 +105,7 @@ public class UserApiController {
 
     }
 
+    // 주소 수정
     @PostMapping("/modifyAddr")
     public String modifyAddr(@RequestBody ModifyUserDto modifyUserDto, Principal principal){
         log.info("========= modifyAddr called ==========");
@@ -117,6 +115,31 @@ public class UserApiController {
         userService.addrModify(modifyUserDto, principal.getName());
 
         return "전송완료";
+    }
+
+    // 이메일 주소 수정시 인증
+    @PostMapping("/emailAuth")
+    public String emailAuth(@RequestBody EmailDto emailDto, HttpSession session) throws Exception {
+        log.info("=========== emailAuth called..... ==============");
+        log.info("sendAuthEmail, {}", emailDto);
+
+        String email_id = emailDto.getEmail_id();
+        String email_domain = emailDto.getEmail_domain();
+        String email_addr = email_id + email_domain;
+        log.info(email_addr);
+//        log.info("email_addr = " + email_addr);
+
+        String code = mailService.sendSimpleMessage(email_addr);
+        log.info("code = {}", code);
+
+        Map<String, String> emailCheck = new HashMap<>();
+        emailCheck.put(email_addr, code);
+        log.info("emailCheck = {}", emailCheck);
+
+        session.setAttribute("emailCheck", emailCheck);
+        session.setAttribute("authCode", code);
+
+        return code;
     }
 
 }

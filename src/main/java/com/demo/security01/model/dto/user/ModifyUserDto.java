@@ -12,11 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class ModifyUserDto {
 
+    private int userIdx;
     private String username;
     private String password;
-    private String email_addr;
-    private String modified_email_addr;
-    private String auth_code;
+    private String emailAddr;
+    private String modifiedEmailAddr;
+    private String authCode;
     private MultipartFile profileFile;
     private String zipCode;
     private String postAddr1;
