@@ -2,7 +2,7 @@ package com.demo.security01.controller.user;
 
 import com.demo.security01.entity.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
-import com.demo.security01.model.dto.user.ModifyUserDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.repository.user.UserRepositoryCustomImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.net.http.HttpRequest;
 import java.security.Principal;
 
 @Slf4j
@@ -33,8 +32,8 @@ public class UserController {
     @Resource(name = "joinValidator")
     private Validator joinValidator;
 
-    @Resource(name = "modifyUserValidator")
-    private Validator modifyUserValidator;
+    @Resource(name = "modUserEmailValidator")
+    private Validator modUserEmailValidator;
 
 
 //    @InitBinder(value = {"",""}) // validator 가 2개 이상의 dto 에 적용되는 경우
@@ -54,7 +53,7 @@ public class UserController {
 
     @InitBinder("modifyUserDto")
     public void initBinder2(WebDataBinder binder){
-        binder.addValidators(modifyUserValidator);
+        binder.addValidators(modUserEmailValidator);
     }
 
     // 스프링 시큐리티가 해당 주소를 낚아챔 - Security Config 파일 생성 후 작동 안함
@@ -93,7 +92,7 @@ public class UserController {
         return "redirect:" + request.getContextPath() +"/user/loginForm";
     }
 
-    // 회원수정
+    // 회원수정 form
     @GetMapping("/modifyForm")
     public String modifyForm(Principal principal, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, Model model){
         String username = principal.getName();
@@ -106,30 +105,7 @@ public class UserController {
         return "user/modifyForm";
     }
 
-    // 회원 이메일 수정
-    @PostMapping("/modifyEmail")
-    public String modifyEmail(@Valid @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, BindingResult result, HttpServletRequest request, Principal principal){
-        log.info("================ modifyEmail called... ================");
-        log.info("modifyEmail = {}", modifyUserDto.getModifiedEmailAddr());
-        log.info("authCode = {}", modifyUserDto.getAuthCode());
 
-        if (result.hasErrors()){
-            result.getFieldErrors().forEach(fieldError -> {
-                log.info("errorField = {}", fieldError.getField());
-                String[] errorCodeArr = fieldError.getCodes();
-                for (int i=0; i<errorCodeArr.length; i++) {
-                    log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
-                }
-                log.info("-----------------------------------------");
-            });
-
-            return "user/joinForm";
-        }
-
-        String username = principal.getName();
-        userService.emailModify(modifyUserDto, username);
-        return "redirect:" + request.getContextPath() +"/user/modifyForm";
-    }
 
     @PostMapping("/modifyProc")
     public String modifyProc(@ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto){

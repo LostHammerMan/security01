@@ -1,19 +1,22 @@
 package com.demo.security01.controller.api;
 
-import com.demo.security01.entity.User;
-import com.demo.security01.entity.UserAddr;
-import com.demo.security01.model.dto.user.EmailDto;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
-import com.demo.security01.model.dto.user.ModifyUserDto;
+import com.demo.security01.model.dto.user.EmailDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.service.user.MailServiceImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,15 @@ public class UserApiController {
     @Autowired
     private UserService userService;
 
+    @Resource(name = "modUserEmailValidator")
+    private Validator modUserEmailValidator;
+
+    @InitBinder("modifyUserDto")
+    public void init(WebDataBinder binder){
+        binder.addValidators(modUserEmailValidator);
+    }
+
+    // 이메일 인증번호 전송
     @PostMapping("/modifyEmailAuth")
     public String emailAuth(@RequestBody ModifyUserDto modifyUserDto, HttpSession session) throws Exception {
         log.info("=========== Modify emailAuth called..... ==============");
@@ -45,13 +57,13 @@ public class UserApiController {
         emailCheck.put(modifiedEmailAddr, code);
         log.info("emailCheck = {}", emailCheck);
 
-        session.setAttribute("modifyEmailCheckOk", emailCheck);
+        session.setAttribute("emailCheck", emailCheck);
         session.setAttribute("authCode", code);
 
         return code;
     }
 
-    //@PostMapping("/authNumCheck")
+    // 인증번호 확인
     @GetMapping(value = {"/authNumCheck","/authNumCheck{inputAuthNum}"}) // {auth_code} 가 null 인 경우를 위해 "/authNumCheck" 사용
     public ResponseEntity<Object> authNumCheck(@PathVariable String inputAuthNum, HttpSession session){
         log.info("================= inputAuthNum called ===================");
@@ -105,9 +117,9 @@ public class UserApiController {
 
     }
 
-    // 주소 수정
+    // 회원수정 - 주소
     @PostMapping("/modifyAddr")
-    public String modifyAddr(@RequestBody ModifyUserDto modifyUserDto, Principal principal){
+    public String modifyAddr(@Valid @RequestBody ModifyUserDto modifyUserDto, Principal principal){
         log.info("========= modifyAddr called ==========");
         log.info("zipcode = {}", modifyUserDto.getZipCode());
         log.info("postAddr1 = {}", modifyUserDto.getPostAddr1());
@@ -140,6 +152,31 @@ public class UserApiController {
         session.setAttribute("authCode", code);
 
         return code;
+    }
+
+    // 회원수정 - 이메일
+    @PostMapping("/modifyEmail")
+    public String modifyEmail(@Valid @RequestBody ModifyUserDto modifyUserDto, /*BindingResult result,*/ HttpServletRequest request, Principal principal){
+        log.info("================ modifyEmail called... ================");
+        log.info("modifyEmail = {}", modifyUserDto.getModifiedEmailAddr());
+        log.info("authCode = {}", modifyUserDto.getAuthCode());
+
+        /*if (result.hasErrors()){
+            result.getFieldErrors().forEach(fieldError -> {
+                log.info("errorField = {}", fieldError.getField());
+                String[] errorCodeArr = fieldError.getCodes();
+                for (int i=0; i<errorCodeArr.length; i++) {
+                    log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
+                }
+                log.info("-----------------------------------------");
+            });
+
+            return "에러 발생";
+        }*/
+
+        String username = principal.getName();
+        userService.emailModify(modifyUserDto, username);
+        return "redirect:" + request.getContextPath() +"/user/modifyForm";
     }
 
 }

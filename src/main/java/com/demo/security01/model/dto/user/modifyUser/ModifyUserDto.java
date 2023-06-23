@@ -1,4 +1,4 @@
-package com.demo.security01.model.dto.user;
+package com.demo.security01.model.dto.user.modifyUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -387,7 +387,9 @@
         $("#emailModifyBtn").on("click", function (e) {
             // modal 창 열 때 초기화
             document.forms['email_form'].reset();
-            $("#modifiedEmailAddr").attr("disabled", false);
+            $("#email_check_warn").text("");
+
+            $("#modifiedEmailAddr").attr("readonly", false);
             $("#EmailModal").modal();
         });
     });
@@ -444,9 +446,30 @@
     <!-- 이메일 변경 버튼 이벤트 - modal -->
     $("#emailModBtn").on("click", function (e){
         e.preventDefault();
-        let modifiedEmailAddrVal = $("#modifiedEmailAddr").val();
-        console.log("modifiedEmailAddrVal = {}", modifiedEmailAddrVal);
-        $("form").submit();
+        let data3 = {
+            "modifiedEmailAddr" : $("#modifiedEmailAddr").val(),
+            "authCode" : $("#authCode").val()
+        }
+
+        console.log("%s", JSON.stringify(data3, null, "\t"));
+        // $("form").submit();
+
+        $.ajax({
+            url : "${root}api/modifyEmail",
+            type : "POST",
+            /*data : {
+                "modifiedEmailAddrVal" : modifiedEmailAddrVal,
+            },*/
+            contentType : "application/json; charset=utf-8",
+            data : JSON.stringify(data3),
+            success : function (res){
+                console.log(res.toString())
+                alert("이메일 변경 성공");
+            },
+            error : function (err){
+                console.log(err.responseText);
+            }
+        })
     });
 
 </script>
