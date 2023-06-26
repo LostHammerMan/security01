@@ -1,6 +1,6 @@
-package com.demo.security01.validator;
+package com.demo.security01.validator.user;
 
-import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,35 +22,35 @@ public class ModUserEmailValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return ModifyUserDto.class.isAssignableFrom(clazz);
+        return ModifyUserEmailDto.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
         log.info("===== modUserEmailValidator called.. ========");
-        ModifyUserDto modifyUserDto = (ModifyUserDto) target;
-        log.info("ModifyUserValidator = {}", modifyUserDto);
-        checkEmail(modifyUserDto, errors);
+        ModifyUserEmailDto modifyUserEmailDto = (ModifyUserEmailDto) target;
+        log.info("ModifyUserValidator = {}", modifyUserEmailDto);
+        checkEmail(modifyUserEmailDto, errors);
 
     }
 
-    public void checkEmail(ModifyUserDto modifyUserDto, Errors errors){
+    public void checkEmail(ModifyUserEmailDto modifyUserEmailDto, Errors errors){
+
         // 세션 가저오기
         // 컨트롤러 및 서비스에서 getSession 을 하지 않고, 세션정보를 가져오는 메서드
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = servletRequestAttributes.getRequest().getSession(true);
 
-        String modifiedEmailAddr = modifyUserDto.getModifiedEmailAddr();
+        String modifiedEmailAddr = modifyUserEmailDto.getModifiedEmailAddr();
         log.info("modifiedEmailAddr = {}", modifiedEmailAddr);
+
+        // null 체크
         if (!StringUtils.hasText(modifiedEmailAddr)) {
             errors.rejectValue("modifiedEmailAddr", "NotBlank");
             return;
         }
 
-
-
-
-        String authCode = modifyUserDto.getAuthCode();
+        String authCode = modifyUserEmailDto.getAuthCode();
         log.info("authCode = {}", authCode);
         if (!StringUtils.hasText(authCode)) {
             errors.rejectValue("authCode", "NotBlank");

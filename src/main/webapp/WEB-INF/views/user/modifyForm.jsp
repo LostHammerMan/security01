@@ -87,6 +87,7 @@
 
     #email_check_warn {
         margin-left: 10px;
+        color: red;
     }
 
     .btn_duo_popup {
@@ -121,7 +122,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading"><a href="${root}user/modifyForm">내프로필</a></div>
-                <div class="panel-body"><a href="#">보안변경</a></div>
+                <div class="panel-body"><a href="${root}user/modifyPwdForm">보안변경</a></div>
             </div>
 
         </div><!--/col-3-->
@@ -445,6 +446,7 @@
 
     <!-- 이메일 변경 버튼 이벤트 - modal -->
     $("#emailModBtn").on("click", function (e){
+        let $email_check_warn = $("#email_check_warn");
         e.preventDefault();
         let data3 = {
             "modifiedEmailAddr" : $("#modifiedEmailAddr").val(),
@@ -465,9 +467,17 @@
             success : function (res){
                 console.log(res.toString())
                 alert("이메일 변경 성공");
+                location.href = "${root}user/modifyForm";
             },
-            error : function (err){
-                console.log(err.responseText);
+            error : function (jqXHR, textStatus, errorThrown){
+                alert("이메일 변경 실패");
+                let error = JSON.parse(jqXHR.responseText);
+                // let error = jQuery.parseJSON(jqXHR.responseText);
+                let errorMsg = error.message;
+                console.log("error = {}", error);
+                console.log(error.message);
+                $email_check_warn.text(errorMsg);
+                // $email_check_warn.text(error.responseText.message);
             }
         })
     });

@@ -1,4 +1,4 @@
-package com.demo.security01.validator;
+package com.demo.security01.validator.user;
 
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
 package com.demo.security01.controller.user;
 
+import com.demo.security01.config.captcha.CaptchaUtil;
 import com.demo.security01.entity.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -51,10 +53,10 @@ public class UserController {
 //        }
     }
 
-    @InitBinder("modifyUserDto")
+    /*@InitBinder("modifyUserDto")
     public void initBinder2(WebDataBinder binder){
         binder.addValidators(modUserEmailValidator);
-    }
+    }*/
 
     // 스프링 시큐리티가 해당 주소를 낚아챔 - Security Config 파일 생성 후 작동 안함
 //    @GetMapping("/loginForm")
@@ -103,6 +105,19 @@ public class UserController {
 //        log.info("findUser = {}", findUser);
 //        model.addAttribute("findUser", findUser);
         return "user/modifyForm";
+    }
+
+    // 회원수정 - 비밀번호 변경
+    @GetMapping("/modifyPwdForm")
+    public String modifyPwdForm(Principal principal){
+        return "user/modifyPwdForm";
+    }
+
+
+
+    @PostMapping("/modifyPwdProc")
+    public String modifyPwdProc(Principal principal){
+        return "user/modifyPwdForm";
     }
 
 

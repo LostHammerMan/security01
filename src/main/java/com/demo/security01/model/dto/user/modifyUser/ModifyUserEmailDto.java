@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ModifyUserEmailDto {
-
+    private int userIdx;
     private String modifiedEmailAddr;
     private String authCode;
 }

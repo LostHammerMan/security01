@@ -1,7 +1,7 @@
 package com.demo.security01.config.handler;
 
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
-import com.demo.security01.model.error.ErrorResponse;
+import com.demo.security01.model.dto.error.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -43,6 +43,7 @@ public class HandlerExample {
                 .body(responseEntityDto);
     }
 
+    // @RequestBody 를 쓴 경우
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -59,12 +60,17 @@ public class HandlerExample {
             errorCode = fieldError.getCodes()[0];
         }
 
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage(messageSourceAccessor.getMessage(errorCode));
+        ErrorResponseDto errorResponse = ErrorResponseDto.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message(messageSourceAccessor.getMessage(errorCode))
+                        .localDateTime(LocalDateTime.now())
+                        .build();
+
         log.info("{}", errorResponse);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 
     // 없는 페이지의 경우

@@ -10,7 +10,6 @@ import javax.validation.ConstraintValidatorContext;
 @Slf4j
 public class TestAddrValidator implements ConstraintValidator<TestAddrAnno, String> {
 
-    private boolean
 
     @Override
     public void initialize(TestAddrAnno constraintAnnotation) {

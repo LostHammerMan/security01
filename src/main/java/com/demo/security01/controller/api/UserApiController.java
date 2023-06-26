@@ -1,11 +1,14 @@
 package com.demo.security01.controller.api;
 
+import com.demo.security01.config.captcha.CaptchaUtil;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.user.EmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
 import com.demo.security01.service.user.MailServiceImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
+import nl.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -36,7 +40,7 @@ public class UserApiController {
     @Resource(name = "modUserEmailValidator")
     private Validator modUserEmailValidator;
 
-    @InitBinder("modifyUserDto")
+    @InitBinder("modifyUserEmailDto")
     public void init(WebDataBinder binder){
         binder.addValidators(modUserEmailValidator);
     }
@@ -156,27 +160,56 @@ public class UserApiController {
 
     // 회원수정 - 이메일
     @PostMapping("/modifyEmail")
-    public String modifyEmail(@Valid @RequestBody ModifyUserDto modifyUserDto, /*BindingResult result,*/ HttpServletRequest request, Principal principal){
+    public ResponseEntity<Object> modifyEmail(@Valid @RequestBody ModifyUserEmailDto modifyUserEmailDto, /*BindingResult result,*/ HttpServletRequest request, Principal principal){
         log.info("================ modifyEmail called... ================");
-        log.info("modifyEmail = {}", modifyUserDto.getModifiedEmailAddr());
-        log.info("authCode = {}", modifyUserDto.getAuthCode());
+        log.info("modifyEmail = {}", modifyUserEmailDto.getModifiedEmailAddr());
+        log.info("authCode = {}", modifyUserEmailDto.getAuthCode());
 
-        /*if (result.hasErrors()){
-            result.getFieldErrors().forEach(fieldError -> {
-                log.info("errorField = {}", fieldError.getField());
-                String[] errorCodeArr = fieldError.getCodes();
-                for (int i=0; i<errorCodeArr.length; i++) {
-                    log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
-                }
-                log.info("-----------------------------------------");
-            });
-
-            return "에러 발생";
-        }*/
 
         String username = principal.getName();
-        userService.emailModify(modifyUserDto, username);
-        return "redirect:" + request.getContextPath() +"/user/modifyForm";
+        userService.emailModify(modifyUserEmailDto, username);
+
+        ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
+                .status(HttpStatus.OK.value())
+                .message("변경 성공!!").build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseEntityDto);
+//        return "redirect:" + request.getContextPath() +"user/modifyForm";
+    }
+
+    // captcha 이미지 가져오는 메서드
+    @GetMapping("/getCaptchaImg")
+    @ResponseBody
+    public void captchaImg(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        new CaptchaUtil().captchaImg(request, response);
+    }
+
+    // 전달받은 문자열로 음성 가져오는 메서드
+    @GetMapping("/getCaptchaAudio")
+    @ResponseBody
+    public void captchaAudio(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Captcha captcha = (Captcha) request.getSession().getAttribute(Captcha.NAME);
+        String getAnswer = captcha.getAnswer();
+        new CaptchaUtil().getAudioCaptCha(request, response, getAnswer);
+    }
+
+    // 사용자가 입력한 보안문자 체크
+    @PostMapping("/chkCaptchaAnswer")
+    @ResponseBody
+    public String chkCaptchaAnswer(HttpServletRequest request, HttpServletResponse response) {
+        String result = "";
+        Captcha captcha = (Captcha) request.getSession().getAttribute(Captcha.NAME);
+
+        String ans = request.getParameter(Captcha.NAME);
+
+        if (ans != null && !"".equals(ans)){
+            request.getSession().removeAttribute(Captcha.NAME);
+            result = "200";
+        }else {
+            result = "300";
+        }
+
+        return result;
     }
 
 }
