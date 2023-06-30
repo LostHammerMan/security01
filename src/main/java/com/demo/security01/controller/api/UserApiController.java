@@ -194,7 +194,7 @@ public class UserApiController {
     }
 
     // 사용자가 입력한 보안문자 체크
-    @PostMapping("/chkCaptchaAnswer")
+   /* @PostMapping("/chkCaptchaAnswer")
     @ResponseBody
     public String chkCaptchaAnswer(HttpServletRequest request, HttpServletResponse response) {
         String result = "";
@@ -210,6 +210,6 @@ public class UserApiController {
         }
 
         return result;
-    }
+    }*/
 
 }

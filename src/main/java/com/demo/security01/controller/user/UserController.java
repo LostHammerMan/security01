@@ -1,9 +1,9 @@
 package com.demo.security01.controller.user;
 
-import com.demo.security01.config.captcha.CaptchaUtil;
 import com.demo.security01.entity.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
 import com.demo.security01.repository.user.UserRepositoryCustomImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -34,23 +34,23 @@ public class UserController {
     @Resource(name = "joinValidator")
     private Validator joinValidator;
 
-    @Resource(name = "modUserEmailValidator")
-    private Validator modUserEmailValidator;
+   /* @Resource(name = "modUserEmailValidator")
+    private Validator modUserEmailValidator;*/
+
+    @Resource(name = "modUserPwdValidator")
+    private Validator modUserPwdValidator;
 
 
 //    @InitBinder(value = {"",""}) // validator 가 2개 이상의 dto 에 적용되는 경우
     @InitBinder("joinUserDto") // 하나에만 적용하는 경우
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(joinValidator);
-        /*log.info("======= initBinder Called......============");
-        String objectName = binder.getObjectName();
 
-        if(objectName.equals("joinUserDto")) {
-            binder.addValidators(joinValidator);
-        }*/
-//        } else if(objectName.equals("emailDto")) {
-//            binder.addValidators(emailValidator);
-//        }
+    }
+
+    @InitBinder("modifyUserPwdDto")
+    public void initBinder2(WebDataBinder binder){
+        binder.addValidators(modUserPwdValidator);
     }
 
     /*@InitBinder("modifyUserDto")
@@ -107,17 +107,32 @@ public class UserController {
         return "user/modifyForm";
     }
 
-    // 회원수정 - 비밀번호 변경
+    // 회원수정 - 비밀번호 변경 폼
     @GetMapping("/modifyPwdForm")
-    public String modifyPwdForm(Principal principal){
+    public String modifyPwdForm(Principal principal, @ModelAttribute("modifyUserPwdDto") ModifyUserPwdDto modifyUserPwdDto){
         return "user/modifyPwdForm";
     }
 
-
-
+    // 회원수정 - 비밀번호 변경
     @PostMapping("/modifyPwdProc")
-    public String modifyPwdProc(Principal principal){
-        return "user/modifyPwdForm";
+    public String modifyPwdProc(@Valid @ModelAttribute("modifyUserPwdDto") ModifyUserPwdDto modifyUserPwdDto, BindingResult result, Principal principal, HttpServletRequest request){
+        log.info("NowPw = {}", modifyUserPwdDto.getNowPw());
+        log.info("NewPw = {}", modifyUserPwdDto.getNewPw());
+        log.info("ConPw = {}", modifyUserPwdDto.getConfPw());
+        String errorCode = null;
+        if (result.hasErrors()){
+            for (FieldError fieldError : result.getFieldErrors()) {
+                log.info("error field = {}", fieldError.getField());
+                log.info("error code = {}", fieldError.getCodes()[0]);
+                errorCode = fieldError.getCodes()[0];
+            }
+            return "user/modifyPwdForm";
+
+        }
+        userService.updatePwd(modifyUserPwdDto, principal.getName());
+        return "redirect:" + request.getContextPath() + "/user/modifyForm";
+
+
     }
 
 
@@ -125,7 +140,7 @@ public class UserController {
     @PostMapping("/modifyProc")
     public String modifyProc(@ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto){
 
-        return "user/modifyForm";
+        return "user/modifyPwdForm";
     }
 
     @Secured("ROLE_ADMIN") // ROLE_ADMIN 권한만 접근 가능 , 메서드에 사용, 하나의 권한만 사용 가능

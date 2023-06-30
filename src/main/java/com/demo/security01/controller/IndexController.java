@@ -27,6 +27,10 @@ public class IndexController {
         return "manager";
     }
 
+    @GetMapping("/flexTest")
+    public String flexTest(){
+        return "flexTest";
+    }
 
 
 }

@@ -8,16 +8,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <style>
     .footer {
-        float: bottom;
+        margin-top: 60px;
     }
 </style>
-<footer class="footer">
-    <div class="jumbotron text-center" style="margin-top: 600px">
+<div class="footer">
+    <div class="jumbotron text-center" style="">
         <p>create By Lss</p>
         <p>📞 031-222-2222</p>
         <p> ✔ 경기도 어딘가</p>
     </div>
-</footer>
+</div>
 
 </body>
 </html>

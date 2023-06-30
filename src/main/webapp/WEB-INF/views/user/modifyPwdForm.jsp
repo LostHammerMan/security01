@@ -54,46 +54,51 @@
         </div>
 
         <div class="card-body">
-            <form action="${root}user/modifyPwdProc" data-toggle="validator">
+            <form:form action="${root}user/modifyPwdProc" method="post" modelAttribute="modifyUserPwdDto" >
                 <div class="form-group">
                     <div class="form-group">
-                        <input type="password" data-minlength="4" class="form-control" id="nowPwd" name="nowPwd"
+                        <form:input path="nowPw" type="password" data-minlength="4" class="form-control" id="nowPwd" name="nowPwd"
                                data-error="Have atleast 4 characters" placeholder="현재 비밀번호"/>
+                        <form:errors path="nowPw" cssStyle="color: red" />
                         <!-- Error -->
-                        <div class="help-block with-errors"></div>
+<%--                        <div class="help-block with-errors"></div>--%>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-group">
-                        <input type="password" data-minlength="4" class="form-control" id="newPw" name="newPw"
+                        <form:input path="newPw" type="password" data-minlength="4" class="form-control" id="newPw" name="newPw"
                                data-error="Have atleast 4 characters" placeholder="새 비밀번호"/>
                         <!-- Error -->
-                        <div class="help-block with-errors"></div>
+                        <form:errors path="newPw" cssStyle="color: red" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="confPw" name="confPw"
+                        <form:input path="confPw" type="password" class="form-control" id="confPw" name="confPw"
                                placeholder="새 비밀번호 확인"/>
                         <!-- Error -->
-                        <div class="help-block with-errors"></div>
+                        <form:errors path="confPw" cssStyle="color: red" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <p>아래 이미지를 보이는 대로 입력해주세요</p>
                     <div class="captcha d-flex justify-content-between">
-<%--                        <div style="overflow:hidden; margin-bottom: 5px">
-                            <div style="float:left">
-                                <img title="캡차이미지" src="${root}api/getCaptchaImg" alt="캡차이미지" id="captchaImg"/>
-                                <div id="ccaudio" class="d-none"></div>
+                        <div class="d-flex mr-2" >
+                            <img title="캡차이미지" src="${root}api/getCaptchaImg" alt="캡차이미지" id="captchaImg"/>
+                        </div>
+                        <div class="d-flex flex-column justify-content-between" style="width: 58%">
+                            <div class="d-flex justify-content-between">
+                                <button id="reload" class="btn btn-outline-info" type="button" onclick="getImage()" style="width: 48%">새로고침</button>
+                                <button id="soundOn" class="btn btn-outline-secondary" type="button" onclick="getAudio()" style="width: 48%">음성듣기</button>
+                            </div>
+                            <div class="mt-2">
+                                <form:input path="captchaCode" id="answer" type="text" value="" class="form-control" placeholder="자동 입력 방지문자"/>
+                                <form:errors path="captchaCode" cssStyle="color: red" />
                             </div>
                         </div>
-                        <div style="padding:3px">
-                            &lt;%&ndash;                    <input id="reload" type="button" onclick="javaScript:getImage()" value="새로고침"/>&ndash;%&gt;
-                            <input id="reload" class="btn btn-outline-info" type="button" onclick="getImage()" value="새로고침"/>
-                            <input id="soundOn" class="btn btn-outline-secondary" type="button" onclick="javaScript:audio()" value="음성듣기"/>
-                        </div>--%>
+                    </div>
+                    <%--<div class="captcha d-flex justify-content-between">
                         <div>
                             <img title="캡차이미지" src="${root}api/getCaptchaImg" alt="캡차이미지" id="captchaImg"/>
                         </div>
@@ -101,26 +106,22 @@
                             <div class="d-flex justify-content-between">
                                 <button id="reload" class="btn btn-outline-info" type="button" onclick="getImage()" style="width: 48%">새로고침</button>
                                 <button id="soundOn" class="btn btn-outline-secondary" type="button" onclick="getAudio()" style="width: 48%">음성듣기</button>
-<%--                                <button id="soundOn" class="btn btn-outline-secondary" type="button" onclick="javaScript:audio()" style="width: 48%">음성듣기</button>--%>
+                                &lt;%&ndash;                                <button id="soundOn" class="btn btn-outline-secondary" type="button" onclick="javaScript:audio()" style="width: 48%">음성듣기</button>&ndash;%&gt;
                             </div>
                             <div>
                                 <input id="answer" type="text" value="" class="form-control" placeholder="자동 입력 방지문자"/>
                             </div>
                         </div>
-                    </div>
-                    <%--<div style="padding:3px">
-                        <input id="answer" type="text" value="" class="form-control" placeholder="자동 입력 방지문자">
-                        &lt;%&ndash;                    <input id="check" type="button" value="확인"/>&ndash;%&gt;
                     </div>--%>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">확인</button>
+                    <form:button type="submit" class="btn btn-primary btn-block">확인</form:button>
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-danger btn-block">취소</button>
                 </div>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>
@@ -135,11 +136,11 @@
     window.onload = function () {
         getImage();	// 이미지 가져오기
 
-        document.querySelector('#check').addEventListener('click', function () {
+       /* document.querySelector('#check').addEventListener('click', function () {
             var params = {answer: document.querySelector('#answer').getAttribute('value')};
 
 
-            AF.ajax('${root}/api/chkCaptchaAnswer', params, function (returnData) {
+            AF.ajax('${root}api/chkCaptchaAnswer', params, function (returnData) {
                 if (returnData == 200) {
                     alert('입력값이 일치합니다.');
                     // 성공 코드
@@ -149,7 +150,7 @@
                     document.querySelector('#answer').setAttribute('value', '');
                 }
             }, 'json');
-        });
+        });*/
     }
 
     /*매번 랜덤값을 파라미터로 전달하는 이유 : IE의 경우 매번 다른 임의 값을 전달하지 않으면 '새로고침' 클릭해도 정상 호출되지 않아 이미지가 변경되지 않는 문제가 발생된다*/

@@ -1,12 +1,13 @@
 package com.demo.security01.config.handler;
 
-import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.error.ErrorResponseDto;
+import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -72,6 +73,29 @@ public class HandlerExample {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
+
+    // BindException - modelAttribute
+   /* @ExceptionHandler(BindException.class)
+    public ResponseEntity<Object> handleMethodBindException(BindException e){
+
+        String errorCode = null;
+        log.info("===== BindException called.. ======");
+        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+            log.info("error field = {}", fieldError.getField());
+            log.info("error code = {}", fieldError.getCodes()[0]);
+            errorCode = fieldError.getCodes()[0];
+        }
+
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(messageSourceAccessor.getMessage(errorCode))
+                .localDateTime(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponseDto);
+    }*/
 
     // 없는 페이지의 경우
     @ExceptionHandler(NoHandlerFoundException.class)

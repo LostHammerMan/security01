@@ -14,7 +14,7 @@
     }
 
     #left-header {
-        background-color: #ccc4ff;
+        background-color: #EBF5ff;
     }
 
     .profile-basic {
