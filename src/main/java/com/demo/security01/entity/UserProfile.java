@@ -21,6 +21,9 @@ public class UserProfile {
     @Column(name = "FILE_NAME")
     private String fileName;
 
+    @Column(name = "NICK_NAME")
+    private String nickName;
+
     @OneToOne
     @JoinColumn(name = "id")
     private User user;

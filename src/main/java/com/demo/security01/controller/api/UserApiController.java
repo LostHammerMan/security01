@@ -5,6 +5,7 @@ import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.user.EmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
 import com.demo.security01.service.user.MailServiceImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -193,23 +195,13 @@ public class UserApiController {
         new CaptchaUtil().getAudioCaptCha(request, response, getAnswer);
     }
 
-    // 사용자가 입력한 보안문자 체크
-   /* @PostMapping("/chkCaptchaAnswer")
+   // 프로필 이미지 업로드
+    @PostMapping("/profileImg")
     @ResponseBody
-    public String chkCaptchaAnswer(HttpServletRequest request, HttpServletResponse response) {
-        String result = "";
-        Captcha captcha = (Captcha) request.getSession().getAttribute(Captcha.NAME);
-
-        String ans = request.getParameter(Captcha.NAME);
-
-        if (ans != null && !"".equals(ans)){
-            request.getSession().removeAttribute(Captcha.NAME);
-            result = "200";
-        }else {
-            result = "300";
-        }
-
-        return result;
-    }*/
+    public ResponseEntity<Object> profileImgUpload(@RequestBody ModifyUserProfileDto modifyUserProfileDto){
+        log.info("파일 생성 성공");
+        userService.uploadProfileImg(modifyUserProfileDto);
+        return ResponseEntity.ok().body("전송 성공");
+    }
 
 }

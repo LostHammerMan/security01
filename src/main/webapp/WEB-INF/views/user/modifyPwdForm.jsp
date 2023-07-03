@@ -10,7 +10,7 @@
 
 <style>
     body {
-        background: #E2E2E2;
+        background: #F2F2F2;
         /* background: -webkit-linear-gradient(to top, #EF629F, #EECDA3);
          background: linear-gradient(to top, #EF629F, #EECDA3);*/
     }
@@ -44,6 +44,18 @@
 </style>
 
 <body>
+<nav class="navbar navbar-expand-sm navbar-light mb-3" style="background-color: #E2E2E2;">
+    <div class="navbar-nav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="${root}user/modifyForm">내프로필</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${root}user/modifyPwdForm">보안변경</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">

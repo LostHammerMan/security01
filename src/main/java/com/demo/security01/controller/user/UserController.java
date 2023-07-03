@@ -3,6 +3,7 @@ package com.demo.security01.controller.user;
 import com.demo.security01.entity.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
 import com.demo.security01.repository.user.UserRepositoryCustomImpl;
 import com.demo.security01.service.user.UserService;
@@ -133,6 +134,11 @@ public class UserController {
         return "redirect:" + request.getContextPath() + "/user/modifyForm";
 
 
+    }
+
+    @GetMapping("/modifyProfile")
+    public String modifyProfile(@ModelAttribute ModifyUserProfileDto modifyUserProfileDto){
+        return "user/modifyProfile";
     }
 
 

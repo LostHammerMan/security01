@@ -112,12 +112,12 @@
     <div class="row">
         <div class="col-sm-3" id="left-header"><!--left col-->
             <div class="text-center">
-                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
-                     alt="avatar">
+                <a href="${root}user/modifyProfile" ><img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
+                                 alt="avatar"></a>
                 <h6>${loginUser.username}</h6>
-                <input type="file" class="text-center center-block file-upload">
+<%--                <input type="file" class="text-center center-block file-upload">--%>
             </div>
-            </hr><br>
+            <hr>
 
 
             <div class="panel panel-default">
