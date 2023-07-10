@@ -53,11 +53,11 @@
                             <div class="m-3">
                                 <img class="card-img-top" src=
                                         "https://media.geeksforgeeks.org/wp-content/uploads/20190506125816/avt.png"
-                                     style="height: 140px; width: 140px">
+                                     style="height: 140px; width: 140px" id="profileImgFile">
                             </div>
                             <div class="flex-column m-3">
-                                <label class="btn btn-outline-dark" for="profileImgFile" style="margin-top: 9px;">사진변경</label>
-                                <input id="profileImgFile" name="profileImgFile" type="file" style="display: none" onchange="uploadImg()" />
+                                <label class="btn btn-outline-dark" for="profileImg" style="margin-top: 9px;">사진변경</label>
+                                <input id="profileImg" name="profileImg" type="file" style="display: none" onchange="uploadImg()" />
                                 <button class="btn btn-outline-secondary" type="button">삭제</button>
                             </div>
                         </div>
@@ -81,57 +81,61 @@
     </div>
 </div>
 
-<script type="text/javascript">function uploadImg() {
+<script type="text/javascript">
+$(function () {
+
+})
+
+// 프로필 이미지 파일 업로드
+function uploadImg() {
 
     let formData = new FormData();
-    let inputFile = $("input[name='profileImgFile']");
-    let inputFiles = inputFile[0].files;
+    let inputFile = $("#profileImg").get(0).files[0];
 
-    console.log("inputFile = {}", inputFile);
-    formData.append("profileImgFile", inputFiles);
+    formData.append("profileImg", inputFile);
 
     // let profileVal = $("profileImgFile").val();
 
     $.ajax({
-        url : '${root}api/profileImg',
+        url : '${root}api/updateProfileImg',
         type : 'POST',
-        data : JSON.stringify(formData),
+        data : formData,
+        enctype : 'multipart/form-data',
         processData : false,
         contentType : false,
         success(res){
-            console.log(res);
+            console.log(JSON.stringify(res, null, 2));
+            console.log(res.storeFileName);
+            let fileName = res.storeFileName;
+            $("#profileImgFile").attr("src", "${root}static/profileImg/0d65ef.png");
+
+    /*$.ajax({
+                url : '${root}api/profileImages/' + fileName,
+                type : 'GET',
+                // dataType : 'text',
+                success(res2) {
+                    console.log("success!!!!!");
+                    console.log("res2 = " + res2)
+
+                    // console.log("res2 = {}" + res2)
+                    /!*console.log(JSON.stringify(result, null, 2));
+                    $email_check_warn.text(result.message);
+                    $email_check_warn.css("color", "green");*!/
+                    $("#profileImgFile").attr("src", <c:url value="${root}static/profileImg/f6886f.png">);
+                },
+                error(err2) {
+                    console.log("Error!!!!!");
+                    console.log(err2);
+                }
+
+            })*/
+
         },
         error(err){
             console.log(err);
         }
     })
 }
-
-$(function (){
-
-        function uploadImg (){
-            let profileVal = $("profileImgFile").val();
-
-            $.ajax({
-                url : '${root}api/profileImg',
-                type : 'POST',
-                data : {
-                    "profileImgFile" : profileVal
-                },
-                success(res){
-                    console.log(res);
-                },
-                error(err){
-                    console.log(err);
-                }
-            })
-        }
-        /*$("#profileImgFile").onchange(function (){
-
-
-    })*/
-
-    });
 </script>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 

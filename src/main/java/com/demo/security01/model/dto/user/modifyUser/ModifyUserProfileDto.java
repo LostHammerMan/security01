@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Data
 public class ModifyUserProfileDto {
 
-    public String profileImgName;
-    public MultipartFile profileImgFile;
+//    public String profileImgName;
+    public MultipartFile profileImg;
     public LocalDateTime localDateTime;
     public String nickName;
 }

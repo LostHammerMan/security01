@@ -24,6 +24,8 @@ public class UserProfile {
     @Column(name = "NICK_NAME")
     private String nickName;
 
+
+
     @OneToOne
     @JoinColumn(name = "id")
     private User user;

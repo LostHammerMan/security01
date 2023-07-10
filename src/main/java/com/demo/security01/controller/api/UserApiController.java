@@ -5,12 +5,14 @@ import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.user.EmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
-import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
+import com.demo.security01.model.test.MultipartFileTest.UploadFile;
 import com.demo.security01.service.user.MailServiceImpl;
+import com.demo.security01.service.user.UserProfileUploadService;
 import com.demo.security01.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import nl.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Validator;
@@ -23,6 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +44,9 @@ public class UserApiController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserProfileUploadService profileService;
 
     @Resource(name = "modUserEmailValidator")
     private Validator modUserEmailValidator;
@@ -195,13 +204,36 @@ public class UserApiController {
         new CaptchaUtil().getAudioCaptCha(request, response, getAnswer);
     }
 
-   // 프로필 이미지 업로드
-    @PostMapping("/profileImg")
+    // 프로필 이미지 업로드
     @ResponseBody
-    public ResponseEntity<Object> profileImgUpload(@RequestBody ModifyUserProfileDto modifyUserProfileDto){
-        log.info("파일 생성 성공");
-        userService.uploadProfileImg(modifyUserProfileDto);
-        return ResponseEntity.ok().body("전송 성공");
+   @PostMapping("/updateProfileImg")
+    public ResponseEntity<Object> updateProfileImg(@RequestParam("profileImg") MultipartFile profileImg) throws IOException {
+        log.info("============= updateProfileImg ===============");
+        log.info("\t profileImg = {}", profileImg);
+        UploadFile uploadFile = profileService.uploadProfileImg(profileImg);
+        log.info("\t uploadFile = {}", uploadFile);
+
+        return ResponseEntity.ok(uploadFile);
     }
+
+    @ResponseBody
+    @GetMapping("/profileImages/{fileName}")
+//    public ResponseEntity<Object> showImage(@PathVariable String fileName) throws MalformedURLException {
+    public ResponseEntity<Object> showImage(@PathVariable String fileName) throws MalformedURLException {
+        org.springframework.core.io.Resource resource = null;
+//        resource = new UrlResource("file:" + profileService.getFullPath(fileName));
+        log.info("======== showImage ============");
+        log.info("\t fileName = {}", fileName);
+        log.info("\t fullPath = {}", profileService.getFullPath(fileName));
+//        String resultFile = URLEncoder.encode(resource, StandardCharsets.UTF_8);
+
+//        return ResponseEntity.ok(resource);
+        //return new UrlResource("file:" + profileService.getFullPath(fileName));
+//        return ResponseEntity.ok("file:" + profileService.getFullPath(fileName));
+        return ResponseEntity.ok("file:" + profileService.getFullPath(fileName));
+    }
+
+
+
 
 }
