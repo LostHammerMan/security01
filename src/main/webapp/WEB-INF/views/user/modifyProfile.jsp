@@ -20,6 +20,10 @@
     .nav-link {
         color: black;
     }
+
+    #profileImgFile {
+        border-radius: 80%;
+    }
 </style>
 <nav class="navbar navbar-expand-sm navbar-light mb-3" style="background-color: #E2E2E2;">
     <div class="navbar-nav">
@@ -42,7 +46,7 @@
     </div>
     <div class="container-body justify-content-center" style="width: 624px;">
         <div class="justify-content-center">
-            <form:form enctype="multipart/form-data">
+            <form:form action="${root}user/modifyProfileProc" enctype="multipart/form-data" modelAttribute="modifyUserProfileDto">
                 <div class="container " style="width: 100%; height: 100%;">
                     <div class="row profile">
                         <div class="col-lg-3 border d-flex m-0 left-col"
@@ -53,12 +57,12 @@
                             <div class="m-3">
                                 <img class="card-img-top" src=
                                         "https://media.geeksforgeeks.org/wp-content/uploads/20190506125816/avt.png"
-                                     style="height: 140px; width: 140px" id="profileImgFile">
+                                     style="height: 140px; width: 140px" id="profileImgFile" name="">
                             </div>
                             <div class="flex-column m-3">
                                 <label class="btn btn-outline-dark" for="profileImg" style="margin-top: 9px;">사진변경</label>
                                 <input id="profileImg" name="profileImg" type="file" style="display: none" onchange="uploadImg()" />
-                                <button class="btn btn-outline-secondary" type="button">삭제</button>
+                                <button class="btn btn-outline-secondary" id="profileImgDel" name="profileImgDel" type="button" onclick="profileImaDel()">삭제</button>
                             </div>
                         </div>
                     </div>
@@ -68,14 +72,15 @@
                             <p class="m-0">별명</p>
                         </div>
                         <div class="col-lg-9 border d-flex" style="align-items: center">
-                            <input class="ml-3" type="text" style="width: 50%; height: 60%">
+                            <input class="ml-3" type="text" id="nickName" name="nickName" style="width: 50%; height: 60%">
                         </div>
                     </div>
                     <div class="row mt-lg-1 mb-lg-1 btn_wrap" style="justify-content: center">
-                        <button class="btn btn-outline-primary m-1" type="button">적용</button>
+                        <button class="btn btn-outline-primary m-1" type="submit">적용</button>
                         <button class="btn btn-outline-danger m-1" type="button">취소</button>
                     </div>
                 </div>
+                <input type="hidden" id="profileImgName" name="profileImgName"/>
             </form:form>
         </div>
     </div>
@@ -84,7 +89,8 @@
 <script type="text/javascript">
 $(function () {
 
-})
+    $("")
+});
 
 // 프로필 이미지 파일 업로드
 function uploadImg() {
@@ -104,37 +110,47 @@ function uploadImg() {
         processData : false,
         contentType : false,
         success(res){
+            console.log("success");
             console.log(JSON.stringify(res, null, 2));
             console.log(res.storeFileName);
             let fileName = res.storeFileName;
-            $("#profileImgFile").attr("src", "${root}static/profileImg/0d65ef.png");
-
-    /*$.ajax({
-                url : '${root}api/profileImages/' + fileName,
-                type : 'GET',
-                // dataType : 'text',
-                success(res2) {
-                    console.log("success!!!!!");
-                    console.log("res2 = " + res2)
-
-                    // console.log("res2 = {}" + res2)
-                    /!*console.log(JSON.stringify(result, null, 2));
-                    $email_check_warn.text(result.message);
-                    $email_check_warn.css("color", "green");*!/
-                    $("#profileImgFile").attr("src", <c:url value="${root}static/profileImg/f6886f.png">);
-                },
-                error(err2) {
-                    console.log("Error!!!!!");
-                    console.log(err2);
-                }
-
-            })*/
-
+            <%--$("#profileImgFile").attr("src", '${root}api/profileImages/' + res.storeFileName);--%>
+            // $("#profileImgFile").attr("src", '/api/profileImages/' + res.storeFileName);
+            $("#profileImgFile").attr("src", '${root}api/profileImages/' + res.storeFileName);
+            $("#profileImgName").attr("value", res.storeFileName);
         },
         error(err){
+            console.log("error!!!!!");
             console.log(err);
         }
     })
+}
+
+// 업로드 이미지 삭제
+function profileImaDel(){
+    let target = $("#profileImgFile");
+    // let fileName = target.data("name");
+    let src = $('#profileImgFile').attr("src");
+    let pos = src.lastIndexOf("/");
+
+    // originalFileName.substring(pos + 1);
+    let fileName = src.substring(pos + 1);
+    console.log("============================")
+    console.log("========== profileImaDel ==============")
+    console.log("fileName = " + fileName)
+    $.ajax({
+        url: '${root}api/deleteProfileImg/' + fileName,
+        type : 'GET',
+        success(res) {
+            console.log("delete success......");
+            target.attr("src", "https://media.geeksforgeeks.org/wp-content/uploads/20190506125816/avt.png");
+            $("#profileImgName").attr("value", "");
+        },
+        error(err) {
+            console.log("delete fail....");
+        }
+    })
+
 }
 </script>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>

@@ -3,6 +3,7 @@ package com.demo.security01.service.user;
 import com.demo.security01.model.test.MultipartFileTest.UploadFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ public class UserProfileUploadService {
 
     @Value("${file.dir}")
     private String fileDir;
+//    private String fileDir = "C:/test/springboot/upload/";
 
     // 전체 경로 + 파일
     public String getFullPath(String fileName){
@@ -46,7 +48,7 @@ public class UserProfileUploadService {
     private  String createStoreFileName(String originalFileName) {
         String ext = extractExt(originalFileName);
         String uuid = UUID.randomUUID().toString();
-        String uuidFix = uuid.substring(0,6);
+        String uuidFix = uuid.substring(0,10);
         String fileName = uuidFix + "." + ext;
         return fileName;
     }
@@ -54,5 +56,14 @@ public class UserProfileUploadService {
     private  String extractExt(String originalFileName) {
         int pos = originalFileName.lastIndexOf(".");
         return originalFileName.substring(pos + 1);
+    }
+
+    // 업로드 한 파일 삭제
+    public void deleteProfileImg(String fileName) throws IOException {
+        org.springframework.core.io.Resource resource = new UrlResource("file:" + getFullPath(fileName));
+        log.info("resource = {}", resource);
+        File file = new File(resource.getFile().toURI());
+        file.delete();
+
     }
 }

@@ -114,7 +114,7 @@
             <div class="text-center">
                 <a href="${root}user/modifyProfile" ><img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
                                  alt="avatar"></a>
-                <h6>${loginUser.username}</h6>
+                <h6 class="mt-2">${loginUser.username}</h6>
 <%--                <input type="file" class="text-center center-block file-upload">--%>
             </div>
             <hr>

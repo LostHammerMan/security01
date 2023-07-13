@@ -9,6 +9,7 @@ import com.demo.security01.repository.user.UserRepositoryCustomImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 
 @Slf4j
@@ -31,6 +33,8 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepositoryCustomImpl userRepositoryCustom;
+
+
 
     @Resource(name = "joinValidator")
     private Validator joinValidator;
@@ -136,17 +140,25 @@ public class UserController {
 
     }
 
+    // 회원수정 - 프로필 수정
     @GetMapping("/modifyProfile")
-    public String modifyProfile(@ModelAttribute ModifyUserProfileDto modifyUserProfileDto){
+    public String modifyProfile(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto){
         return "user/modifyProfile";
     }
 
+    @PostMapping("/modifyProfileProc")
+    public String modifyProfileProc(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, Principal principal) throws IOException {
+        log.info("======= modifyProfileProc ===========");
+        String originalFileName = modifyUserProfileDto.getProfileImg().getOriginalFilename();
+        String storeFileName = modifyUserProfileDto.getProfileImgName();
+//        modifyUserProfileDto.setProfileImgName(originalFileName);
 
-
-    @PostMapping("/modifyProc")
-    public String modifyProc(@ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto){
-
-        return "user/modifyPwdForm";
+        String username = principal.getName();
+        log.info("\t modifyUserProfileDto = {}", modifyUserProfileDto);
+        log.info("\t\t originalFileName = {}", originalFileName);
+        log.info("\t\t storeFileName = {}", storeFileName);
+        userService.profileModify(modifyUserProfileDto, username);
+        return "user/modifyProfile";
     }
 
     @Secured("ROLE_ADMIN") // ROLE_ADMIN 권한만 접근 가능 , 메서드에 사용, 하나의 권한만 사용 가능

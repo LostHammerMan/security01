@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -216,22 +217,41 @@ public class UserApiController {
         return ResponseEntity.ok(uploadFile);
     }
 
+    // 이미지 파일 불러오기
     @ResponseBody
     @GetMapping("/profileImages/{fileName}")
 //    public ResponseEntity<Object> showImage(@PathVariable String fileName) throws MalformedURLException {
     public ResponseEntity<Object> showImage(@PathVariable String fileName) throws MalformedURLException {
         org.springframework.core.io.Resource resource = null;
-//        resource = new UrlResource("file:" + profileService.getFullPath(fileName));
+//   file:  http: 이런식의 Prefix로 프로토콜을 명시해주고 해당 리소스의 위치를 알려주는 URL방식을 통해서 리소스의 위치를 알려주는 방식
+        resource = new UrlResource("file:" + profileService.getFullPath(fileName));
         log.info("======== showImage ============");
         log.info("\t fileName = {}", fileName);
-        log.info("\t fullPath = {}", profileService.getFullPath(fileName));
+        log.info("\t fullPath = {}", "file:///" + profileService.getFullPath(fileName));
 //        String resultFile = URLEncoder.encode(resource, StandardCharsets.UTF_8);
 
 //        return ResponseEntity.ok(resource);
         //return new UrlResource("file:" + profileService.getFullPath(fileName));
 //        return ResponseEntity.ok("file:" + profileService.getFullPath(fileName));
-        return ResponseEntity.ok("file:" + profileService.getFullPath(fileName));
+//        return ResponseEntity.ok("file:///" + profileService.getFullPath(fileName));
+        return ResponseEntity.ok(resource);
     }
+//    {"/authNumCheck","/authNumCheck{inputAuthNum}"}
+    // 이미지 파일 삭제
+    @GetMapping(value = {"/deleteProfileImg","/deleteProfileImg/{fileName}" })
+    public ResponseEntity<Object> deleteImg(@PathVariable String fileName) throws IOException {
+        log.info("========= deleteImg ===========");
+        log.info("deleteFileName = {}", fileName);
+        profileService.deleteProfileImg(fileName);
+        /*org.springframework.core.io.Resource resource = new UrlResource("file:" + profileService.getFullPath(fileName));
+        log.info("resource = {}", resource);
+        File file = new File(resource.getFile().toURI());
+        file.delete();*/
+
+        return ResponseEntity.ok("success");
+    }
+
+
 
 
 

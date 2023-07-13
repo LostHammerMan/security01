@@ -24,7 +24,8 @@ public class UserProfile {
     @Column(name = "NICK_NAME")
     private String nickName;
 
-
+    @Column(name = "FILE_URL")
+    private String fileUrl;
 
     @OneToOne
     @JoinColumn(name = "id")
