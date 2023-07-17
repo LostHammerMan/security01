@@ -31,12 +31,12 @@ public class JoinValidator2 implements Validator {
         JoinUserDto joinUserDto = (JoinUserDto) target;
         log.info("joinUserDto = {}", joinUserDto);
 
-        checkUsername(joinUserDto.getUsername(), errors);
+//        checkUsername(joinUserDto.getUsername(), errors);
         checkPwd(joinUserDto.getPassword(), errors);
     }
 
     // username validation(공백, 정규식, 존재여부)
-    private void checkUsername(String username, Errors errors){
+    /*private void checkUsername(String username, Errors errors){
 
         String regExp = "^([a-zA-Z0-9]{4,12})$";
 
@@ -47,7 +47,7 @@ public class JoinValidator2 implements Validator {
         } else if(userService.existByUsername(username)){
             errors.rejectValue("username", "UsernameExist");
         }
-    }
+    }*/
 
     // password validation
     private void checkPwd(String password, Errors errors){
@@ -63,10 +63,11 @@ public class JoinValidator2 implements Validator {
 
 
     // email validation
-   /* private void checkEmail(String email, Errors errors){
+ private void checkEmail(String email, Errors errors){
 
         if (!StringUtils.hasText(email)){
             errors.rejectValue("email", "NotBlank");
         }
-    }*/
+    }
+
 }

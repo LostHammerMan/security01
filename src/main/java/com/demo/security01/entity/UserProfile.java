@@ -1,33 +1,32 @@
 package com.demo.security01.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(exclude = "user")
 @Entity
 public class UserProfile {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PROFILE_IDX")
-    private Long id;
+    private int profileIdx;
 
-    @Column(name = "FILE_NAME")
+    @Column(name = "FILE_NAME", unique = true)
     private String fileName;
-
-    @Column(name = "NICK_NAME")
-    private String nickName;
 
     @Column(name = "FILE_URL")
     private String fileUrl;
 
-    @OneToOne
+    @Column(name = "UPDATE_DATE")
+    private LocalDateTime localDateTime;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     private User user;
 }

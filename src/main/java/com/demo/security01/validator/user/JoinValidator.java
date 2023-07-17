@@ -37,22 +37,28 @@ public class JoinValidator implements Validator {
         JoinUserDto joinUserDto = (JoinUserDto) target;
         log.info("joinUserDto = {}", joinUserDto);
 
-        checkUsername(joinUserDto.getUsername(), errors);
+        checkUsername(joinUserDto, errors);
         checkPwd(joinUserDto.getPassword(), errors);
         checkEmail(joinUserDto, errors);
     }
 
     // username validation(공백, 정규식, 존재여부)
-    private void checkUsername(String username, Errors errors){
+    private void checkUsername(JoinUserDto joinUserDto, Errors errors){
+        log.info("========= UserJoinValidator ============");
 
         String regExp = "^([a-zA-Z0-9]{4,12})$";
+        String username = joinUserDto.getUsername();
+        log.info("Username = {}", username);
 
-        if (!StringUtils.hasText(username)){
+        if (!StringUtils.hasText(joinUserDto.getUsername())){
             errors.rejectValue("username", "NotBlank");
+            return;
         } else if (!Pattern.matches(regExp, username)) {
             errors.rejectValue("username", "Pattern");
-        } else if(userService.existByUsername(username)){
+            return;
+        } else if(userService.existByUsername2(joinUserDto.getUsername())){
             errors.rejectValue("username", "UsernameExist");
+            return;
         }
     }
 
@@ -69,6 +75,17 @@ public class JoinValidator implements Validator {
     }
 
     private void checkEmail(JoinUserDto joinUserDto, Errors errors) {
+        log.info("========= checkEmail ==========");
+
+        if (!StringUtils.hasText(joinUserDto.getEmail_id())){
+            errors.rejectValue("email_addr", "id_NotBlank");
+            return;
+        }
+        if (!StringUtils.hasText(joinUserDto.getEmail_domain())){
+            errors.rejectValue("email_addr","domain_NotBlank");
+            return;
+        }
+
         String email_addr = joinUserDto.getEmail_id() + joinUserDto.getEmail_domain();
         log.info("email_addr = {}", email_addr);
 
@@ -83,6 +100,8 @@ public class JoinValidator implements Validator {
         Map<String, String> emailCheck = (Map<String, String>) session.getAttribute("emailCheck");
         log.info("emailCheck = {}", emailCheck);
 
+
+
         if (!emailCheck.containsKey(email_addr)) {
             errors.rejectValue("email_addr", "NeedAuth");
             return;
@@ -96,13 +115,7 @@ public class JoinValidator implements Validator {
         }
     }
 
-    // email validation
-   /* private void checkEmail(String email, Errors errors){
 
-        if (!StringUtils.hasText(email)){
-            errors.rejectValue("email", "NotBlank");
-        }
-    }*/
 
     // Controller 가 아닌 곳에서 request session 정보 가져오기
     public User getSessionUser(){

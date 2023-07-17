@@ -112,8 +112,18 @@
     <div class="row">
         <div class="col-sm-3" id="left-header"><!--left col-->
             <div class="text-center">
-                <a href="${root}user/modifyProfile" ><img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
-                                 alt="avatar"></a>
+                <c:choose>
+                    <c:when test="${loginUser.userProfile.fileUrl == null}">
+                        <a href="${root}user/modifyProfile" ><img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
+                                                                  alt="avatar"></a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${root}user/modifyProfile" ><img src="${root}api/profileImages/${loginUser.userProfile.fileName}" class="avatar img-circle img-thumbnail"
+                                                                  alt="avatar"></a>
+                    </c:otherwise>
+                </c:choose>
+
+
                 <h6 class="mt-2">${loginUser.username}</h6>
 <%--                <input type="file" class="text-center center-block file-upload">--%>
             </div>

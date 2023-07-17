@@ -4,7 +4,8 @@ import com.demo.security01.config.security.auth.PrincipalDetails;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
 import com.demo.security01.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
-import nl.captcha.Captcha;
+//import nl.captcha.Captcha;
+//import nl.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +40,7 @@ public class ModUserPwdValidator implements Validator {
         checkNowPwd(modifyUserPwdDto, errors);
         checkNewPwd(modifyUserPwdDto, errors);
         checkConfPw(modifyUserPwdDto, errors);
-        checkCaptchaCode(modifyUserPwdDto,errors);
+//        checkCaptchaCode(modifyUserPwdDto,errors);
     }
 
     // 현재 비밀번호 - null, 현재 비밀번호와 일치 여부
@@ -96,7 +97,7 @@ public class ModUserPwdValidator implements Validator {
 
 
     // 캡차 코드 확인
-    private void checkCaptchaCode(ModifyUserPwdDto modifyUserPwdDto, Errors errors){
+    /*private void checkCaptchaCode(ModifyUserPwdDto modifyUserPwdDto, Errors errors){
         log.info("========== checkCaptchaCode called... =================");
         String captchaCode = modifyUserPwdDto.getCaptchaCode();
         log.info("captchaCode = {}", captchaCode);
@@ -115,7 +116,7 @@ public class ModUserPwdValidator implements Validator {
             errors.rejectValue("captchaCode", "NotMatch");
             return;
         }
-    }
+    }*/
 
     // 현재 접속중인 username
     private String getCurrentUsername(){

@@ -5,6 +5,7 @@ import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
+import com.demo.security01.repository.user.UserProfileRepository;
 import com.demo.security01.repository.user.UserRepositoryCustomImpl;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
@@ -23,6 +25,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.security.Principal;
 
 @Slf4j
@@ -33,6 +36,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepositoryCustomImpl userRepositoryCustom;
+    private final UserProfileRepository profileRepository;
 
 
 
@@ -72,6 +76,7 @@ public class UserController {
 
     @GetMapping("/joinForm")
     public String joinForm(@ModelAttribute("joinUserDto") JoinUserDto joinUserDto) {
+        log.info("======== joinForm ===========");
         return "user/joinForm";
     }
 
@@ -95,8 +100,11 @@ public class UserController {
         }
 
         userService.save(joinUserDto);
+        request.setAttribute("msg", "회원 가입이 완료되었습니다");
+        request.setAttribute("url", request.getContextPath() + "/user/loginForm");
+        return "user/joinOk";
 //        return "redirect:user/loginForm";
-        return "redirect:" + request.getContextPath() +"/user/loginForm";
+//        return "redirect:" + request.getContextPath() +"/user/loginForm";
     }
 
     // 회원수정 form
@@ -104,7 +112,8 @@ public class UserController {
     public String modifyForm(Principal principal, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, Model model){
         String username = principal.getName();
         User loginUser =  userService.userDetailsByUsername(username);
-        log.info("user = {}", loginUser);
+        log.info("========= modifyForm ==============");
+        log.info("loginUser = {}", loginUser);
         model.addAttribute("loginUser", loginUser);
 //        User findUser = userService.userDetails(userId);
 //        log.info("findUser = {}", findUser);
@@ -142,23 +151,33 @@ public class UserController {
 
     // 회원수정 - 프로필 수정
     @GetMapping("/modifyProfile")
-    public String modifyProfile(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto){
+    public String modifyProfile(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, Principal principal, Model model){
+        String username = principal.getName();
+        User loginUser = userService.userDetailsByUsername(username);
+
+        model.addAttribute("loginUser", loginUser);
+
         return "user/modifyProfile";
     }
 
     @PostMapping("/modifyProfileProc")
-    public String modifyProfileProc(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, Principal principal) throws IOException {
+    public String modifyProfileProc(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, Principal principal, HttpServletRequest request) throws IOException {
         log.info("======= modifyProfileProc ===========");
         String originalFileName = modifyUserProfileDto.getProfileImg().getOriginalFilename();
         String storeFileName = modifyUserProfileDto.getProfileImgName();
 //        modifyUserProfileDto.setProfileImgName(originalFileName);
 
         String username = principal.getName();
+//        User loginUser = userService.userDetailsByUsername(username);
         log.info("\t modifyUserProfileDto = {}", modifyUserProfileDto);
         log.info("\t\t originalFileName = {}", originalFileName);
         log.info("\t\t storeFileName = {}", storeFileName);
+
         userService.profileModify(modifyUserProfileDto, username);
-        return "user/modifyProfile";
+//        request.
+        return "redirect:" + request.getContextPath() + "/user/modifyProfile";
+
+//        return "user/modifyProfile";
     }
 
     @Secured("ROLE_ADMIN") // ROLE_ADMIN 권한만 접근 가능 , 메서드에 사용, 하나의 권한만 사용 가능

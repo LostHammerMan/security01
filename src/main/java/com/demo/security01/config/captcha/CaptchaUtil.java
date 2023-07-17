@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class CaptchaUtil {
 
@@ -48,16 +49,20 @@ public class CaptchaUtil {
 
         AudioCaptcha audiocaptcha = new AudioCaptcha.Builder()
                 .addAnswer(new SetTextProducer(getAnswer))
-                .addNoise()	/*잡음 추가*/
+                .addNoise()
+//잡음 추가
+
                 .build();
 
         CaptchaServletUtil.writeAudio(res, audiocaptcha.getChallenge());
     }
 
-    /*// 제출 답안 확인 프로세스
-    public String chkAnswerProcess(HttpServletRequest request, HashMap<String, String> p){
+
+// 제출 답안 확인 프로세스
+ /*   public String chkAnswerProcess(HttpServletRequest request, HashMap<String, String> p){
         return "confirm";
-    }*/
+    }
+*/
 
 
 }

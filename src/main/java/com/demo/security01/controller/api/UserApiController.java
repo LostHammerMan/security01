@@ -1,5 +1,6 @@
 package com.demo.security01.controller.api;
 
+//import com.demo.security01.config.captcha.CaptchaUtil;
 import com.demo.security01.config.captcha.CaptchaUtil;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.user.EmailDto;
@@ -13,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import nl.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -145,7 +148,7 @@ public class UserApiController {
         return "전송완료";
     }
 
-    // 이메일 주소 수정시 인증
+    // 회원가입시 이메일 인증
     @PostMapping("/emailAuth")
     public String emailAuth(@RequestBody EmailDto emailDto, HttpSession session) throws Exception {
         log.info("=========== emailAuth called..... ==============");
@@ -208,12 +211,12 @@ public class UserApiController {
     // 프로필 이미지 업로드
     @ResponseBody
    @PostMapping("/updateProfileImg")
-    public ResponseEntity<Object> updateProfileImg(@RequestParam("profileImg") MultipartFile profileImg) throws IOException {
+    public ResponseEntity<Object> updateProfileImg(@RequestParam("profileImg") MultipartFile profileImg, Model model) throws IOException {
         log.info("============= updateProfileImg ===============");
         log.info("\t profileImg = {}", profileImg);
         UploadFile uploadFile = profileService.uploadProfileImg(profileImg);
         log.info("\t uploadFile = {}", uploadFile);
-
+//        model.addAttribute()
         return ResponseEntity.ok(uploadFile);
     }
 

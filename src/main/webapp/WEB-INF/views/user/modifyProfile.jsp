@@ -55,9 +55,18 @@
                         </div>
                         <div class="col-lg-9 border ">
                             <div class="m-3">
-                                <img class="card-img-top" src=
-                                        "https://media.geeksforgeeks.org/wp-content/uploads/20190506125816/avt.png"
-                                     style="height: 140px; width: 140px" id="profileImgFile" name="">
+                                <c:choose>
+                                    <c:when test="${loginUser.userProfile.fileName == null}">
+                                        <img class="card-img-top" src=
+                                                "https://media.geeksforgeeks.org/wp-content/uploads/20190506125816/avt.png"
+                                             style="height: 140px; width: 140px" id="profileImgFile" name="">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="card-img-top" src="${root}api/profileImages/${loginUser.userProfile.fileName}"
+                                             style="height: 140px; width: 140px" id="profileImgFile" name="">
+                                    </c:otherwise>
+                                </c:choose>
+
                             </div>
                             <div class="flex-column m-3">
                                 <label class="btn btn-outline-dark" for="profileImg" style="margin-top: 9px;">사진변경</label>
@@ -72,12 +81,12 @@
                             <p class="m-0">별명</p>
                         </div>
                         <div class="col-lg-9 border d-flex" style="align-items: center">
-                            <input class="ml-3" type="text" id="nickName" name="nickName" style="width: 50%; height: 60%">
+                            <input class="ml-3" type="text" id="nickName" name="nickName" value="${loginUser.userProfile.nickName}" style="width: 50%; height: 60%">
                         </div>
                     </div>
                     <div class="row mt-lg-1 mb-lg-1 btn_wrap" style="justify-content: center">
                         <button class="btn btn-outline-primary m-1" type="submit">적용</button>
-                        <button class="btn btn-outline-danger m-1" type="button">취소</button>
+                        <button class="btn btn-outline-danger m-1" type="button" id="cancelBtn">취소</button>
                     </div>
                 </div>
                 <input type="hidden" id="profileImgName" name="profileImgName"/>
@@ -89,7 +98,9 @@
 <script type="text/javascript">
 $(function () {
 
-    $("")
+    $("#cancelBtn").on("click", function (){
+        location.href = "${root}user/modifyForm";
+    })
 });
 
 // 프로필 이미지 파일 업로드

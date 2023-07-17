@@ -30,10 +30,13 @@ public class HandlerExample {
     @Autowired
     MessageSourceAccessor messageSourceAccessor;
 
+
+
     @ExceptionHandler(NullPointerException.class)
     @ResponseBody
     public ResponseEntity<Object> handleNullPointerException(NullPointerException e){
         log.info("========= NullPointerException ==========");
+        e.printStackTrace();
         ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.getMessage())
@@ -48,6 +51,7 @@ public class HandlerExample {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         log.info("========= MethodArgumentNotValidException ==========");
         String errorCode = null;
 //        e.getBindingResult().getFieldErrors().forEach(fieldError -> {
@@ -100,6 +104,7 @@ public class HandlerExample {
     // 없는 페이지의 경우
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handlerNoHandlerFoundException(NoHandlerFoundException e){
+        e.printStackTrace();
         log.info("## handlerNoHandlerFoundException");
         return "error/errorMain";
     }
@@ -107,6 +112,7 @@ public class HandlerExample {
     @ExceptionHandler(MissingPathVariableException.class)
     @ResponseBody
     public ResponseEntity<Object> handlerMissingPathVariableException(MissingPathVariableException e){
+        e.printStackTrace();
         log.info("========= MissingPathVariableException ==========");
         /*ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
