@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 
+
 public class CaptchaUtil {
 
 
@@ -50,8 +51,6 @@ public class CaptchaUtil {
         AudioCaptcha audiocaptcha = new AudioCaptcha.Builder()
                 .addAnswer(new SetTextProducer(getAnswer))
                 .addNoise()
-//잡음 추가
-
                 .build();
 
         CaptchaServletUtil.writeAudio(res, audiocaptcha.getChallenge());

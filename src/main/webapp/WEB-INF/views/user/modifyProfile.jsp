@@ -81,7 +81,7 @@
                             <p class="m-0">별명</p>
                         </div>
                         <div class="col-lg-9 border d-flex" style="align-items: center">
-                            <input class="ml-3" type="text" id="nickName" name="nickName" value="${loginUser.userProfile.nickName}" style="width: 50%; height: 60%">
+                            <input class="ml-3" type="text" id="nickName" name="nickName" value="${loginUser.nickName}" style="width: 50%; height: 60%">
                         </div>
                     </div>
                     <div class="row mt-lg-1 mb-lg-1 btn_wrap" style="justify-content: center">
@@ -142,6 +142,7 @@ function profileImaDel(){
     let target = $("#profileImgFile");
     // let fileName = target.data("name");
     let src = $('#profileImgFile').attr("src");
+
     let pos = src.lastIndexOf("/");
 
     // originalFileName.substring(pos + 1);

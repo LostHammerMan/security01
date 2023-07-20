@@ -1,6 +1,7 @@
 package com.demo.security01.service.user;
 
 import com.demo.security01.model.test.MultipartFileTest.UploadFile;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -9,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 // 파일 저장과 관련된 업무처리
@@ -22,13 +25,16 @@ public class UserProfileUploadService {
 
     // 전체 경로 + 파일
     public String getFullPath(String fileName){
-        File file = new File(fileDir);
+        File profileUploadPath = new File(fileDir, getFolder());
+        log.info("directory = {}", profileUploadPath);
 
-        if (!file.exists()){
-            file.mkdirs();
+        if (!profileUploadPath.exists()){
+            profileUploadPath.mkdirs();
         }
 
-        return fileDir + fileName;
+//        return profileUploadPath + "//" + fileName;
+//        return profileUploadPath + fileName;
+        return profileUploadPath + "\\" +fileName;
     }
 
     // 프로필 이미지 파일 저장
@@ -64,6 +70,13 @@ public class UserProfileUploadService {
         log.info("resource = {}", resource);
         File file = new File(resource.getFile().toURI());
         file.delete();
+    }
 
+    // 날짜로 폴더 생성
+    private String getFolder(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String str = sdf.format(date);
+        return str.replace("-", File.separator);
     }
 }
