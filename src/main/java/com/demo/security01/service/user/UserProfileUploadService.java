@@ -32,9 +32,19 @@ public class UserProfileUploadService {
             profileUploadPath.mkdirs();
         }
 
-//        return profileUploadPath + "//" + fileName;
-//        return profileUploadPath + fileName;
-        return profileUploadPath + "\\" +fileName;
+//        return profileUploadPath + "\\" +fileName;
+        return profileUploadPath + File.separator +fileName;
+//        return profileUploadPath.getPath();
+    }
+
+    public String getFolderPath(){
+        File profileUploadPath = new File(fileDir, getFolder());
+        log.info("ProfileFolder = {}", profileUploadPath);
+        if (!profileUploadPath.exists()){
+            profileUploadPath.mkdirs();
+        }
+
+        return profileUploadPath.getPath();
     }
 
     // 프로필 이미지 파일 저장
@@ -47,6 +57,7 @@ public class UserProfileUploadService {
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFileName);
         // 파일 해당 경로에 저장
+//        multipartFile.transferTo(new File(getFullPath(storeFileName)));
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
         return new UploadFile(originalFileName, storeFileName);
     }
@@ -55,7 +66,7 @@ public class UserProfileUploadService {
         String ext = extractExt(originalFileName);
         String uuid = UUID.randomUUID().toString();
         String uuidFix = uuid.substring(0,10);
-        String fileName = uuidFix + "." + ext;
+        String fileName = uuidFix +"_"+ originalFileName + "." + ext;
         return fileName;
     }
 

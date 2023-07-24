@@ -3,10 +3,12 @@ package com.demo.security01.task;
 import com.demo.security01.repository.user.UserRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+//@EnableScheduling // 이 어노테이션 없으면 실행 안됨
 @Slf4j
 public class AttachFileCheckTask {
 
