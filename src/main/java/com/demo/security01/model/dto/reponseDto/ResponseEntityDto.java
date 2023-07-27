@@ -11,5 +11,6 @@ public class ResponseEntityDto {
 
     private int status;
     private String message;
+    private Object objectData;
     private LocalDateTime localDateTime;
 }

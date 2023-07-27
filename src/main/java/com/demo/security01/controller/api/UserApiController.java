@@ -2,6 +2,7 @@ package com.demo.security01.controller.api;
 
 //import com.demo.security01.config.captcha.CaptchaUtil;
 import com.demo.security01.config.captcha.CaptchaUtil;
+import com.demo.security01.model.dto.error.ErrorResponseDto;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.user.EmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
@@ -10,11 +11,11 @@ import com.demo.security01.model.test.MultipartFileTest.UploadFile;
 import com.demo.security01.service.user.MailServiceImpl;
 import com.demo.security01.service.user.UserProfileUploadService;
 import com.demo.security01.service.user.UserService;
+import com.demo.security01.model.utils.TickParser_ProfileImg;
 import lombok.extern.slf4j.Slf4j;
 import nl.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -28,12 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +51,9 @@ public class UserApiController {
 
     @Autowired
     private UserProfileUploadService profileService;
+
+    @Autowired
+    private TickParser_ProfileImg tickParserTest;
 
     @Resource(name = "modUserEmailValidator")
     private Validator modUserEmailValidator;
@@ -214,10 +217,45 @@ public class UserApiController {
     public ResponseEntity<Object> updateProfileImg(@RequestParam("profileImg") MultipartFile profileImg, Model model) throws IOException {
         log.info("============= updateProfileImg ===============");
         log.info("\t profileImg = {}", profileImg);
-        UploadFile uploadFile = profileService.uploadProfileImg(profileImg);
-        log.info("\t uploadFile = {}", uploadFile);
+
+        InputStream inputStream = profileImg.getInputStream();
+        log.info("inputStream = {}", inputStream);
+
+        boolean isValid = tickParserTest.validImgFile(inputStream);
+
+        if (!isValid){
+            log.info("티가 에러");
+            inputStream.close();
+            ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("이미지 파일만 업로드 가능합니다")
+                    .localDateTime(LocalDateTime.now())
+                    .build();
+
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+        }else {
+            log.info("티카 통과");
+            UploadFile uploadFile = profileService.uploadProfileImg(profileImg);
+            log.info("\t uploadFile = {}", uploadFile);
+            inputStream.close();
 //        model.addAttribute()
-        return ResponseEntity.ok(uploadFile);
+
+            ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("프로필 이미지 변경 성공했습니다")
+                    .objectData(uploadFile)
+                    .localDateTime(LocalDateTime.now())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseEntityDto);
+
+
+
+        }
+
+
+
     }
 
     // 이미지 파일 불러오기

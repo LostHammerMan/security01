@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @SpringBootTest
 @Slf4j
 public class StreamTest {
-
-
     public List<Member> createMember(){
         log.info(" ==================================");
         log.info(" ============  createMember ==========");
@@ -78,23 +76,13 @@ public class StreamTest {
         // 이름 기준으로 알파벳 오름차순 정렬한 이후 이름 추출
         List<String> nameAscList = members.stream()
                 .sorted((p1, p2) -> p1.getFirstName().compareTo(p2.getFirstName()))
-                .map(p -> p.getFirstName())
+//                .map(p -> p.getFirstName())
+                .map(Member::getFirstName)
                 .collect(Collectors.toList());
 
         log.info("nameAscList ={}", nameAscList);
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
     @Setter
     @Getter

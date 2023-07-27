@@ -81,7 +81,8 @@
                             <p class="m-0">별명</p>
                         </div>
                         <div class="col-lg-9 border d-flex" style="align-items: center">
-                            <input class="ml-3" type="text" id="nickName" name="nickName" value="${loginUser.nickName}" style="width: 50%; height: 60%">
+                            <form:input path="nickName" class="ml-3" type="text" id="nickName" name="nickName" value="${loginUser.nickName}" style="width: 50%; height: 60%">
+                            <form:errors path="nickName" />
                         </div>
                     </div>
                     <div class="row mt-lg-1 mb-lg-1 btn_wrap" style="justify-content: center">
@@ -121,18 +122,31 @@ function uploadImg() {
         processData : false,
         contentType : false,
         success(res){
+
             console.log("success");
+            alert(res.message);
             console.log(JSON.stringify(res, null, 2));
-            console.log(res.storeFileName);
-            let fileName = res.storeFileName;
-            <%--$("#profileImgFile").attr("src", '${root}api/profileImages/' + res.storeFileName);--%>
-            // $("#profileImgFile").attr("src", '/api/profileImages/' + res.storeFileName);
-            $("#profileImgFile").attr("src", '${root}api/profileImages/' + res.storeFileName);
-            $("#profileImgName").attr("value", res.storeFileName);
+            console.log(res.objectData.storeFileName);
+            let fileName = res.objectData.storeFileName;
+            $("#profileImgFile").attr("src", '${root}api/profileImages/' + fileName);
+            $("#profileImgName").attr("value", fileName);
         },
-        error(err){
+        error(jqXHR, textStatus, errorThrown){
+            let result = JSON.parse(jqXHR.responseText)
+
+            alert(result.message);
+            // jqXHR : 서버에서 ResponseEntity 에 담아서 보낸 응답 메시지,
+            //        - 데이터 내부에서 응답 텍스트와 응답 코드 확인 가능
+            // responseText : ResponseEntity 응답 메시지로 보낸 텍스트
+
+            // JSON.parse : 텍스트를 객체 형태로 변환
+            // 위 result 의 값이 변환되어 객체타입으로 저장됨 -> 프로퍼티를 조회하거나, 값 가져올 수 있음
+
+            // 문자열로 변환하는 이유
+            // - 인코딩이 필요하거나 저장되는 공간이 문자열만 가능한 경우이거나
+            // - 최대한 단순한 구조로 저장하기 위함
+            console.log("result = " + result.message);
             console.log("error!!!!!");
-            console.log(err);
         }
     })
 }

@@ -49,17 +49,24 @@ public class UserController {
     @Resource(name = "modUserPwdValidator")
     private Validator modUserPwdValidator;
 
+    @Resource(name = "modUserProfileValidator")
+    private Validator modUserProfileValidator;
+
 
 //    @InitBinder(value = {"",""}) // validator 가 2개 이상의 dto 에 적용되는 경우
     @InitBinder("joinUserDto") // 하나에만 적용하는 경우
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(joinValidator);
-
     }
 
     @InitBinder("modifyUserPwdDto")
     public void initBinder2(WebDataBinder binder){
         binder.addValidators(modUserPwdValidator);
+    }
+
+    @InitBinder("modifyUserProfileDto")
+    public void initBinder3(WebDataBinder binder){
+        binder.addValidators(modUserProfileValidator);
     }
 
     /*@InitBinder("modifyUserDto")
@@ -161,7 +168,7 @@ public class UserController {
     }
 
     @PostMapping("/modifyProfileProc")
-    public String modifyProfileProc(@ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, Principal principal, HttpServletRequest request) throws IOException {
+    public String modifyProfileProc(@Valid @ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, BindingResult result, Principal principal, HttpServletRequest request) throws IOException {
         log.info("======= modifyProfileProc ===========");
         String originalFileName = modifyUserProfileDto.getProfileImg().getOriginalFilename();
         String storeFileName = modifyUserProfileDto.getProfileImgName();
@@ -172,6 +179,19 @@ public class UserController {
         log.info("\t modifyUserProfileDto = {}", modifyUserProfileDto);
         log.info("\t\t originalFileName = {}", originalFileName);
         log.info("\t\t storeFileName = {}", storeFileName);
+
+        if (result.hasErrors()){
+            result.getFieldErrors().forEach(fieldError -> {
+                log.info("errorField = {}", fieldError.getField());
+                String[] errorCodeArr = fieldError.getCodes();
+                for (int i=0; i<errorCodeArr.length; i++) {
+                    log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
+                }
+                log.info("-----------------------------------------");
+            });
+
+            return "user/modifyProfile";
+        }
 
         userService.profileModify(modifyUserProfileDto, username);
 //        request.

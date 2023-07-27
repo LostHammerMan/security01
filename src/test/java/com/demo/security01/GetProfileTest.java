@@ -36,14 +36,17 @@ public class GetProfileTest {
 
         List<UserProfile> userProfile1 = userRepositoryCustom.getOldProfileFile();
 
-        // DB에 저장되어 있는 모든 파일
+        // DB에 저장되어 있는 모든 파일 경로
         List<Path> fileListPaths = userProfile1.stream()
-                .map(profile -> Paths.get(getFolderYesterday(fileDir) + "\\" + profile.getFileName())).collect(Collectors.toList());
+                .map(profile -> Paths.get(getFolderYesterday(fileDir) + "\\" + profile.getFileName()))
+                .collect(Collectors.toList());
 
 
         //
-        userProfile1.stream().filter(profile -> profile.getFileName() != null)
-                        .map(profile -> Paths.get(getFolderYesterday(fileDir) + "\\" + profile.getFileName())).forEach(p -> fileListPaths.add(p));
+        userProfile1.stream().filter(profile -> profile.getFileName() != null) // f
+                        .map(profile -> Paths.get(getFolderYesterday(fileDir)
+                                + File.separator + profile.getFileName()))
+                        .forEach(p -> fileListPaths.add(p));
         log.info("=====================================================");
         fileListPaths.forEach(p -> log.info(String.valueOf(p)));
 

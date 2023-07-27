@@ -53,6 +53,8 @@ public class UserProfileUploadService {
             return null;
         }
 
+
+
         // originalFileName -> storeFileName(UUID.확장자)로 변환
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFileName);
