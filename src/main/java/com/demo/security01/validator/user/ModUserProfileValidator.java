@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @Component(value = "modUserProfileValidator")
 public class ModUserProfileValidator implements Validator {
 
-    public static final String regExp = "^([가-힣a-zA-Z0-9]{2,20})$";
+    public static final String regExp = "^([가-힣a-zA-Z0-9]{2,10})$";
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -35,13 +35,12 @@ public class ModUserProfileValidator implements Validator {
         // "\\s" : whitespace
 
         String nickName = modifyUserProfileDto.getNickName();
+        log.info("nickName ={}", nickName);
         String result = nickName.replaceAll("\\s", "");
         if (!StringUtils.hasText(nickName)){
-            errors.rejectValue("NickName", "NotBlank");
-            return;
+            errors.rejectValue("nickName", "NotBlank");
         }else if (!Pattern.matches(regExp, result)){
-            errors.rejectValue("NickName", "Pattern");
-            return;
+            errors.rejectValue("nickName", "Pattern");
         }
 
     }

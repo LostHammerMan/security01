@@ -11,6 +11,7 @@ import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +38,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepositoryCustomImpl userRepositoryCustom;
     private final UserProfileRepository profileRepository;
+    private final MessageSourceAccessor messageSourceAccessor;
 
 
 
@@ -66,6 +68,7 @@ public class UserController {
 
     @InitBinder("modifyUserProfileDto")
     public void initBinder3(WebDataBinder binder){
+        log.info("======= modUserProfileValidator =========");
         binder.addValidators(modUserProfileValidator);
     }
 
@@ -163,37 +166,47 @@ public class UserController {
         User loginUser = userService.userDetailsByUsername(username);
 
         model.addAttribute("loginUser", loginUser);
+//        model.addAttribute("profileErrorMsg", "에러 있다아아아");
 
         return "user/modifyProfile";
     }
 
     @PostMapping("/modifyProfileProc")
-    public String modifyProfileProc(@Valid @ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, BindingResult result, Principal principal, HttpServletRequest request) throws IOException {
+    public String modifyProfileProc(@Valid @ModelAttribute("modifyUserProfileDto") ModifyUserProfileDto modifyUserProfileDto, BindingResult result, Principal principal, HttpServletRequest request, Model model) throws IOException {
         log.info("======= modifyProfileProc ===========");
-        String originalFileName = modifyUserProfileDto.getProfileImg().getOriginalFilename();
+        log.info("\t > {}", modifyUserProfileDto);
+        //String originalFileName = modifyUserProfileDto.getProfileImg().getOriginalFilename(); // 서버 재시작시 NullPointerException
         String storeFileName = modifyUserProfileDto.getProfileImgName();
 //        modifyUserProfileDto.setProfileImgName(originalFileName);
 
         String username = principal.getName();
 //        User loginUser = userService.userDetailsByUsername(username);
         log.info("\t modifyUserProfileDto = {}", modifyUserProfileDto);
-        log.info("\t\t originalFileName = {}", originalFileName);
+//        log.info("\t\t originalFileName = {}", originalFileName);
         log.info("\t\t storeFileName = {}", storeFileName);
 
         if (result.hasErrors()){
+            String errorCode = null;
+            log.info("\t modifyProfile has errors.......");
             result.getFieldErrors().forEach(fieldError -> {
                 log.info("errorField = {}", fieldError.getField());
                 String[] errorCodeArr = fieldError.getCodes();
                 for (int i=0; i<errorCodeArr.length; i++) {
                     log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
                 }
+
+                //
+                String msg = messageSourceAccessor.getMessage(errorCodeArr[0]);
+
+                model.addAttribute("profileErrorMsg", msg);
+
                 log.info("-----------------------------------------");
             });
-
             return "user/modifyProfile";
         }
 
         userService.profileModify(modifyUserProfileDto, username);
+        log.info("\t modifyProfile Success");
 //        request.
         return "redirect:" + request.getContextPath() + "/user/modifyProfile";
 
