@@ -4,6 +4,7 @@ import com.demo.security01.entity.UserProfile;
 import com.demo.security01.repository.user.UserRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @SpringBootTest
 public class GetProfileTest {
 
-    @Autowired
+    @Mock
     private UserRepositoryCustom userRepositoryCustom;
 
     @Value("${file.dir}")

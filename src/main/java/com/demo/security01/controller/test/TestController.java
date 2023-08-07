@@ -126,4 +126,14 @@ public class TestController {
         model.addAttribute("item", item);
         return "/test/item-view";
     }*/
+
+    @GetMapping("/layoutTest")
+    public String layoutTest(){
+        return "test/HtmlLayoutTest";
+    }
+
+    @GetMapping("/layoutTest2")
+    public String layoutTest2(){
+        return "test/htmlLayoutTest2";
+    }
 }

@@ -1,8 +1,6 @@
 package com.demo.security01.config.captcha;
 
 
-
-
 import nl.captcha.Captcha;
 import nl.captcha.audio.AudioCaptcha;
 import nl.captcha.backgrounds.GradiatedBackgroundProducer;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
 
 
 public class CaptchaUtil {

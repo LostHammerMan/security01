@@ -24,8 +24,12 @@ public class UserProfileUploadService {
 //    private String fileDir = "C:/test/springboot/upload/";
 
     // 전체 경로 + 파일
-    public String getFullPath(String fileName){
-        File profileUploadPath = new File(fileDir, getFolder());
+    public String getFullPath(String fileName) throws IOException {
+        log.info("============ getFullPath ================== ");
+//        File profileUploadPath = new File(fileDir, getFolder());
+        File profileUploadPath = new File(fileDir+ File.separator + getFolder(), fileName);
+        log.info("\t\t{}", fileDir);
+        log.info("\t{}", getFolder());
         log.info("directory = {}", profileUploadPath);
 
         if (!profileUploadPath.exists()){
@@ -33,8 +37,9 @@ public class UserProfileUploadService {
         }
 
 //        return profileUploadPath + "\\" +fileName;
-        return profileUploadPath + File.separator +fileName;
+//        return profileUploadPath + File.separator +fileName;
 //        return profileUploadPath.getPath();
+        return profileUploadPath.getCanonicalPath(); // 절대경로
     }
 
     public String getFolderPath(){
@@ -52,9 +57,6 @@ public class UserProfileUploadService {
         if (multipartFile.isEmpty()){
             return null;
         }
-
-
-
         // originalFileName -> storeFileName(UUID.확장자)로 변환
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFileName);
@@ -68,7 +70,8 @@ public class UserProfileUploadService {
         String ext = extractExt(originalFileName);
         String uuid = UUID.randomUUID().toString();
         String uuidFix = uuid.substring(0,10);
-        String fileName = uuidFix +"_"+ originalFileName + "." + ext;
+//        String fileName = uuidFix +"_"+ originalFileName + "." + ext;
+        String fileName = uuidFix +"_"+ originalFileName;
         return fileName;
     }
 

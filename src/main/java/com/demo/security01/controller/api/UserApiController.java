@@ -224,7 +224,7 @@ public class UserApiController {
         boolean isValid = tickParserTest.validImgFile(inputStream);
 
         if (!isValid){
-            log.info("티가 에러");
+            log.info("티카 에러");
             inputStream.close();
             ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
@@ -262,11 +262,13 @@ public class UserApiController {
     @ResponseBody
     @GetMapping("/profileImages/{fileName}")
 //    public ResponseEntity<Object> showImage(@PathVariable String fileName) throws MalformedURLException {
-    public ResponseEntity<Object> showImage(@PathVariable String fileName) throws MalformedURLException {
+    public ResponseEntity<Object> showImage(@PathVariable String fileName) throws IOException {
         org.springframework.core.io.Resource resource = null;
 //   file:  http: 이런식의 Prefix로 프로토콜을 명시해주고 해당 리소스의 위치를 알려주는 URL방식을 통해서 리소스의 위치를 알려주는 방식
         resource = new UrlResource("file:" + profileService.getFullPath(fileName));
         log.info("======== showImage ============");
+        log.info("{}", resource.getURL());
+        log.info("{}", resource.getURI());
         log.info("\t fileName = {}", fileName);
         log.info("\t fullPath = {}", "file:///" + profileService.getFullPath(fileName));
 //        String resultFile = URLEncoder.encode(resource, StandardCharsets.UTF_8);
