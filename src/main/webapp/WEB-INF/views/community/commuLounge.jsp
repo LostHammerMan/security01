@@ -67,7 +67,7 @@
         <main class="loungeContainerMain">
             <header class="loungeContainerHeader">
                 <h1 style="font-size: 16px; font-weight: bolder;">슽디 커뮤니티에서 당신의 이야기를 나눠보세요!</h1>
-                <a class="btn btn-primary ml-auto">작성하기</a>
+                <a class="btn btn-primary ml-auto" href="${root}community/lounge/write">작성하기</a>
             </header>
             <div class="row d-flex ">
 

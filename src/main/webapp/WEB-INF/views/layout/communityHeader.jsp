@@ -3,41 +3,38 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="root" value="${pageContext.request.contextPath}/" />
-<%--<style>
-  #commuNavVar {
-    font-family: D2Coding, serif;
-    vertical-align: center;
-  }
 
-  #loungeBtn:active {
-    color: #1c7430;
-  }
-
-  .navbar-1 {
-    cursor: pointer;
-  }
-
-  .selected {
-    background-color: red;
-  }
-
-</style>--%>
 
 <div class="navbar navbar-light bg-light d-flex justify-content-start" id="commuNavVar">
-  <a class="navbar-brand mr-lg-5 navbar-1" href="${root}community/lounge">
+
+  <a class="navbar-brand mr-lg-5 navbar-1" href="${root}community/main">
+    <img src="${root}static/img/community/artist_love_you.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    슽디 <span style="color: #ff681a">community</span>
+  </a>
+  <c:forEach var="category" items="${categoryDtos}">
+    <c:if test="${category.categoryIdx == 2}">
+      <c:forEach var="subCategory" items="${category.subCategory}">
+        <a class="navbar-brand mr-lg-5 pt-2 navbar-1" id="menu1"
+           href="${root}${subCategory.categoryPath}" style="font-size: 16px; font-family: D2Coding,serif; vertical-align: center">
+          ${subCategory.categoryName}
+        </a>
+      </c:forEach>
+    </c:if>
+  </c:forEach>
+  <%--<a class="navbar-brand mr-lg-5 navbar-1" href="${root}community/main">
     <img src="${root}static/img/community/artist_love_you.png" width="30" height="30" class="d-inline-block align-top" alt="">
     슽디 <span style="color: #ff681a">community</span>
   </a>
   <a class="navbar-brand mr-lg-5 pt-2 navbar-1" id="menu1"
-     href="${root}community/lounge" style="font-size: 16px; font-family: D2Coding,serif; vertical-align: center"
-  >
+     href="${root}community/lounge" style="font-size: 16px; font-family: D2Coding,serif; vertical-align: center">
     개발자 라운지
   </a>
   <a class="navbar-brand pt-2 navbar-1" href="${root}community/QnA" id="menu2"
      style="font-size: 16px; font-family: D2Coding,serif">
     Q&A
-  </a>
+  </a>--%>
 </div>
+
 <%--<script type="text/javascript">
 
   $(function (){
