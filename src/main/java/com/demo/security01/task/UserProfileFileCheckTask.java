@@ -1,6 +1,6 @@
 package com.demo.security01.task;
 
-import com.demo.security01.entity.UserProfile;
+import com.demo.security01.entity.user.UserProfile;
 import com.demo.security01.repository.user.UserRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package com.demo.security01.entity;
+package com.demo.security01.entity.user;
 
 import lombok.*;
 
@@ -24,6 +24,8 @@ public class UserAddr {
 
     @Column(name = "POST_ADDR2")
     private String postAddr2;
+
+    private String writer;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")

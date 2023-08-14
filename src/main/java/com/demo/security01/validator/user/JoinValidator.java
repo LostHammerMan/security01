@@ -1,6 +1,6 @@
 package com.demo.security01.validator.user;
 
-import com.demo.security01.entity.User;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;

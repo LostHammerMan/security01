@@ -29,7 +29,7 @@ public class CommunityController {
     }*/
 
     // 커뮤니티 메인, 개발자 라운지
-    @GetMapping("/lounge")
+    @GetMapping({"/lounge", ""})
     public String communityLounge(){
         return "community/commuLounge";
     }

@@ -1,4 +1,4 @@
-package com.demo.security01.entity;
+package com.demo.security01.entity.user;
 
 import lombok.*;
 

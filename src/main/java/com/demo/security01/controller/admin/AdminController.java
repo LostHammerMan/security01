@@ -1,6 +1,6 @@
 package com.demo.security01.controller.admin;
 
-import com.demo.security01.entity.User;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.Role;
 import com.demo.security01.model.dto.admin.AdminUpdateDto;
 import com.demo.security01.model.dto.paging.Criteria;

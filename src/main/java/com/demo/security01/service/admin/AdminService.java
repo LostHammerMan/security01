@@ -1,6 +1,6 @@
 package com.demo.security01.service.admin;
 
-import com.demo.security01.entity.User;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.paging.Criteria;
 import com.demo.security01.model.dto.paging.Paging;
 import com.demo.security01.repository.user.UserRepositoryCustomImpl;
