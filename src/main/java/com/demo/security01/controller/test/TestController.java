@@ -10,6 +10,7 @@ import com.demo.security01.repository.test.MultipartFileTest.ItemRepository;
 import com.demo.security01.validator.test.TestEmailAddrValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -135,5 +137,17 @@ public class TestController {
     @GetMapping("/layoutTest2")
     public String layoutTest2(){
         return "test/htmlLayoutTest2";
+    }
+
+    @Autowired
+    private ApplicationContext context;
+
+    @GetMapping("/context")
+    @ResponseBody
+    public String context() {
+        log.info("## context");
+        log.info("\t > dataSource from getBean = {}", context.getBean(DataSource.class));
+        log.info("\t > dataSource from getBeansOfType = {}", context.getBeansOfType(DataSource.class));
+        return "success";
     }
 }

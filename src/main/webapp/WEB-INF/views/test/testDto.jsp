@@ -16,8 +16,23 @@
 
     <span id="examSpan"></span><hr>
     <button type="button" name="submitBtn" id="submitBtn">전송</button>
+    <button class="btn btn-secondary btn-lg" type="button" onclick="context()">context</button>
 </body>
 <script>
+    function context() {
+        console.log("## context");
+        $.ajax({
+            url : "${root}test/context",
+            type : "GET",
+            success : function(result) {
+                console.log(result);
+            },
+            error : function(e) {
+                console.log(e);
+            }
+        });
+    }
+
     $(function (){
         $("#submitBtn").on("click", function (e){
             e.preventDefault();

@@ -1,15 +1,23 @@
 package com.demo.security01.controller.community;
 
+import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.category.CategoryDto;
+import com.demo.security01.model.dto.community.LoungeWriteRequest;
 import com.demo.security01.repository.category.CategoryRepositoryCustom;
 import com.demo.security01.service.category.CategoryService;
+import com.demo.security01.service.community.LoungeService;
+import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -18,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CommunityController {
 
     private final CategoryService categoryService;
+    private final LoungeService loungeService;
+    private final UserService userService;
 
     // 불필요한 과정이라 삭제
     /*@ModelAttribute
@@ -30,13 +40,28 @@ public class CommunityController {
 
     // 커뮤니티 메인, 개발자 라운지
     @GetMapping({"/lounge", ""})
-    public String communityLounge(){
+    public String communityLounge(Model model){
+        List<LoungeEntity> allLounge = loungeService.findAllLounge();
+        model.addAttribute("allLounge", allLounge);
+
         return "community/commuLounge";
     }
 
+    // 라운지 작성 폼
     @GetMapping("/lounge/write")
-    public String loungeWrite(){
+    public String getLoungeWriteForm(){
         return "community/loungeWriteForm";
+    }
+
+    // 라운지 작성글 작성
+    @PostMapping("lounge/writeProc")
+    public String loungeWrite(Principal principal, @ModelAttribute("loungeWriteRequest") LoungeWriteRequest loungeWriteRequest, HttpServletRequest request){
+        String username = principal.getName();
+
+        loungeService.loungeSave(loungeWriteRequest, username);
+        request.setAttribute("msg", "라운지 게시글 작성 완료");
+        request.setAttribute("url", request.getContextPath() + "/community/lounge");
+        return "community/loungeWriteOk";
     }
 
     // QnA

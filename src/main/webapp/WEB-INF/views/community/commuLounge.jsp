@@ -71,37 +71,41 @@
             </header>
             <div class="row d-flex ">
 
-                <div class="col-12 col-md-4 mb-4 mt-2">
-                    <div class="card  h-100 border-light  bg-light shadow">
-                        <a href="#">
-                        <div class="card-body d-flex-row">
-                            <h4>글 카테고리</h4>
-                            <blockquote class="blockquote mb-4 pb-2">
-                                <p class="mb-0 font-weight-bold">글 제목</p>
-                            </blockquote>
-                            <p class="card-text mb-5">글 내용</p>
-                            <div class="w-100 pb-1"></div>
-                            <div class="d-flex align-items-center align-self-end">
-                                <div class="meta-author">
-                                    <img class="d-block img-fluid rounded-circle"
-                                         src="https://via.placeholder.com/40x40/5fa9f8/ffffff " alt="author avatar">
-                                </div>
-                                <div class="m-2">
-                                    <a href="#">작성자</a>
-                                </div>
-                                <hr/>
+                <c:forEach items="${allLounge}" var="allLounge">
+                    <div class="col-12 col-md-4 mb-4 mt-2">
+                        <div class="card  h-100 border-light  bg-light shadow">
+                            <a href="#">
+                                <div class="card-body d-flex-row">
+                                    <h4>글 카테고리</h4>
+                                    <blockquote class="blockquote mb-4 pb-2">
+                                        <p class="mb-0 font-weight-bold">${allLounge.title}</p>
+                                    </blockquote>
+                                    <p class="card-text mb-5">${allLounge.content}</p>
+                                    <div class="w-100 pb-1"></div>
+                                    <div class="d-flex align-items-center align-self-end">
+                                        <div class="meta-author">
+                                            <img class="d-block img-fluid rounded-circle"
+                                                 src="https://via.placeholder.com/40x40/5fa9f8/ffffff " alt="author avatar">
+                                        </div>
+                                        <div class="m-2">
+                                            <a href="#">${allLounge.user.username}</a>
+                                        </div>
+                                        <hr/>
 
-                            </div>
-                            <hr>
-                            <ul>
-                                <li style="list-style-type: none">조회 수</li>
-                                <li style="list-style-type: none">댓글 수</li>
-                                <li style="list-style-type: none">좋아요 수</li>
-                            </ul>
+                                    </div>
+                                    <hr>
+                                    <ul>
+                                        <li style="list-style-type: none">조회 수</li>
+                                        <li style="list-style-type: none">댓글 수</li>
+                                        <li style="list-style-type: none">좋아요 수</li>
+                                    </ul>
+                                </div>
+                            </a>
                         </div>
-                        </a>
                     </div>
-                </div>
+                </c:forEach>
+
+
                 <div class="col-12 col-md-4 mb-4 mt-2">
                     <div class="card  h-100 border-light  bg-light shadow">
                         <div class="card-body d-flex-row">
