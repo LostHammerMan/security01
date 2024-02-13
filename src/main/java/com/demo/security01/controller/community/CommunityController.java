@@ -16,6 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.List;
 
@@ -49,7 +52,15 @@ public class CommunityController {
 
     // 라운지 작성 폼
     @GetMapping("/lounge/write")
-    public String getLoungeWriteForm(){
+    public String getLoungeWriteForm(HttpServletRequest request,@ModelAttribute("loungeWriteRequest") LoungeWriteRequest loungeWriteRequest, Model model) throws IOException {
+
+        log.info("\tgetLoungeWriteForm called........");
+        if (request.getUserPrincipal() == null){
+            model.addAttribute("msg", "로그인이 필요합니다...");
+            model.addAttribute("url", request.getContextPath() + "/community/lounge");
+            return "error/loginError";
+        }
+
         return "community/loungeWriteForm";
     }
 

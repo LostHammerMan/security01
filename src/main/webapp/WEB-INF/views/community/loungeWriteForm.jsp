@@ -50,8 +50,8 @@
                    <div class="dropdown">
                        <form:select class="form-control dropdown-toggle" path="cateCode">
                            <option class="dropdown-menu">카테고리 선택</option>
-                           <option class="dropdown-item" value="free">자유주제</option>
-                           <option class="dropdown-item" value="career">커리어 고민</option>
+                           <option class="dropdown-item" value="5">자유주제</option>
+                           <option class="dropdown-item" value="6">커리어 고민</option>
                        </form:select>
                            <%--<button class="form-control dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                              카테고리 선택
@@ -68,14 +68,14 @@
            <div class="form-group col-md-4">
                <label>제목</label>
                <div class="input-group">
-                   <input type="text" name="userEmail" id="userEmail"
-                          class="form-control" placeholder="글 제목을 입력해주세요">
+                   <form:input type="text" path="title"
+                          class="form-control" placeholder="글 제목을 입력해주세요" />
                </div>
            </div>
        </div>
        <div class="row">
            <div class="form-group col-md-8">
-               <label>내용</label>
+               <form:label path="contents">내용</form:label>
                <div class="input-group">
                        <%--          <textarea class="form-control" rows="5" name="message"--%>
                        <%--                    id="message" required></textarea>--%>
@@ -88,8 +88,8 @@
        </div>
        <div class="row">
            <div class="col">
-               <button type="button" class="btn btn-outline-danger">취소</button>
-               <button type="submit" class="btn btn-primary">등록</button>
+               <form:button type="button" class="btn btn-outline-danger">취소</form:button>
+               <form:button type="submit" class="btn btn-primary">등록</form:button>
 
            </div>
        </div>

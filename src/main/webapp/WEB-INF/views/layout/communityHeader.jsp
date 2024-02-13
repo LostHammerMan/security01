@@ -7,7 +7,7 @@
 
 <div class="navbar navbar-light bg-light d-flex justify-content-start" id="commuNavVar">
 
-  <a class="navbar-brand mr-lg-5 navbar-1" href="${root}community/main">
+  <a class="navbar-brand mr-lg-5 navbar-1" href="${root}community">
     <img src="${root}static/img/community/artist_love_you.png" width="30" height="30" class="d-inline-block align-top" alt="">
     슽디 <span style="color: #ff681a">community</span>
   </a>
