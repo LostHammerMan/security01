@@ -3,12 +3,11 @@ package com.demo.security01;
 
 import com.querydsl.core.types.dsl.StringTemplate;
 import org.junit.jupiter.api.Test;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
+
 import org.springframework.boot.test.context.SpringBootTest;
 
 public class QuartzExample {
-        // Job 생성
+      /*  // Job 생성
         JobDetail job = JobBuilder.newJob(MyJob.class)
                 .withIdentity("myJob", "group1")
                 .build();
@@ -23,12 +22,12 @@ public class QuartzExample {
                 .build();
 
         // 스케줄러 생성 및 Job, Trigger 등록
-        /*Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+        *//*Scheduler scheduler = new StdSchedulerFactory().getScheduler();
         scheduler.start();
-        scheduler.scheduleJob(job, trigger);*/
+        scheduler.scheduleJob(job, trigger);*//*
 
 
-//        StringTemplate
+//        StringTemplate*/
 }
 
 

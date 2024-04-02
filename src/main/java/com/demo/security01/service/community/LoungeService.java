@@ -65,6 +65,14 @@ public class LoungeService {
 
     }
 
+    // 라운지 조회
+    public LoungeEntity getLounge(Long id){
+        LoungeEntity findLounge = loungeRepository.findById(id)
+                .orElseThrow(() -> new LoungeNotFountException());
+
+        return findLounge;
+    }
+
     // 라운지 목록
     public List<LoungeEntity> findAllLounge(){
         return loungeRepository.findAll();

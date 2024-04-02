@@ -75,6 +75,14 @@ public class CommunityController {
         return "community/loungeWriteOk";
     }
 
+    // 라운지 작성글 조회
+    @GetMapping("/lounge/{loungeId}")
+    public String getLounge(@PathVariable Long loungeId, Model model){
+        LoungeEntity findLounge = loungeService.getLounge(loungeId);
+        model.addAttribute("findLounge", findLounge);
+        return "community/loungeReadForm";
+    }
+
     // QnA
     @GetMapping("/QnA")
     public String communityQnA(){
