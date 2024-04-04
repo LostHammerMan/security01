@@ -50,6 +50,9 @@ public class LoungeEntity {
     @Column(name = "UPDATE_DATE")
     private LocalDateTime updateDate;
 
+    @Column(name = "LIKE_COUNT")
+    private Integer likeCount;
+
     public void loungeEdit(LoungeModifyRequest request){
         this.title  = request.getTitle() != null? request.getTitle() : this.getTitle() ;
         this.content = request.getContents() != null ? request.getContents() : this.getContent();

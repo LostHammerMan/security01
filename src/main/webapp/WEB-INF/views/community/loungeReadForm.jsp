@@ -124,7 +124,7 @@
         margin: 16px 0 24px;
     }
 
-    .comment_buttonComplete {
+    .comment_completeButton {
         padding: 12px 24px;
         /*height: 40px;*/
         background: #333;
@@ -138,12 +138,46 @@
         text-align: center;
     }
 
+    .countAndLike {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 20px;
+    }
+
+    .postCount {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .postHeart {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        /*cursor: pointer;*/
+    }
+
+    .fa-heart:hover {
+        cursor: pointer;
+    }
+
+    .fa-heart {
+        color: var(--gray);
+    }
+
+    .fas.fa-heart {
+        color: var(--red);
+    }
+
 
 
 </style>
 <div class="loungeContent_wrapper">
     <section class="postHeader flex-column">
-        <svg cursor="pointer" color=></svg>
+        <img src="${root}static/img/arrow-left.svg" alt="arrowLeft" style="color: #6e707e; width: 30px; height: 30px
+           ; cursor: pointer" onclick="history.back(-1)">
         <div class="loungeContent_title">
             ${findLounge.title}
         </div>
@@ -159,7 +193,7 @@
                 <fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd" />
 <%--                <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" />--%>
             </div>
-            <div class="lounge_modifyBtn" style="margin-left: 60%">
+            <div class="lounge_modifyBtn justify-content-end" style="margin-left: 63%">
                     <button type="submit" class="btn btn-primary">수정</button>
             </div>
         </div>
@@ -169,6 +203,17 @@
         <div class="loungeContent_postContent">
             ${findLounge.content}
         </div>
+        <section class="countAndLike">
+            <div class="postCount">
+                <img src="${root}static/img/eye.svg" alt="eye" style="width: 20px; height: auto"  />
+                <span class="post_count" style="color: #6e707e; font-size: 14px; font-weight: 500">13</span>
+            </div>
+            <div class="postHeart ml-2">
+<%--                <img src="${root}static/img/blackHeart.png"  alt="heart" style="width: 20px; height: auto; fill: #2F96B4"/>--%>
+                <i class="far fa-heart" style="width: 20px; height: auto"></i>
+                <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">15</span>
+            </div>
+        </section>
     </div>
 
     <div class="mt-lg-5" style="padding-bottom: 80px">
@@ -181,7 +226,7 @@
             <textarea class="commentInput_text ml-4" placeholder="댓글 입력하세요"></textarea>
         </div>
         <div class="comment_buttonWrapper">
-            <button class="comment_buttonComplete" id="register" name="register"
+            <button class="comment_completeButton" id="register" name="register"
             style="text-align: center">댓글 등록</button>
         </div>
     </div>
@@ -189,5 +234,13 @@
 
 
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
+<script>
+    // const togglingBtn = $(".fa-heart");
+    const togglingBtn = document.querySelector('.fa-heart');
 
+    togglingBtn.addEventListener('click', function (){
+       togglingBtn.classList.toggle('fas');
+    });
+
+</script>
 </html>
