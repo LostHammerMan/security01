@@ -4,6 +4,7 @@ import com.demo.security01.entity.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -20,8 +21,11 @@ public class BoardLike {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LOUNGE_IDX")
+    @JoinColumn(name = "LOUNGE_IDX", nullable = true)
     private LoungeEntity lounge;
 
-
+    public BoardLike(User user, LoungeEntity lounge) {
+        this.user = user;
+        this.lounge = lounge;
+    }
 }

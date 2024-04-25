@@ -21,14 +21,14 @@ public class LikeApiController {
     private final LoungeService loungeService;
 
     // 좋아요 추가
-    @PostMapping("/api/addLike/up/{cateCode}/{boardId}")
-    public ResponseEntity<BoardLike> addLike(@PathVariable CategoryEntity cateCode,
-                                             @PathVariable Long boardId,
-                                             Principal principal){
-
-        String username = principal.getName();
-        likeService.addLike(cateCode, boardId, username);
-
-    }
+//    @PostMapping("/api/addLike/up/{cateCode}/{boardId}")
+//    public ResponseEntity<BoardLike> addLike(@PathVariable CategoryEntity cateCode,
+//                                             @PathVariable Long boardId,
+//                                             Principal principal){
+//
+//        String username = principal.getName();
+////        likeService.addLike(cateCode, boardId, username);
+//
+//    }
 
 }

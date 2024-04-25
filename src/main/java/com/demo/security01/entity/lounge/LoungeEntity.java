@@ -51,12 +51,20 @@ public class LoungeEntity {
     private LocalDateTime updateDate;
 
     @Column(name = "LIKE_COUNT")
-    private Integer likeCount;
+    private Integer likeCount = 0;
+
+    @Column(name = "VIEW_COUNT")
+    private Integer viewCount = 0;
 
     public void loungeEdit(LoungeModifyRequest request){
         this.title  = request.getTitle() != null? request.getTitle() : this.getTitle() ;
         this.content = request.getContents() != null ? request.getContents() : this.getContent();
         this.cateCode = request.getCateCode() != null  ? request.getCateCode() : this.getCateCode();
+    }
+
+    // 좋아요
+    public void setLikeCount(int num){
+        this.likeCount = num;
     }
 
     @Builder
