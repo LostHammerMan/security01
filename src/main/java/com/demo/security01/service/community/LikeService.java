@@ -8,6 +8,7 @@ import com.demo.security01.entity.user.User;
 import com.demo.security01.repository.boardLike.LikeRepository;
 import com.demo.security01.repository.community.LoungeRepository;
 import com.demo.security01.repository.user.UserRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,14 +28,22 @@ public class LikeService {
         LoungeEntity findLounge = loungeRepository.findById(boardId).orElseThrow(
                 () -> new LoungeNotFountException()
         );
-        if (!likeRepository.existsByUserAndBoard(user, findLounge)){
+        if (!likeRepository.existsByUserAndLounge(user, findLounge)){
             findLounge.setLikeCount(findLounge.getLikeCount() + 1);
             likeRepository.save(new BoardLike(user, findLounge));
-        }else {
+        }/*else {*/
+//            findLounge.setLikeCount(findLounge.getLikeCount() - 1);
+//            likeRepository.deleteByUserAndLounge(user, findLounge);
+//        }
+    }
+
+    public void deleteLike(Long boardId, User user){
+        LoungeEntity findLounge = loungeRepository.findById(boardId).orElseThrow(
+                () -> new LoungeNotFountException()
+        );
+        if (likeRepository.existsByUserAndLounge(user, findLounge)){
             findLounge.setLikeCount(findLounge.getLikeCount() - 1);
-            likeRepository.deleteByUserAndBoard(user, findLounge);
+            likeRepository.deleteByUserAndLounge(user, findLounge);
         }
-
-
     }
 }

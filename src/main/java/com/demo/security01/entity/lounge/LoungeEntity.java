@@ -67,6 +67,10 @@ public class LoungeEntity {
         this.likeCount = num;
     }
 
+    public void setViewCount(int num){
+        this.viewCount = num;
+    }
+
     @Builder
     public LoungeEntity(String title, String content, int count, User user, CategoryEntity cateCode, LocalDateTime regDate) {
         this.title = title;

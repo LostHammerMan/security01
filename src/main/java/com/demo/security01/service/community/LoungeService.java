@@ -66,10 +66,12 @@ public class LoungeService {
     }
 
     // 라운지 조회
+    @Transactional
     public LoungeEntity getLounge(Long id){
         LoungeEntity findLounge = loungeRepository.findById(id)
                 .orElseThrow(() -> new LoungeNotFountException());
-
+        findLounge.setViewCount(findLounge.getViewCount() + 1);
+//        loungeRepository.save(findLounge);
         return findLounge;
     }
 

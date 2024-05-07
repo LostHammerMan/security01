@@ -4,11 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class BoardLikeDto {
+public class BoardLikeRequestDto {
 
-    private boolean isCheck = false;
-    private long likeId;
-    private String userName;
     private Long boardId;
 
 }

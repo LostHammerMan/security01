@@ -206,12 +206,12 @@
         <section class="countAndLike">
             <div class="postCount">
                 <img src="${root}static/img/eye.svg" alt="eye" style="width: 20px; height: auto"  />
-                <span class="post_count" style="color: #6e707e; font-size: 14px; font-weight: 500">13</span>
+                <span class="post_count" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.viewCount}</span>
             </div>
             <div class="postHeart ml-2">
 <%--                <img src="${root}static/img/blackHeart.png"  alt="heart" style="width: 20px; height: auto; fill: #2F96B4"/>--%>
                 <i class="far fa-heart" style="width: 20px; height: auto"></i>
-                <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">15</span>
+                <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.likeCount}</span>
             </div>
         </section>
     </div>
