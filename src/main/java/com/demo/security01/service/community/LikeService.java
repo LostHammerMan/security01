@@ -11,6 +11,7 @@ import com.demo.security01.repository.user.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,26 +25,43 @@ public class LikeService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
 
-    public void addLike(Long boardId, User user){
+    public void addLike(Long boardId, String username){
         LoungeEntity findLounge = loungeRepository.findById(boardId).orElseThrow(
                 () -> new LoungeNotFountException()
         );
-        if (!likeRepository.existsByUserAndLounge(user, findLounge)){
+
+        User findUser = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("해당 유저 없음")
+        );
+        if (!likeRepository.existsByUserAndLounge(findUser, findLounge)){
             findLounge.setLikeCount(findLounge.getLikeCount() + 1);
-            likeRepository.save(new BoardLike(user, findLounge));
+            likeRepository.save(new BoardLike(findUser, findLounge));
         }/*else {*/
 //            findLounge.setLikeCount(findLounge.getLikeCount() - 1);
 //            likeRepository.deleteByUserAndLounge(user, findLounge);
 //        }
     }
 
-    public void deleteLike(Long boardId, User user){
+    public void deleteLike(Long boardId, String username){
         LoungeEntity findLounge = loungeRepository.findById(boardId).orElseThrow(
                 () -> new LoungeNotFountException()
         );
-        if (likeRepository.existsByUserAndLounge(user, findLounge)){
+
+        User findUser = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("해당 유저 없음")
+        );
+        if (likeRepository.existsByUserAndLounge(findUser, findLounge)){
             findLounge.setLikeCount(findLounge.getLikeCount() - 1);
-            likeRepository.deleteByUserAndLounge(user, findLounge);
+            likeRepository.deleteByUserAndLounge(findUser, findLounge);
         }
+    }
+
+    public int getLikeCount(Long boardId) {
+        LoungeEntity findLounge = loungeRepository.findById(boardId).orElseThrow(
+                () -> new LoungeNotFountException()
+        );
+
+        int likeCount = findLounge.getLikeCount();
+        return likeCount;
     }
 }

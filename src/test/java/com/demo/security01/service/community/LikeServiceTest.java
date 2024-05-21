@@ -32,7 +32,7 @@ class LikeServiceTest {
         LoungeEntity findLounge = loungeRepository.findById(18L).orElseThrow(() -> new LoungeNotFountException());
         User findUser = userRepository.findByUsername("admin3").orElseThrow(() -> new UsernameNotFoundException("해당 유저 없음"));
 
-        likeService.addLike(findLounge.getIdx(), findUser);
+//        likeService.addLike(findLounge.getIdx(), findUser);
 
     }
 

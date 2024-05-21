@@ -7,16 +7,17 @@ import com.demo.security01.service.community.LikeService;
 import com.demo.security01.service.community.LoungeService;
 import com.demo.security01.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class LikeApiController {
 
     private final UserService userService;
@@ -27,11 +28,12 @@ public class LikeApiController {
     @PostMapping("/api/addLike")
     public ResponseEntity<Object> addLike(
             @RequestBody BoardLikeRequestDto dto,
-            Authentication authentication){
+            Principal principal){
+        log.info("== addLike called .. == ");
+        String username = principal.getName();
 
-        User user = (User)authentication.getPrincipal();
 
-        if (user == null){
+        if (username == null){
             throw new RuntimeException("로그인이 필요한 기능입니다.");
         }
 
@@ -39,16 +41,26 @@ public class LikeApiController {
             throw new RuntimeException("게시글이 존재하지 않음");
         }
 
-        likeService.addLike(dto.getBoardId(), user);
+        likeService.addLike(dto.getBoardId(), username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/addLike")
-    public ResponseEntity<Object> deleteLike(@RequestBody BoardLikeRequestDto dto,
-                                             Authentication authentication){
-        User user = (User) authentication.getPrincipal();
+    // 좋아요 수 불러오기
+    @GetMapping("/api/addLike/{boardId}")
+    public ResponseEntity<Object> getLikeCount(@PathVariable Long boardId){
+        log.info("getLikeCount() called...............");
+        int likeCount = likeService.getLikeCount(boardId);
 
-        if (user == null){
+        return ResponseEntity.status(HttpStatus.OK).body(likeCount);
+    }
+
+    @PostMapping("/api/deleteLike")
+    public ResponseEntity<Object> deleteLike(@RequestBody BoardLikeRequestDto dto,
+                                             Principal principal){
+        log.info("=== deleteLike called ... =====");
+        String username = principal.getName();
+
+        if (username == null){
             throw new RuntimeException("로그인이 필요한 기능입니다.");
         }
 
@@ -56,7 +68,7 @@ public class LikeApiController {
             throw new RuntimeException("게시글이 존재하지 않음");
         }
 
-        likeService.deleteLike(dto.getBoardId(), user);
+        likeService.deleteLike(dto.getBoardId(), username);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }

@@ -235,12 +235,88 @@
 
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 <script>
-    // const togglingBtn = $(".fa-heart");
-    const togglingBtn = document.querySelector('.fa-heart');
+    // // const togglingBtn = $(".fa-heart");
+    // const togglingBtn = document.querySelector('.fa-heart');
+    //
+    // togglingBtn.addEventListener('click', function (){
+    //    togglingBtn.classList.toggle('fas');
+    //
+    //     const element = $('#')
+    // });
 
-    togglingBtn.addEventListener('click', function (){
-       togglingBtn.classList.toggle('fas');
+    $(document).ready(function (){
+
+        const toggleBtn = $(".fa-heart");
+        toggleBtn.click(function (){
+            toggleBtn.toggleClass('fas');
+            let data = {'boardId' : ${findLounge.idx}};
+
+            if (toggleBtn.hasClass('fas')){
+
+                console.log("active")
+                $.ajax({
+                    url : '${root}api/addLike',
+                    method : 'POST',
+                    data : JSON.stringify(data),
+                    contentType :'application/json',
+
+                    success : function (response){
+                        console.log("좋아요 추가 성공");
+                        console.log(${findLounge.idx});
+                        $.ajax({
+                            url : '${root}api/addLike/${findLounge.idx}',
+                            type : 'GET',
+                            <%--data : '${findLounge.idx}',--%>
+
+                            success : function (response){
+                                console.log("좋아요 수 불러오기 성공");
+                                console.log(response);
+                            },
+                            error : function (err){
+                                console.log(err);
+                            }
+                        });
+
+                    },
+                    error : function (err){
+                        console.log("좋아요 추가 실패")
+                    }
+                })
+            }else {
+                console.log("inactive")
+                $.ajax({
+                    url : '${root}api/deleteLike',
+                    method : 'POST',
+                    data : JSON.stringify(data),
+                    contentType :'application/json',
+
+                    success : function (response){
+                        console.log("좋아요 취소 성공");
+
+                        $.ajax({
+                            url : '${root}api/addLike/${findLounge.idx}',
+                            type : 'GET',
+                            <%--data : '${findLounge.idx}',--%>
+
+                            success : function (response){
+                                console.log("좋아요 수 불러오기 성공");
+                                console.log(response);
+                            },
+                            error : function (err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    error : function (err){
+
+                        console.log("좋아요 취소 실패")
+                    }
+                })
+            }
+        })
     });
+
+    // 좋아요 버튼
 
 </script>
 </html>
