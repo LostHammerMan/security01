@@ -171,6 +171,74 @@
         color: var(--red);
     }
 
+    .commentList_list {
+        width: 100%;
+        display: block;
+        padding-inline-start: 40px;
+        padding-inline-end: 0px;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+    }
+
+    .commentList_item_container {
+        display: flex;
+        flex-direction: column;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #e1e1e1;
+    }
+
+    .commentItem_header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .commentItem_content {
+        padding-bottom: 30px;
+        font-size: 1rem;
+        display: block;
+    }
+
+    .commentItem_profileWrapper {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .commentItem_profileImg {
+        display: block;
+        width: 52px;
+        height: 52px;
+        margin-right: 16px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .commentItem_profileInfo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .commentItem_username {
+        color: #333;
+        font-weight: 700;
+        box-sizing: inherit;
+        font-family: D2Coding, serif;
+    }
+
+    .commentItem_registerDate {
+        font-size: 14px;
+        line-height: 126.5%;
+        letter-spacing: -.005rem;
+        color: #9f9f9f;
+    }
+
+    .commentItem_content {
+        padding-bottom: 30px;
+        font-size: 1rem;
+    }
+
 
 
 </style>
@@ -210,8 +278,17 @@
             </div>
             <div class="postHeart ml-2">
 <%--                <img src="${root}static/img/blackHeart.png"  alt="heart" style="width: 20px; height: auto; fill: #2F96B4"/>--%>
-                <i class="far fa-heart" style="width: 20px; height: auto"></i>
-                <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.likeCount}</span>
+                <c:choose>
+                    <c:when test="${isLikeCheck == true}">
+                        <i class="far fa-heart fas" style="width: 20px; height: auto"></i>
+                        <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.likeCount}</span>
+                    </c:when>
+                    <c:otherwise>
+                        <i class="far fa-heart" style="width: 20px; height: auto"></i>
+                        <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.likeCount}</span>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
         </section>
     </div>
@@ -223,12 +300,29 @@
         </div>
         <div class="comment_inputContainer d-flex">
             <img class="comment_inputProfile" src="${root}static/img/community/artist_love_you.png"  alt="profile"/>
-            <textarea class="commentInput_text ml-4" placeholder="댓글 입력하세요"></textarea>
+            <textarea class="commentInput_text ml-4" id="commentInput" name="commentInput" placeholder="댓글 입력하세요"></textarea>
         </div>
         <div class="comment_buttonWrapper">
-            <button class="comment_completeButton" id="register" name="register"
+            <button class="comment_completeButton" id="comment_completeButton" name="comment_completeButton"
             style="text-align: center">댓글 등록</button>
         </div>
+        <ul class="commentList_list">
+            <li class="commentList_item_container">
+                <section class="commentItem_header">
+                    <div class="commentItem_profileWrapper">
+                        <img class="commentItem_profileImg" alt="프로필" src="${root}static/img/ssalmuk.jpg">
+
+                        <div class="commentItem_profileInfo">
+                            <div class="commentItem_username">관리자</div>
+                            <div class="commentItem_registerDate">2024-12-12</div>
+                        </div>
+                    </div>
+                </section>
+                <section class="commentItem_content">
+                    <p class="commentItem_content">샘플 댓글</p>
+                </section>
+            </li>
+        </ul>
     </div>
 </div>
 
@@ -246,6 +340,7 @@
 
     $(document).ready(function (){
 
+        // 좋아요 버튼 이벤트
         const toggleBtn = $(".fa-heart");
         toggleBtn.click(function (){
             toggleBtn.toggleClass('fas');
@@ -270,7 +365,10 @@
 
                             success : function (response){
                                 console.log("좋아요 수 불러오기 성공");
-                                console.log(response);
+                                console.log(response.objectData);
+                                // $(".post_heart").attr("text", response.objectData)
+                                $(".post_heart").text(response.objectData)
+
                             },
                             error : function (err){
                                 console.log(err);
@@ -300,7 +398,10 @@
 
                             success : function (response){
                                 console.log("좋아요 수 불러오기 성공");
-                                console.log(response);
+                                console.log(response.objectData);
+                                // $(".post_heart").attr("text", response.objectData)
+                                $(".post_heart").text(response.objectData)
+
                             },
                             error : function (err){
                                 console.log(err);
@@ -314,6 +415,38 @@
                 })
             }
         })
+
+        // ======== 좋아요 버튼 끝 ============
+
+        // == 댓글 등록 시작 ===
+        const commentBtn = $("#comment_completeButton");
+        commentBtn.on("click", function (e){
+            e.preventDefault();
+            const commentInput = $("#commentInput").val();
+            console.log("댓글 등록 클릭");
+            let data = {
+                "content" : commentInput,
+                "boardIdx" : ${findLounge.idx}
+            };
+
+            console.log("boardIdx : " + ${findLounge.idx})
+            console.log("content = " + data.content);
+
+            $.ajax({
+                url : '${root}api/addComment',
+                method : 'POST',
+                data : JSON.stringify(data),
+                contentType :'application/json',
+                success : function (response){
+                    console.log("댓글 등록 성공");
+                    console.log("댓글 내용 :" + commentInput);
+                },
+                error : function (err){
+                    console.log("댓글 등록 실패");
+                }
+            })
+        })
+
     });
 
     // 좋아요 버튼

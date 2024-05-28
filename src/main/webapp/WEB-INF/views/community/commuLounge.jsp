@@ -55,6 +55,10 @@
 
     }
 
+    .card_bottom {
+
+    }
+
 </style>
 
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
@@ -104,11 +108,17 @@
 
                                     </div>
                                     <hr>
-                                    <ul>
+                                    <ul class="card_bottom d-flex row" style="gap: 1.5rem">
 <%--                                        <li style="list-style-type: none">${allLounge.count}</li>--%>
-                                        <li style="list-style-type: none">조회 수 </li>
+                                        <li style="list-style-type: none">
+                                            <img src="${root}static/img/eye.svg" alt="eye" style="width: 20px; height: auto"  />
+                                            <span class="post_count" style="color: #6e707e; font-size: 14px; font-weight: 500">${allLounge.viewCount}</span>
+                                        </li>
                                         <li style="list-style-type: none">댓글 수</li>
-                                        <li style="list-style-type: none">좋아요 수</li>
+                                        <li style="list-style-type: none">
+                                            <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                                            <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">${allLounge.likeCount}</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </a>
@@ -139,68 +149,7 @@
 
     </div>
 </section>
-<%--<section class="d-flex justify-content-between">
-    <div class="left_part">
-        <div class="left_part1 header d-flex justify-content-between" style="margin: 40px 0 40px 20px; align-items: center">
-            <h1 style="font-size: 16px; font-weight: bolder;">슽디 커뮤니티에서 당신의 이야기를 나눠보세요!</h1>
-            <a class="btn btn-primary ml-auto">작성하기</a>
-        </div>
-        <div class="left_part2" style="margin: 0 0 0 0">
-            <ul class="loungeWrapper d-flex flex-sm-wrap justify-content-between">
-                <li class="loungeBoard">
-                    <a href="#">
-                        <h4>자유주제</h4>
-                        <h2>글제목</h2>
-                        <h3>글 내용</h3>
-                        <div>
-                            <img src="">
-                            <p>
-                                <span>닉네임</span>
-                                <span>글생성일</span>
-                            </p>
-                        </div>
-                        <ul>
-                            <li>조회 수</li>
-                            <li>댓글 수</li>
-                            <li>좋아요 수</li>
-                        </ul>
-                    </a>
-                </li>
-                <li class="loungeBoard">
-                    <a href="#">
-                        <h4>자유주제</h4>
-                        <h2>글제목</h2>
-                        <h3>글 내용</h3>
-                        <div>
-                            <img src="">
-                            <p>
-                                <span>닉네임</span>
-                                <span>글생성일</span>
-                            </p>
-                        </div>
-                        <ul>
-                            <li>조회 수</li>
-                            <li>댓글 수</li>
-                            <li>좋아요 수</li>
-                        </ul>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
 
-    &lt;%&ndash;<aside>
-    </aside>&ndash;%&gt;
-    <aside class="right_part">
-        <div>
-            <img class="adImg" src="${root}static/img/community/01.png" alt="광고1" width="70%" height="70%"/>
-        </div>
-        <div class="mt-lg-5">
-            <img class="adImg" src="${root}static/img/community/42.png" alt="광고1" width="70%" height="70%"/>
-        </div>
-
-    </aside>
-</section>--%>
 
 
 <!-- Q&A - 이용관련, 자유질문-->

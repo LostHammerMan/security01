@@ -1,6 +1,7 @@
 package com.demo.security01.entity.lounge;
 
 import com.demo.security01.entity.CategoryEntity;
+import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import lombok.*;
@@ -13,6 +14,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -55,6 +57,9 @@ public class LoungeEntity {
 
     @Column(name = "VIEW_COUNT")
     private Integer viewCount = 0;
+
+    @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
+    private List<CommentEntity> commentEntity;
 
     public void loungeEdit(LoungeModifyRequest request){
         this.title  = request.getTitle() != null? request.getTitle() : this.getTitle() ;

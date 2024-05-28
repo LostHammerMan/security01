@@ -5,6 +5,7 @@ import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
+import com.demo.security01.repository.boardLike.LikeRepository;
 import com.demo.security01.repository.community.LoungeRepository;
 import com.demo.security01.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class LoungeService {
 
     private final LoungeRepository loungeRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
     // 게시글 저장
     @Transactional
@@ -74,6 +76,24 @@ public class LoungeService {
 //        loungeRepository.save(findLounge);
         return findLounge;
     }
+
+    //
+    public boolean isCheckLike(Long loungeId, String username){
+        boolean isLikeCheck = false;
+        User findUser = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("해당 유저 없음")
+        );
+
+        LoungeEntity findLounge = loungeRepository.findById(loungeId).orElseThrow(
+                () -> new LoungeNotFountException()
+        );
+        if (likeRepository.existsByUserAndLounge(findUser, findLounge)){
+            return isLikeCheck = true;
+        }else {
+            return isLikeCheck;
+        }
+    };
+
 
     // 라운지 목록
     public List<LoungeEntity> findAllLounge(){
