@@ -2,6 +2,7 @@ package com.demo.security01.entity.comment;
 
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.dto.comment.request.CommentModifyRequestDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,12 @@ public class CommentEntity {
         this.user = user;
     }
 
+    // 댓글 수정
+    public void modifyComment(CommentModifyRequestDto request){
+        this.content = request.getContent();
+        this.regDate = request.getUpdateDate();
+    }
+
 
     public String getContent(){
         return content;
@@ -54,5 +61,13 @@ public class CommentEntity {
 
     public LocalDateTime getRegDate() {
         return regDate;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public Long getId(){
+        return id;
     }
 }

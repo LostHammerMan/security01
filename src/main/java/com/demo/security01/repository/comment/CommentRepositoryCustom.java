@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CommentRepositoryCustom {
 
-    List<CommentEntity> getCommentList();
+    List<CommentEntity> getCommentList(Long boardId);
 }

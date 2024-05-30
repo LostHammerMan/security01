@@ -1,4 +1,4 @@
-package com.demo.security01.model.dto.comment;
+package com.demo.security01.model.dto.comment.request;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

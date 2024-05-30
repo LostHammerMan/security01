@@ -1,11 +1,14 @@
 package com.demo.security01.controller.community;
 
+import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.category.CategoryDto;
+import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
 import com.demo.security01.repository.category.CategoryRepositoryCustom;
 import com.demo.security01.service.category.CategoryService;
+import com.demo.security01.service.community.CommentService;
 import com.demo.security01.service.community.LikeService;
 import com.demo.security01.service.community.LoungeService;
 import com.demo.security01.service.user.UserService;
@@ -33,6 +36,7 @@ public class CommunityController {
     private final LoungeService loungeService;
     private final UserService userService;
     private final LikeService likeService;
+    private final CommentService commentService;
 
     // 불필요한 과정이라 삭제
     /*@ModelAttribute
@@ -93,8 +97,12 @@ public class CommunityController {
 
         LoungeEntity findLounge = loungeService.getLounge(loungeId);
         boolean isCheck = loungeService.isCheckLike(loungeId, username);
+        List<CommentResponseDto> comments = commentService.getCommentList(loungeId);
+
+
         model.addAttribute("findLounge", findLounge);
         model.addAttribute("isLikeCheck", isCheck);
+        model.addAttribute("comments", comments);
         return "community/loungeReadForm";
     }
 

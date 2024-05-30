@@ -1,19 +1,16 @@
 package com.demo.security01.controller.api;
 
-import com.demo.security01.model.dto.comment.CommentRequestDto;
-import com.demo.security01.model.dto.comment.CommentResponseDto;
+import com.demo.security01.model.dto.comment.request.CommentRequestDto;
+import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.service.community.CommentService;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -32,5 +29,12 @@ public class CommentApiController {
         log.info("commentRequest = {}", request);
         CommentResponseDto response = commentService.addComment(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/api/getComments/{boardId}")
+    public ResponseEntity<?> getComment(@PathVariable Long boardId){
+        log.info("===== Ajax getComments =====");
+        List<CommentResponseDto> commentList = commentService.getCommentList(boardId);
+        return ResponseEntity.status(HttpStatus.OK).body(commentList);
     }
 }
