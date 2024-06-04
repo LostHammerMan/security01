@@ -47,9 +47,10 @@ public class CommentService {
         CommentEntity comment = commentRepository.save(addedComment);
 
         CommentResponseDto response = CommentResponseDto.builder()
+                .id(comment.getId())
                 .content(comment.getContent())
                 .username(findUser.getUsername())
-                .filePath(findUser.getUserProfile().getFileUrl())
+                .filePath(findUser.getUserProfile().getFileName())
                 .regDate(comment.getRegDate()).build();
 
         return response;
@@ -67,6 +68,7 @@ public class CommentService {
         List<CommentResponseDto> responseDtoList = new ArrayList<>();
         for (CommentEntity comment : commentList){
             CommentResponseDto response = CommentResponseDto.builder()
+                    .id(comment.getId())
                     .content(comment.getContent())
                     .username(comment.getUser().getUsername())
                     .filePath(comment.getUser().getUserProfile().getFileName())

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -96,7 +97,19 @@ public class LoungeService {
 
 
     // 라운지 목록
+    @Transactional(readOnly = true)
     public List<LoungeEntity> findAllLounge(){
         return loungeRepository.findAll();
+    }
+
+    // 라운지 목록 + 페이징
+    @Transactional(readOnly = true)
+    public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx){
+        if (lastIdx == null){
+            Long maxId = loungeRepository.getMaxLoungeIdx();
+            return loungeRepository.getAllLoungeWithPaging(maxId +1, 9);
+        }
+
+        return loungeRepository.getAllLoungeWithPaging(lastIdx, 9);
     }
 }

@@ -308,27 +308,27 @@
             style="text-align: center">댓글 등록</button>
         </div>
         <ul class="commentList_list">
-            <c:forEach var="comments" items="${comments}">
+<%--            <c:forEach var="comments" items="${comments}">--%>
                 <li class="commentList_item_container">
-                    <section class="commentItem_header">
-                        <div class="commentItem_profileWrapper">
-                            <img class="commentItem_profileImg" alt="프로필" src="${root}api/profileImages/${comments.profileFilePath}">
+<%--                    <section class="commentItem_header">--%>
+<%--                        <div class="commentItem_profileWrapper">--%>
+<%--                            <img class="commentItem_profileImg" alt="프로필" src="&lt;%&ndash;${root}api/profileImages/${comments.profileFilePath}&ndash;%&gt;">--%>
 
-                            <div class="commentItem_profileInfo">
-                                <div class="commentItem_username">${comments.username}</div>
-                                <div class="commentItem_registerDate">
-                                    <fmt:parseDate value="${comments.regDate}"
-                                                   pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                                    <fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd HH:mm" />
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section class="commentItem_content">
-                        <p class="commentItem_content">${comments.content}</p>
-                    </section>
+<%--                            <div class="commentItem_profileInfo">--%>
+<%--                                <div class="commentItem_username">&lt;%&ndash;${comments.username}&ndash;%&gt;</div>--%>
+<%--&lt;%&ndash;                                <div class="commentItem_registerDate">&ndash;%&gt;--%>
+<%--&lt;%&ndash;                                    <fmt:parseDate value="${comments.regDate}"&ndash;%&gt;--%>
+<%--&lt;%&ndash;                                                   pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />&ndash;%&gt;--%>
+<%--&lt;%&ndash;                                    <fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd HH:mm" />&ndash;%&gt;--%>
+<%--&lt;%&ndash;                                </div>&ndash;%&gt;--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </section>--%>
+<%--                    <section class="commentItem_content">--%>
+<%--                        <p class="commentItem_content">&lt;%&ndash;${comments.content}&ndash;%&gt;</p>--%>
+<%--                    </section>--%>
                 </li>
-            </c:forEach>
+<%--            </c:forEach>--%>
 
         </ul>
     </div>
@@ -347,6 +347,8 @@
     // });
 
     $(document).ready(function (){
+        getCommentList();
+
 
         // 좋아요 버튼 이벤트
         const toggleBtn = $(".fa-heart");
@@ -422,15 +424,15 @@
                     }
                 })
             }
-        })
+        });
 
         // ======== 좋아요 버튼 끝 ============
 
         // == 댓글 등록 시작 ===
-        const commentBtn = $("#comment_completeButton");
-        commentBtn.on("click", function (e){
-            // e.preventDefault();
-            const commentInput = $("#commentInput").val();
+        $(document).on('click', "#comment_completeButton", function (e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let commentInput = $("#commentInput").val();
 
             if (commentInput.trim() === ''){
                 alert("댓글 입력하세요");
@@ -452,12 +454,12 @@
                 data : JSON.stringify(data),
                 contentType :'application/json',
                 success : function (response){
+                    alert("댓글 등록");
                     console.log("댓글 등록 성공");
                     console.log("댓글 내용 :" + commentInput);
-
+                    $("#commentInput").val('');
                     // 댓글 입력 성공 후 댓글 불러오기
-                    getComments();
-
+                    getCommentList();
                 },
                 error : function (err){
                     console.log("댓글 등록 실패");
@@ -467,7 +469,7 @@
 
 
      // 댓글 불러오기
-     function getComments(){
+     function getCommentList(){
             $.ajax({
                 url : '${root}api/getComments/${findLounge.idx}',
                 type : 'GET',
@@ -477,9 +479,7 @@
 
                     // console.log(result.body)
                     result.forEach(function (comment){
-                        console.log(comment.content);
-                        console.log(comment.username);
-                        console.log(comment.regDate);
+
                         commentsHtml += '<li class="commentList_item_container">';
                         commentsHtml += '<section class="commentItem_header">';
                         commentsHtml += '<div class="commentItem_profileWrapper">';
@@ -489,6 +489,8 @@
                         commentsHtml += '<div class="commentItem_registerDate">';
                         <%--commentsHtml += '<fmt:parseDate value=' +'"'+ comment.regDate+ '"'+ pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />';--%>
                         <%--commentsHtml += '<fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd HH:mm" />';--%>
+                        commentsHtml += '<div class="commentItem_registerDate">' + comment.regDate;
+                        commentsHtml += '</div>';
                         commentsHtml += '</div>';
                         commentsHtml += '</div>';
                         commentsHtml += '</div>';

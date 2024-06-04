@@ -1,6 +1,7 @@
 package com.demo.security01.loungeServiceTest;
 
 import com.demo.security01.entity.CategoryEntity;
+import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
@@ -12,6 +13,8 @@ import com.demo.security01.service.community.LoungeService;
 import com.demo.security01.service.user.MailServiceImpl;
 import com.demo.security01.service.user.UserProfileUploadService;
 import com.demo.security01.service.user.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +24,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.Validator;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @SpringBootTest
+@Slf4j
 public class LoungeServiceTest {
 
     @Autowired
@@ -52,10 +57,10 @@ public class LoungeServiceTest {
     @Resource(name = "modUserEmailValidator")
     private Validator modUserEmailValidator;
 
-    @BeforeEach
-    void clean(){
-        loungeRepository.deleteAll();
-    }
+//    @BeforeEach
+//    void clean(){
+//        loungeRepository.deleteAll();
+//    }
 
     @Test
     @DisplayName("라운지 게시글 저장")
@@ -121,6 +126,64 @@ public class LoungeServiceTest {
         loungeService.loungeSave(request, findUser.getUsername());
 
         loungeService.loungeDelete(5L);
+    }
+
+    // 라운지 게시글 - 페이징
+    @Test
+    @DisplayName("라운지 게시글 - 페이징")
+    public void getLoungeListWithPaging(){
+
+//        // 카테고리
+//        CategoryEntity findCate = categoryRepository.findById(2L).orElseThrow();
+//
+//        // 유저
+//        User findUser = userRepository.findById(1).orElseThrow(() ->
+//                new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
+//        for (int i = 0; i <= 300; i++){
+//
+//            // 게시글 저장
+//            LoungeWriteRequest request = LoungeWriteRequest.builder()
+//                    .title("제목" + i)
+//                    .contents("내용" + i)
+//                    .cateCode(findCate).build();
+//
+//            loungeService.loungeSave(request, findUser.getUsername());
+//        }
+
+//        List<LoungeEntity> list = loungeRepository.getAllLoungeWithPaging(null, 10);
+        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(null);
+
+        for (LoungeEntity lounge : list){
+            System.out.println("lounge.id = " + lounge.getIdx());
+        }
+
+        Assertions.assertEquals(9, list.size());
+    }
+
+    @Test
+    @DisplayName("2번째 페이지")
+    public void getLoungeListWithPaging2thPage(){
+        Long maxIdx = loungeRepository.getMaxLoungeIdx();
+
+        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(maxIdx -10L);
+        for (LoungeEntity lounge : list){
+            System.out.println("lounge.id = " + lounge.getIdx());
+        }
+
+        Assertions.assertEquals(9, list.size());
+    }
+
+    @Test
+    @DisplayName("3번째 페이지")
+    public void getLoungeListWithPaging3thPage(){
+        Long maxIdx = loungeRepository.getMaxLoungeIdx();
+
+        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(maxIdx -20L);
+        for (LoungeEntity lounge : list){
+            System.out.println("lounge.id = " + lounge.getIdx());
+        }
+
+        Assertions.assertEquals(9, list.size());
     }
 }
 

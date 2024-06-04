@@ -50,11 +50,13 @@ public class CommunityController {
     // 커뮤니티 메인, 개발자 라운지
     @GetMapping({"/lounge", ""})
     public String communityLounge(Model model){
-        List<LoungeEntity> allLounge = loungeService.findAllLounge();
-        model.addAttribute("allLounge", allLounge);
+//        List<LoungeEntity> allLounge = loungeService.findAllLounge();
+//        model.addAttribute("allLounge", allLounge);
 
         return "community/commuLounge";
     }
+
+
 
     // 라운지 작성 폼
     @GetMapping("/lounge/write")
@@ -102,7 +104,7 @@ public class CommunityController {
 
         model.addAttribute("findLounge", findLounge);
         model.addAttribute("isLikeCheck", isCheck);
-        model.addAttribute("comments", comments);
+//        model.addAttribute("comments", comments);
         return "community/loungeReadForm";
     }
 

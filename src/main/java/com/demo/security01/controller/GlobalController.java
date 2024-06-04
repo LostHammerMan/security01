@@ -19,6 +19,6 @@ public class GlobalController {
     public void globalController(Model model){
         log.info("============= globalController ==================");
         model.addAttribute("categoryDtos", categoryService.getCategoryList());
-        log.info("categoryDtos = {}", categoryService.getCategoryList());
+//        log.info("categoryDtos = {}", categoryService.getCategoryList());
     }
 }

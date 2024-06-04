@@ -77,7 +77,7 @@
 
                 <c:forEach items="${allLounge}" var="allLounge">
                     <div class="col-12 col-md-4 mb-4 mt-2">
-                        <div class="card  h-100 border-light  bg-light shadow">
+                        <div class="card h-100 border-light  bg-light shadow">
                             <a href="${root}community/lounge/${allLounge.idx}">
                                 <div class="card-body d-flex-row">
                                     <p class="card-text mb-5">${allLounge.cateCode.categoryName}</p>
