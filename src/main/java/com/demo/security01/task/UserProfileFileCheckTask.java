@@ -29,7 +29,7 @@ public class UserProfileFileCheckTask {
     private  String fileDir;
 
     // 일정 시간에 작동할 작업
-    @Scheduled(cron = "0 10 13 * * *")
+//    @Scheduled(cron = "0 10 13 * * *")
 //    @Scheduled(cron = "0/15 * * * * *")
     public void checkOlderProfileFile(){
         log.info("=========== UserProfileFileCheckTask ============");

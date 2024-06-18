@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,7 @@ public class LoungeEntity {
     private String title;
 
     @Column(name = "CONTENT")
+    @Size(max = 5000)
     private String content;
 
     @Column(name = "COUNT")

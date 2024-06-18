@@ -496,7 +496,8 @@
                         commentsHtml += '</div>';
                         commentsHtml += '</section>';
                         commentsHtml += '<section class="commentItem_content">';
-                        commentsHtml += '<p class="commentItem_content">'+ comment.content + '</p>';
+                        // commentsHtml += '<p class="commentItem_content">'+ comment.content + '</p>';
+                        commentsHtml += '<pre class="commentItem_content">'+ comment.content + '</pre>';
                         commentsHtml += '</section>';
                         commentsHtml += '</li>'
                     });

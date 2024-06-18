@@ -1,20 +1,28 @@
 package com.demo.security01.service.community;
 
 import com.demo.security01.config.exception.LoungeNotFountException;
+import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.dto.community.LoungeListResponseDto;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
 import com.demo.security01.repository.boardLike.LikeRepository;
+import com.demo.security01.repository.category.CategoryRepository;
 import com.demo.security01.repository.community.LoungeRepository;
 import com.demo.security01.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +34,7 @@ public class LoungeService {
     private final LoungeRepository loungeRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final CategoryRepository categoryRepository;
 
     // 게시글 저장
     @Transactional
@@ -34,10 +43,13 @@ public class LoungeService {
         User findUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저 정보를 찾을 수 없습니다"));
 
+        CategoryEntity category = categoryRepository.findById(request.getCateCode())
+                .orElseThrow(() -> new RuntimeException("해당 카테고리 없음"));
+
         LoungeEntity entity = LoungeEntity.builder()
                 .title(request.getTitle())
                 .content(request.getContents())
-                .cateCode(request.getCateCode())
+                .cateCode(category)
                 .regDate(LocalDateTime.now())
                 .user(findUser)
                 .build();
@@ -104,12 +116,41 @@ public class LoungeService {
 
     // 라운지 목록 + 페이징
     @Transactional(readOnly = true)
-    public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx){
+    public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx){
+
+        List<LoungeListResponseDto> dtos = new ArrayList<>();
         if (lastIdx == null){
             Long maxId = loungeRepository.getMaxLoungeIdx();
-            return loungeRepository.getAllLoungeWithPaging(maxId +1, 9);
+            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9);
+            entityToDto(dtos, allLoungeWithPaging);
+            return dtos;
         }
 
-        return loungeRepository.getAllLoungeWithPaging(lastIdx, 9);
+        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9);
+        entityToDto(dtos, allLoungeWithPaging);
+        return dtos;
+    }
+
+    private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {
+        for (LoungeEntity entity : list){
+            LoungeListResponseDto response = LoungeListResponseDto.builder()
+                    .idx(entity.getIdx())
+                    .title(entity.getTitle())
+                    .username(entity.getUser().getUsername())
+                    .categoryName(entity.getCateCode().getCategoryName())
+                    .profileFilename(entity.getUser().getUserProfile().getFileName())
+                    .regDate(entity.getRegDate())
+                    .viewCount(entity.getViewCount())
+                    .likeCount(entity.getLikeCount()).build();
+            dtos.add(response);
+        }
+    }
+
+    // 라운지 목록 + 페이징 + Slice활용
+    public Slice<LoungeEntity> getAllLoungeWithPagingWithSlice(Long lastIdx, Pageable pageable){
+
+//        Pageable pageable = PageRequest.of(0, 9);
+        return  loungeRepository.getAllLoungeWithPaging2(lastIdx, pageable);
+
     }
 }

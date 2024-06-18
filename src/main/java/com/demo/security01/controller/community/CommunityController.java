@@ -1,5 +1,6 @@
 package com.demo.security01.controller.community;
 
+import com.demo.security01.config.annotation.LoungeWriteRequestAnno;
 import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
@@ -17,10 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
@@ -37,6 +43,14 @@ public class CommunityController {
     private final UserService userService;
     private final LikeService likeService;
     private final CommentService commentService;
+
+    @Resource(name = "loungeWriteValidator")
+    private Validator loungeWriteValidator;
+
+    @InitBinder("loungeWriteRequest")
+    public void initBinder(WebDataBinder binder){
+        binder.addValidators(loungeWriteValidator);
+    }
 
     // 불필요한 과정이라 삭제
     /*@ModelAttribute
@@ -59,8 +73,9 @@ public class CommunityController {
 
 
     // 라운지 작성 폼
+    // custom ArgumentResolver 를 사용하는 경우 @ModelAttribute, @RequestBody 사용불가, 해당 어노테이션에 해당하는 argumentResolver 가 이미 있기 때문
     @GetMapping("/lounge/write")
-    public String getLoungeWriteForm(HttpServletRequest request,@ModelAttribute("loungeWriteRequest") LoungeWriteRequest loungeWriteRequest, Model model) throws IOException {
+    public String getLoungeWriteForm(HttpServletRequest request, @ModelAttribute("loungeWriteRequest") LoungeWriteRequest loungeWriteRequest, Model model) throws IOException {
 
         log.info("\tgetLoungeWriteForm called........");
         if (request.getUserPrincipal() == null){
@@ -68,14 +83,40 @@ public class CommunityController {
             model.addAttribute("url", request.getContextPath() + "/community/lounge");
             return "error/loginError";
         }
-
+        model.addAttribute("loungeWriteRequest", loungeWriteRequest);
         return "community/loungeWriteForm";
     }
 
     // 라운지 작성글 작성
     @PostMapping("lounge/writeProc")
-    public String loungeWrite(Principal principal, @ModelAttribute("loungeWriteRequest") LoungeWriteRequest loungeWriteRequest, HttpServletRequest request){
+    public String loungeWrite(@Valid @ModelAttribute("loungeWriteRequest") LoungeWriteRequest loungeWriteRequest,
+                              BindingResult result, HttpServletRequest request, Model model, Principal principal){
         String username = principal.getName();
+        log.info("\t loungeWrite called.....");
+
+        log.info(loungeWriteRequest.getContents());
+
+        if (result.hasErrors()){
+            if (result.hasFieldErrors("cateCode")){ 
+                loungeWriteRequest.setCateCode(5L);
+                log.info("loungeWriteRequest.getCateCode() = {}", loungeWriteRequest.getCateCode());
+            }
+            result.getFieldErrors().forEach(fieldError -> {
+                log.info("errorField = {}", fieldError.getField());
+                String[] errorCodeArr = fieldError.getCodes();
+                for (int i=0; i<errorCodeArr.length; i++) {
+                    log.info("errorCode[{}] = {}", i, errorCodeArr[i]);
+                }
+                log.info("-----------------------------------------");
+            });
+
+            return "community/loungeWriteForm";
+        }
+
+//        if (result.hasFieldErrors("cateCode")){
+//            loungeWriteRequest.setCateCode(5L);
+//        }
+
 
         loungeService.loungeSave(loungeWriteRequest, username);
         request.setAttribute("msg", "라운지 게시글 작성 완료");

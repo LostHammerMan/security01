@@ -15,7 +15,7 @@ public class GlobalController {
 
     private final CategoryService categoryService;
 
-    @ModelAttribute()
+    @ModelAttribute() // @RequestMapping 이 붙은 컨트롤러 메서드가 호출되기 전 호출됨
     public void globalController(Model model){
         log.info("============= globalController ==================");
         model.addAttribute("categoryDtos", categoryService.getCategoryList());

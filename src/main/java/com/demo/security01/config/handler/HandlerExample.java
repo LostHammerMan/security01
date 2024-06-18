@@ -1,5 +1,6 @@
 package com.demo.security01.config.handler;
 
+import com.demo.security01.config.exception.CateCodeFormantException;
 import com.demo.security01.model.dto.error.ErrorResponseDto;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,8 +31,6 @@ public class HandlerExample {
 
     @Autowired
     MessageSourceAccessor messageSourceAccessor;
-
-
 
     @ExceptionHandler(NullPointerException.class)
     @ResponseBody
@@ -150,6 +150,14 @@ public class HandlerExample {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseEntityDto);
 
+    }
+
+    @ExceptionHandler(CateCodeFormantException.class)
+    public String handlerCateCodeFormantException(CateCodeFormantException e, Model model){
+        log.info("==== CateCodeFormantException =======");
+        model.addAttribute("errorMsg", e.getMessage());
+
+        return "community/loungeWriteForm";
     }
 
 

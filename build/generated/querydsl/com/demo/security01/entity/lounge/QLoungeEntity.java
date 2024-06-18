@@ -24,11 +24,15 @@ public class QLoungeEntity extends EntityPathBase<LoungeEntity> {
 
     public final com.demo.security01.entity.QCategoryEntity cateCode;
 
+    public final ListPath<com.demo.security01.entity.comment.CommentEntity, com.demo.security01.entity.comment.QCommentEntity> commentEntity = this.<com.demo.security01.entity.comment.CommentEntity, com.demo.security01.entity.comment.QCommentEntity>createList("commentEntity", com.demo.security01.entity.comment.CommentEntity.class, com.demo.security01.entity.comment.QCommentEntity.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     public final NumberPath<Integer> count = createNumber("count", Integer.class);
 
     public final NumberPath<Long> idx = createNumber("idx", Long.class);
+
+    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
@@ -37,6 +41,8 @@ public class QLoungeEntity extends EntityPathBase<LoungeEntity> {
     public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
 
     public final com.demo.security01.entity.user.QUser user;
+
+    public final NumberPath<Integer> viewCount = createNumber("viewCount", Integer.class);
 
     public QLoungeEntity(String variable) {
         this(LoungeEntity.class, forVariable(variable), INITS);

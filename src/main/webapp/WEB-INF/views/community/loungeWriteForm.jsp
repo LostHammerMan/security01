@@ -53,7 +53,24 @@
                            <option class="dropdown-item" value="5">자유주제</option>
                            <option class="dropdown-item" value="6">커리어 고민</option>
                        </form:select>
-                           <%--<button class="form-control dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                       <spring:hasBindErrors name="loungeWriteRequest">
+                           <c:if test="${errors.hasFieldErrors('cateCode')}">
+                               <c:forEach var="fieldError" items="${errors.getFieldErrors('cateCode')}">
+                                   <span>${fieldError.code}</span>
+                                    <c:if test="${fieldError.code eq 'invalidCateCode'}">
+                                        <%--<span>invalidCateCode</span>--%>
+                                    </c:if>
+                                    <c:if test="${fieldError.code eq 'typeMismatch'}">
+                                        <spring:message code="${fieldError.code}" var="errorMessage"/>
+                                        <span>${errorMessage}</span>
+                                    </c:if>
+                               </c:forEach>
+                           </c:if>
+
+                       </spring:hasBindErrors>
+                       <%--<form:errors path="cateCode" cssStyle="color: red"/>--%>
+
+                   <%--<button class="form-control dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                              카테고리 선택
                            </button>
                            <div class="dropdown-menu">
@@ -63,14 +80,16 @@
                    </div>
                </div>
            </div>
+
        </div>
        <div class="row">
            <div class="form-group col-md-4">
-               <label>제목</label>
-               <div class="input-group">
+               <form:label path="title">제목</form:label>
+               <div class="form-group" style="display: flex">
                    <form:input type="text" path="title"
-                          class="form-control" placeholder="글 제목을 입력해주세요" />
+                          class="form-control" placeholder="글 제목을 입력해주세요" /><br>
                </div>
+               <form:errors path="title" cssStyle="color: red"  />
            </div>
        </div>
        <div class="row">
@@ -80,10 +99,12 @@
                        <%--          <textarea class="form-control" rows="5" name="message"--%>
                        <%--                    id="message" required></textarea>--%>
                    <div id="container">
-                       <div id="editor">
-                       </div>
+                       <form:textarea path="contents" id="editor"/>
+<%--                       <div id="editor">--%>
+<%--                       </div>--%>
                    </div>
                </div>
+
            </div>
        </div>
        <div class="row">

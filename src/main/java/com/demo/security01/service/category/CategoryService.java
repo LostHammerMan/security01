@@ -26,7 +26,6 @@ public class CategoryService {
 
         List<CategoryDto> results = categoryRepositoryCustom.findAllCategory()
                 .stream().map(CategoryDto::of).collect(Collectors.toList());
-        log.info("\t\t results = {}", results);
         return results;
     }
 
@@ -37,7 +36,6 @@ public class CategoryService {
 
         List<CategoryDto> subResults = categoryRepositoryCustom.findSubCategory(idx)
                 .stream().map(CategoryDto::of).collect(Collectors.toList());
-        log.info("subResults = {}", subResults);
         return subResults;
 
     }

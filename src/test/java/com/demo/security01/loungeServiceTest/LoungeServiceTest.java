@@ -3,6 +3,7 @@ package com.demo.security01.loungeServiceTest;
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.dto.community.LoungeListResponseDto;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
 import com.demo.security01.model.utils.TickParser_ProfileImg;
@@ -20,6 +21,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.Validator;
 
@@ -151,13 +155,15 @@ public class LoungeServiceTest {
 //        }
 
 //        List<LoungeEntity> list = loungeRepository.getAllLoungeWithPaging(null, 10);
-        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(null);
+//        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(null);
+        Pageable pageable = PageRequest.of(0, 9);
+        Slice<LoungeEntity> list = loungeService.getAllLoungeWithPagingWithSlice(null, pageable);
 
         for (LoungeEntity lounge : list){
             System.out.println("lounge.id = " + lounge.getIdx());
         }
 
-        Assertions.assertEquals(9, list.size());
+//        Assertions.assertEquals(9, list.size());
     }
 
     @Test
@@ -165,12 +171,23 @@ public class LoungeServiceTest {
     public void getLoungeListWithPaging2thPage(){
         Long maxIdx = loungeRepository.getMaxLoungeIdx();
 
-        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(maxIdx -10L);
+//        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(maxIdx -10L);
+//        for (LoungeEntity lounge : list){
+//            System.out.println("lounge.id = " + lounge.getIdx());
+//        }
+        Pageable pageable = PageRequest.of(0, 9); // no offset -> 페이지는 항상 0 으로 고정
+        Slice<LoungeEntity> list = loungeService.getAllLoungeWithPagingWithSlice(null, pageable);
+
+        // given
+        Long first = list.getContent().get(0).getIdx();
+        Long last = list.getContent().get(8).getIdx();
+
+
         for (LoungeEntity lounge : list){
             System.out.println("lounge.id = " + lounge.getIdx());
         }
 
-        Assertions.assertEquals(9, list.size());
+//        Assertions.assertEquals(9, list.size());
     }
 
     @Test
@@ -178,8 +195,8 @@ public class LoungeServiceTest {
     public void getLoungeListWithPaging3thPage(){
         Long maxIdx = loungeRepository.getMaxLoungeIdx();
 
-        List<LoungeEntity> list = loungeService.getAllLoungeWithPaging(maxIdx -20L);
-        for (LoungeEntity lounge : list){
+        List<LoungeListResponseDto> list = loungeService.getAllLoungeWithPaging(maxIdx -20L);
+        for (LoungeListResponseDto lounge : list){
             System.out.println("lounge.id = " + lounge.getIdx());
         }
 

@@ -1,5 +1,6 @@
 package com.demo.security01.controller.api;
 
+import com.demo.security01.config.annotation.CommentAnno;
 import com.demo.security01.model.dto.comment.request.CommentRequestDto;
 import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.service.community.CommentService;
@@ -20,7 +21,7 @@ public class CommentApiController {
     private final CommentService commentService;
 
     @PostMapping("/api/addComment")
-    public ResponseEntity<?> addComment(@RequestBody CommentRequestDto request, Principal principal){
+    public ResponseEntity<?> addComment(@RequestBody @CommentAnno CommentRequestDto request, Principal principal){
         log.info("=== addComment =====");
         if (principal.getName() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인 필요");

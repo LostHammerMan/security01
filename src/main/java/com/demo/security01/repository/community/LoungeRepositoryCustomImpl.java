@@ -7,7 +7,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,6 +30,30 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
                 .orderBy(loungeEntity.idx.desc())
                 .limit(pageSize)
                 .fetch();
+    }
+
+    @Override
+    public Slice<LoungeEntity> getAllLoungeWithPaging2(Long lastIdx, Pageable pageable) {
+         List<LoungeEntity> results = queryFactory
+                .select(loungeEntity)
+                .from(loungeEntity)
+                .where(ltLoungeIdx(lastIdx))
+                .orderBy(loungeEntity.idx.desc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        return checkAndPage(pageable, results);
+    }
+
+    @Override
+    public Slice<LoungeEntity> checkAndPage(Pageable pageable, List<LoungeEntity> results) {
+
+        boolean hasNext = false;
+        if (results.size() > pageable.getPageSize()){
+            hasNext = true;
+            results.remove(pageable.getPageSize()); // 한개 더 가져왔으니 더 가져온 데이터 삭제
+        }
+        return new SliceImpl<>(results, pageable, hasNext);
     }
 
     @Override
