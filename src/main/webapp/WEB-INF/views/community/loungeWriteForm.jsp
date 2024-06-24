@@ -53,22 +53,22 @@
                            <option class="dropdown-item" value="5">자유주제</option>
                            <option class="dropdown-item" value="6">커리어 고민</option>
                        </form:select>
-                       <spring:hasBindErrors name="loungeWriteRequest">
-                           <c:if test="${errors.hasFieldErrors('cateCode')}">
-                               <c:forEach var="fieldError" items="${errors.getFieldErrors('cateCode')}">
-                                   <span>${fieldError.code}</span>
-                                    <c:if test="${fieldError.code eq 'invalidCateCode'}">
-                                        <%--<span>invalidCateCode</span>--%>
-                                    </c:if>
-                                    <c:if test="${fieldError.code eq 'typeMismatch'}">
-                                        <spring:message code="${fieldError.code}" var="errorMessage"/>
-                                        <span>${errorMessage}</span>
-                                    </c:if>
-                               </c:forEach>
-                           </c:if>
+<%--                       <spring:hasBindErrors name="loungeWriteRequest">--%>
+<%--                           <c:if test="${errors.hasFieldErrors('cateCode')}">--%>
+<%--                               <c:forEach var="fieldError" items="${errors.getFieldErrors('cateCode')}">--%>
+<%--                                   <span>${fieldError.code}</span>--%>
+<%--                                    <c:if test="${fieldError.code eq 'invalidCateCode'}">--%>
+<%--                                        &lt;%&ndash;<span>invalidCateCode</span>&ndash;%&gt;--%>
+<%--                                    </c:if>--%>
+<%--                                    <c:if test="${fieldError.code eq 'typeMismatch'}">--%>
+<%--                                        <spring:message code="${fieldError.code}" var="errorMessage"/>--%>
+<%--                                        <span>${errorMessage}</span>--%>
+<%--                                    </c:if>--%>
+<%--                               </c:forEach>--%>
+<%--                           </c:if>--%>
 
-                       </spring:hasBindErrors>
-                       <%--<form:errors path="cateCode" cssStyle="color: red"/>--%>
+<%--                       </spring:hasBindErrors>--%>
+                       <form:errors path="cateCode" cssStyle="color: red"/>
 
                    <%--<button class="form-control dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                              카테고리 선택

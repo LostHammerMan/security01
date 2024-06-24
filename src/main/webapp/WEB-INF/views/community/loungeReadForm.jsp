@@ -9,6 +9,7 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
 <c:import url="/WEB-INF/views/layout/communityHeader.jsp"/>
+
 <style>
 
     .wrapper {
@@ -239,6 +240,12 @@
         font-size: 1rem;
     }
 
+    .dropdown-menu {
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        min-width: 6rem;
+    }
+
 
 
 </style>
@@ -261,9 +268,24 @@
                 <fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd" />
 <%--                <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" />--%>
             </div>
-            <div class="lounge_modifyBtn justify-content-end" style="margin-left: 63%">
-                    <button type="submit" class="btn btn-primary">수정</button>
-            </div>
+            <c:if test="${loginUsername == findLounge.user.username}">
+                <div class="lounge_modifyBtn justify-content-end" style="margin-left: 63%">
+                    <button type="button" class="btn btn-light" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="${root}community/lounge/modifyForm/${findLounge.idx}">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                            수정
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fa-solid fa-trash-can"></i>
+                            삭제
+                        </a>
+                    </div>
+                </div>
+            </c:if>
+
         </div>
 
     </section>
@@ -296,7 +318,7 @@
     <div class="mt-lg-5" style="padding-bottom: 80px">
         <div class="commentInput_input d-flex">
             <div class="comment_label mr-1">댓글</div>
-            <span class="comment_count">0</span>
+            <span class="comment_count">$<%--{commentCount}--%></span>
         </div>
         <div class="comment_inputContainer d-flex">
             <img class="comment_inputProfile" src="${root}api/profileImages/${findLounge.user.userProfile.fileName}"  alt="profile"/>
@@ -308,28 +330,8 @@
             style="text-align: center">댓글 등록</button>
         </div>
         <ul class="commentList_list">
-<%--            <c:forEach var="comments" items="${comments}">--%>
                 <li class="commentList_item_container">
-<%--                    <section class="commentItem_header">--%>
-<%--                        <div class="commentItem_profileWrapper">--%>
-<%--                            <img class="commentItem_profileImg" alt="프로필" src="&lt;%&ndash;${root}api/profileImages/${comments.profileFilePath}&ndash;%&gt;">--%>
-
-<%--                            <div class="commentItem_profileInfo">--%>
-<%--                                <div class="commentItem_username">&lt;%&ndash;${comments.username}&ndash;%&gt;</div>--%>
-<%--&lt;%&ndash;                                <div class="commentItem_registerDate">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                    <fmt:parseDate value="${comments.regDate}"&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                   pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                    <fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd HH:mm" />&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                </div>&ndash;%&gt;--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </section>--%>
-<%--                    <section class="commentItem_content">--%>
-<%--                        <p class="commentItem_content">&lt;%&ndash;${comments.content}&ndash;%&gt;</p>--%>
-<%--                    </section>--%>
                 </li>
-<%--            </c:forEach>--%>
-
         </ul>
     </div>
 </div>
@@ -348,8 +350,7 @@
 
     $(document).ready(function (){
         getCommentList();
-
-
+        getCommentListCount();
         // 좋아요 버튼 이벤트
         const toggleBtn = $(".fa-heart");
         toggleBtn.click(function (){
@@ -460,14 +461,13 @@
                     $("#commentInput").val('');
                     // 댓글 입력 성공 후 댓글 불러오기
                     getCommentList();
+                    getCommentListCount();
                 },
                 error : function (err){
                     console.log("댓글 등록 실패");
                 }
             })
         });
-
-
      // 댓글 불러오기
      function getCommentList(){
             $.ajax({
@@ -513,9 +513,24 @@
 
      }
 
+        // 댓글 수 불러오기
+        function getCommentListCount(){
+            $.ajax({
+                url : '${root}api/getCommentsCount/${findLounge.idx}',
+                type : 'GET',
+                success : function (result){
+                    console.log("댓글 수 불러오기 성공");
+                    console.log("result = " + result)
+                    $(".comment_count").text(result);
+                },
+                error : function (err){
+                    console.log("댓글 수 불러오기 실패")
+                }
+            });
+        }
     });
 
-    // 좋아요 버튼
+
 
 </script>
 </html>

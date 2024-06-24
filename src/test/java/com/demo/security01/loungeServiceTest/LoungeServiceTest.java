@@ -29,6 +29,7 @@ import org.springframework.validation.Validator;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @Slf4j
@@ -70,8 +71,8 @@ public class LoungeServiceTest {
     @DisplayName("라운지 게시글 저장")
     void test1(){
         // 카테고리
-        CategoryEntity findCate = categoryRepository.findById(2L).orElseThrow();
-
+//        CategoryEntity findCate = categoryRepository.findById(2L).orElseThrow();
+        Long cateCode = 2L;
         // 유저
         User findUser = userRepository.findById(1).orElseThrow(() ->
                 new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
@@ -80,7 +81,7 @@ public class LoungeServiceTest {
         LoungeWriteRequest request = LoungeWriteRequest.builder()
                 .title("제목1")
                 .contents("내용1")
-                .cateCode(findCate).build();
+                .cateCode(cateCode).build();
 
         loungeService.loungeSave(request, findUser.getUsername());
     }
@@ -88,48 +89,43 @@ public class LoungeServiceTest {
     @Test
     @DisplayName("라운지 게시글 수정 - 성공")
     void test2(){
-        // 카테고리
-        CategoryEntity findCate = categoryRepository.findById(2L).orElseThrow();
 
-        // 유저
-        User findUser = userRepository.findById(1).orElseThrow(() ->
-                new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
+        String username = "admin";
 
-        // 게시글 저장
-        LoungeWriteRequest request = LoungeWriteRequest.builder()
-                .title("제목1")
-                .contents("내용1")
-                .cateCode(findCate).build();
+        User findUser = userRepository.findByUsername(username).orElseThrow();
 
-        loungeService.loungeSave(request, findUser.getUsername());
+        LoungeModifyRequest request = LoungeModifyRequest.builder()
+                .loungeId(374L)
+                .cateCode(6L)
+                .title("수정333")
+                .contents("수정333")
+                .build();
 
-        LoungeModifyRequest request2 = LoungeModifyRequest.builder()
-                .title("변경된 제목")
-                .contents("변경된 내용")
-                .cateCode(findCate).build();
+        loungeService.loungeModify(request, findUser.getUsername());
+//        LoungeModifyRequest request2 = LoungeModifyRequest.builder()
+//                .title("변경된 제목")
+//                .contents("변경된 내용")
+//                .cateCode(cateCode).build();
+        LoungeEntity findLounge = loungeRepository.findById(374L)
+                .orElseThrow(() -> new RuntimeException());
 
-        loungeService.loungeModify(request2, 4L);
+            log.info("findLounge.title = {}", findLounge.getTitle());
+            log.info("findLounge.contents = {}", findLounge.getTitle());
     }
 
     @Test
     @DisplayName("라운지 게시글 삭제 - 성공")
-    public void test3(){
+    public void deleteTest(){
         // 카테고리
         CategoryEntity findCate = categoryRepository.findById(2L).orElseThrow();
 
         // 유저
-        User findUser = userRepository.findById(1).orElseThrow(() ->
-                new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
+//        User findUser = userRepository.findById(1).orElseThrow(() ->
+//                new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
+        User findUser = userRepository.findByUsername("admin").orElseThrow();
 
-        // 게시글 저장
-        LoungeWriteRequest request = LoungeWriteRequest.builder()
-                .title("제목1")
-                .contents("내용1")
-                .cateCode(findCate).build();
 
-        loungeService.loungeSave(request, findUser.getUsername());
-
-        loungeService.loungeDelete(5L);
+        loungeService.loungeDelete(342L, findUser.getUsername());
     }
 
     // 라운지 게시글 - 페이징

@@ -38,4 +38,11 @@ public class CommentApiController {
         List<CommentResponseDto> commentList = commentService.getCommentList(boardId);
         return ResponseEntity.status(HttpStatus.OK).body(commentList);
     }
+
+    @GetMapping("/api/getCommentsCount/{boardId}")
+    public ResponseEntity<?> getCommentsListCount(@PathVariable Long boardId){
+        log.info("=== api - getCommentsListCount ===");
+        Integer commentCount = commentService.getCommentCounts(boardId);
+        return ResponseEntity.status(HttpStatus.OK).body(commentCount);
+    }
 }

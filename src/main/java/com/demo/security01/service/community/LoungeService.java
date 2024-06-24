@@ -1,6 +1,7 @@
 package com.demo.security01.service.community;
 
 import com.demo.security01.config.exception.LoungeNotFountException;
+import com.demo.security01.config.exception.UserNotMatchException;
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
@@ -9,6 +10,7 @@ import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
 import com.demo.security01.repository.boardLike.LikeRepository;
 import com.demo.security01.repository.category.CategoryRepository;
+import com.demo.security01.repository.comment.CommentRepository;
 import com.demo.security01.repository.community.LoungeRepository;
 import com.demo.security01.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +33,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoungeService {
 
+
     private final LoungeRepository loungeRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
     // 게시글 저장
     @Transactional
@@ -50,7 +54,7 @@ public class LoungeService {
                 .title(request.getTitle())
                 .content(request.getContents())
                 .cateCode(category)
-                .regDate(LocalDateTime.now())
+//                .regDate(LocalDateTime.now())
                 .user(findUser)
                 .build();
 
@@ -60,23 +64,59 @@ public class LoungeService {
 
     // 라운지 수정
     @Transactional
-    public void loungeModify(LoungeModifyRequest request, Long loungeId){
+    public void loungeModify(LoungeModifyRequest request, String username){
 
-        LoungeEntity findLounge = loungeRepository.findById(loungeId)
+        User loginUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 유저 없음"));
+
+        log.info("request = {}", request);
+        LoungeEntity findLounge = loungeRepository.findById(request.getLoungeId())
                 .orElseThrow(()-> new LoungeNotFountException());
 
-        findLounge.loungeEdit(request);
+        if (loginUser != findLounge.getUser()){
+            throw new UserNotMatchException();
+        }
 
+        log.info("findLounge = {}", findLounge);
+
+        CategoryEntity findCateCode = null;
+
+        if (request.getCateCode() != null){
+            findCateCode = categoryRepository.findById(request.getCateCode())
+                    .orElseThrow(() -> new RuntimeException("해당 카테고리는 존재 하지 않음"));
+        }else {
+            findCateCode = findLounge.getCateCode();
+        }
+
+        findLounge.loungeEdit(request, findCateCode);
+        log.info("findLounge = {}", findLounge);
+
+//            LoungeEntity modifyLounge = findLounge.builder()
+//                    .title(request.getTitle())
+//                    .content(request.getContents())
+//                    .cateCode(findCateCode)
+//                    .updateDate(request.getUpdateDate())
+//                    .build();
+
+//        log.info("modifyLounge = {}", modifyLounge);
+//        loungeRepository.save(modifyLounge);
     }
 
     // 라운지 삭제
     @Transactional
-    public void loungeDelete(Long loungeId){
+    public void loungeDelete(Long loungeId, String username){
+
+        User loginUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 유저는 존재하지 않습니다."));
 
         LoungeEntity findLounge = loungeRepository.findById(loungeId)
                 .orElseThrow(()-> new LoungeNotFountException());
 
-        loungeRepository.deleteById(findLounge.getIdx());
+        if (loginUser != findLounge.getUser()){
+            throw new UserNotMatchException();
+        }
+
+            loungeRepository.deleteById(findLounge.getIdx());
 
     }
 
@@ -117,6 +157,8 @@ public class LoungeService {
     // 라운지 목록 + 페이징
     @Transactional(readOnly = true)
     public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx){
+        log.info("==== loungeServiceCalled.. ====");
+        log.info("\t\t getAllLoungeWithPaging called....");
 
         List<LoungeListResponseDto> dtos = new ArrayList<>();
         if (lastIdx == null){
@@ -141,6 +183,7 @@ public class LoungeService {
                     .profileFilename(entity.getUser().getUserProfile().getFileName())
                     .regDate(entity.getRegDate())
                     .viewCount(entity.getViewCount())
+                    .commentCount(commentRepository.getCommentListCount(entity.getIdx()))
                     .likeCount(entity.getLikeCount()).build();
             dtos.add(response);
         }

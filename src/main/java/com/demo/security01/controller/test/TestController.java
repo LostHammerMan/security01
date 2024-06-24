@@ -150,4 +150,10 @@ public class TestController {
         log.info("\t > dataSource from getBeansOfType = {}", context.getBeansOfType(DataSource.class));
         return "success";
     }
+
+    // modal test
+    @GetMapping("/modalTest")
+    public String modalTest(){
+        return "/test/modalTestView";
+    }
 }

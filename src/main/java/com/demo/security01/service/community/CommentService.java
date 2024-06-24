@@ -122,5 +122,11 @@ public class CommentService {
 
     }
 
+    // 댓글 수 카운트
+    @Transactional
+    public int getCommentCounts(Long loungeIdx){
+        return commentRepository.getCommentListCount(loungeIdx);
+    }
+
 
 }

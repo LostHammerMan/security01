@@ -5,6 +5,6 @@ import com.demo.security01.entity.comment.CommentEntity;
 import java.util.List;
 
 public interface CommentRepositoryCustom {
-
     List<CommentEntity> getCommentList(Long boardId);
+    Integer getCommentListCount(Long loungeIdx);
 }

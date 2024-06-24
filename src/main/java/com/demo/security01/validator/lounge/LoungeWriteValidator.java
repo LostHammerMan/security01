@@ -25,26 +25,34 @@ public class LoungeWriteValidator implements Validator {
 
         checkCateCode(loungeWriteRequest, errors);
         checkTitle(loungeWriteRequest, errors);
-
+        checkContents(loungeWriteRequest, errors);
     }
 
     public void checkCateCode(LoungeWriteRequest request, Errors errors){
         log.info("\t\t checkCateCode called...");
+        log.info("\t\t\t request.cateCode = {}", request.getCateCode());
 
         if (errors.hasFieldErrors("cateCode")) { // typeMismatch, NotBlank
             return;
         }
+//        if (request.getCateCode() == null){
+//            errors.rejectValue("cateCode", "NotBlank");
+//            return;
+//        }
 
         // cateCode를 빈값을 보내거나 string을 보내면 LoungeWriteRequest(cateCode=null, title=, contents=)
         // null != 5L --> NPE
 
-        // 카테코리 있는지 여부
-        if (request.getCateCode() != 5L || request.getCateCode() != 6L){
+        // 카테고리 코드 정확하지 여부
+        if (request.getCateCode() != 5L && request.getCateCode() != 6L){
             errors.rejectValue("cateCode", "invalidCateCode");
             return;
         }
+//        if (request.getCateCode() != 5L || request.getCateCode() != 6L){
+//            errors.rejectValue("cateCode", "invalidCateCode");
+//            return;
+//        }
 
-        // 카테고리 코드 정확하지 여부
     }
 
     public void checkTitle(LoungeWriteRequest request, Errors errors){
@@ -52,6 +60,12 @@ public class LoungeWriteValidator implements Validator {
         if (!StringUtils.hasText(request.getTitle())){
             errors.rejectValue("title", "NotBlank");
             return;
+        }
+    }
+
+    public void checkContents(LoungeWriteRequest request, Errors errors){
+        if (!StringUtils.hasText(request.getContents())){
+            errors.rejectValue("contents", "NotBlank");
         }
     }
 }

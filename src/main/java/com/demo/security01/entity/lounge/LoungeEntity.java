@@ -21,6 +21,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Table(name = "LOUNGE_ENTITY")
 public class LoungeEntity {
 
@@ -63,10 +64,18 @@ public class LoungeEntity {
     @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntity;
 
-    public void loungeEdit(LoungeModifyRequest request){
+    public void loungeEdit(LoungeModifyRequest request, CategoryEntity cateCode){
         this.title  = request.getTitle() != null? request.getTitle() : this.getTitle() ;
         this.content = request.getContents() != null ? request.getContents() : this.getContent();
-        this.cateCode = request.getCateCode() != null  ? request.getCateCode() : this.getCateCode();
+        this.updateDate = request.getUpdateDate();
+        this.cateCode = cateCode;
+//        this.cateCode.getCategoryIdx() = request.getCateCode();
+//        this.cateCode.getCategoryIdx() = request.getCateCode() != null  ? request.getCateCode() : this.cateCode.getCateCode();
+    }
+
+    // 카레고리
+    public void setCateCode(CategoryEntity cateCode) {
+        this.cateCode = cateCode;
     }
 
     // 좋아요
@@ -79,11 +88,12 @@ public class LoungeEntity {
     }
 
     @Builder
-    public LoungeEntity(String title, String content, int count, User user, CategoryEntity cateCode, LocalDateTime regDate) {
+    public LoungeEntity(String title, String content, int count, User user, CategoryEntity cateCode, LocalDateTime updateDate) {
         this.title = title;
         this.content = content;
         this.user = user;
         this.cateCode = cateCode;
         this.regDate = LocalDateTime.now();
+        this.updateDate = updateDate;
     }
 }
