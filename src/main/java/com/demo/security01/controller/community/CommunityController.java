@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -190,6 +191,21 @@ public class CommunityController {
         request.setAttribute("msg", "수정이 완료되었습니다");
         request.setAttribute("url", request.getContextPath() + "/community/lounge/"+ loungeModifyRequest.getLoungeId());
         return "community/loungeModifyOk";
+    }
+
+    // 라운지 삭제
+    @GetMapping("/lounge/delete/{loungeIdx}")
+    public String deleteLounge(@PathVariable Long loungeIdx, HttpServletRequest request, RedirectAttributes redirectAttributes){
+        log.info("======== community Controller - deleteLounge called.... =======");
+        // loungeIdx 다른 타입의 값이 들어오는 경우?
+
+        if (request.getUserPrincipal() == null) {
+            return "error/loginError";
+        }
+
+        loungeService.loungeDelete(loungeIdx, request.getUserPrincipal().getName());
+        return "redirect:/community/lounge";
+
     }
 
 

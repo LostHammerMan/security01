@@ -246,6 +246,37 @@
         min-width: 6rem;
     }
 
+    .modal-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+    }
+
+    .modal-header {
+        justify-content: center;
+        border-bottom: none;
+    }
+
+    .modal-body {
+        text-align: center;
+    }
+
+    .modal_content1 {
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .modal_content2 {
+        font-size: 16px;
+    }
+
+    .modal-footer {
+        flex-wrap: nowrap;
+        text-align: center;
+        border-top: none;
+    }
+
 
 
 </style>
@@ -278,7 +309,7 @@
                             <i class="fa-regular fa-pen-to-square"></i>
                             수정
                         </a>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#loungeDeleteModal">
                             <i class="fa-solid fa-trash-can"></i>
                             삭제
                         </a>
@@ -334,6 +365,38 @@
                 </li>
         </ul>
     </div>
+</div>
+
+<%-- 삭제 시 모달 --%>
+<div class="container modalContainer">
+
+    <!-- The Modal -->
+    <div class="modal fade" id="loungeDeleteModal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="56" height="auto" viewBox="0 0 448 512"><path d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z"
+                    style="fill: #FFA500"/></svg>
+<%--                    <h4 class="modal-title" style="font-weight: bold">작성 취소</h4>--%>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <span class="modal_content1">글 삭제</span><br/>
+                    <span class="modal_content2">해당 글을 삭제하시겠어요?</span>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" id="deleteCancelBtn" data-dismiss="modal" style="width: 45%">취소</button>
+                    <button type="button" class="btn btn-success" id="loungeDeleteBtn" style="width: 45%">삭제</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -528,6 +591,19 @@
                 }
             });
         }
+
+        $("#loungeDeleteBtn").click(function (e){
+            e.preventDefault();
+            alert("해당 글이 삭제 되었습니다.");
+            location.href = '${root}community/lounge/delete/${findLounge.idx}';
+            <%--$.ajax({--%>
+            <%--    url : '${root}community/lounge/delete/${findLounge.idx}',--%>
+            <%--    type : 'DELETE',--%>
+            <%--    success : function (){--%>
+
+            <%--    }--%>
+            <%--})--%>
+        })
     });
 
 

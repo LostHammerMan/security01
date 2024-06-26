@@ -42,7 +42,7 @@ public class LoungeService {
 
     // 게시글 저장
     @Transactional
-    public void loungeSave(LoungeWriteRequest request, String username){
+    public void loungeSave(LoungeWriteRequest request, String username) {
 
         User findUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저 정보를 찾을 수 없습니다"));
@@ -64,16 +64,16 @@ public class LoungeService {
 
     // 라운지 수정
     @Transactional
-    public void loungeModify(LoungeModifyRequest request, String username){
+    public void loungeModify(LoungeModifyRequest request, String username) {
 
         User loginUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저 없음"));
 
         log.info("request = {}", request);
         LoungeEntity findLounge = loungeRepository.findById(request.getLoungeId())
-                .orElseThrow(()-> new LoungeNotFountException());
+                .orElseThrow(() -> new LoungeNotFountException());
 
-        if (loginUser != findLounge.getUser()){
+        if (loginUser != findLounge.getUser()) {
             throw new UserNotMatchException();
         }
 
@@ -81,10 +81,10 @@ public class LoungeService {
 
         CategoryEntity findCateCode = null;
 
-        if (request.getCateCode() != null){
+        if (request.getCateCode() != null) {
             findCateCode = categoryRepository.findById(request.getCateCode())
                     .orElseThrow(() -> new RuntimeException("해당 카테고리는 존재 하지 않음"));
-        }else {
+        } else {
             findCateCode = findLounge.getCateCode();
         }
 
@@ -104,25 +104,25 @@ public class LoungeService {
 
     // 라운지 삭제
     @Transactional
-    public void loungeDelete(Long loungeId, String username){
+    public void loungeDelete(Long loungeId, String loginUsername) {
 
-        User loginUser = userRepository.findByUsername(username)
+        User loginUser = userRepository.findByUsername(loginUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저는 존재하지 않습니다."));
 
         LoungeEntity findLounge = loungeRepository.findById(loungeId)
-                .orElseThrow(()-> new LoungeNotFountException());
+                .orElseThrow(() -> new LoungeNotFountException());
 
-        if (loginUser != findLounge.getUser()){
+        // 작성유저와 로그인 유저가 다른 경우
+        if (loginUser != findLounge.getUser()) {
             throw new UserNotMatchException();
         }
 
-            loungeRepository.deleteById(findLounge.getIdx());
-
+        loungeRepository.deleteById(findLounge.getIdx());
     }
 
     // 라운지 조회
     @Transactional
-    public LoungeEntity getLounge(Long id){
+    public LoungeEntity getLounge(Long id) {
         LoungeEntity findLounge = loungeRepository.findById(id)
                 .orElseThrow(() -> new LoungeNotFountException());
         findLounge.setViewCount(findLounge.getViewCount() + 1);
@@ -131,7 +131,7 @@ public class LoungeService {
     }
 
     //
-    public boolean isCheckLike(Long loungeId, String username){
+    public boolean isCheckLike(Long loungeId, String username) {
         boolean isLikeCheck = false;
         User findUser = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("해당 유저 없음")
@@ -140,28 +140,30 @@ public class LoungeService {
         LoungeEntity findLounge = loungeRepository.findById(loungeId).orElseThrow(
                 () -> new LoungeNotFountException()
         );
-        if (likeRepository.existsByUserAndLounge(findUser, findLounge)){
+        if (likeRepository.existsByUserAndLounge(findUser, findLounge)) {
             return isLikeCheck = true;
-        }else {
+        } else {
             return isLikeCheck;
         }
-    };
+    }
+
+    ;
 
 
     // 라운지 목록
     @Transactional(readOnly = true)
-    public List<LoungeEntity> findAllLounge(){
+    public List<LoungeEntity> findAllLounge() {
         return loungeRepository.findAll();
     }
 
     // 라운지 목록 + 페이징
     @Transactional(readOnly = true)
-    public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx){
+    public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx) {
         log.info("==== loungeServiceCalled.. ====");
         log.info("\t\t getAllLoungeWithPaging called....");
 
         List<LoungeListResponseDto> dtos = new ArrayList<>();
-        if (lastIdx == null){
+        if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
             List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9);
             entityToDto(dtos, allLoungeWithPaging);
@@ -174,7 +176,7 @@ public class LoungeService {
     }
 
     private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {
-        for (LoungeEntity entity : list){
+        for (LoungeEntity entity : list) {
             LoungeListResponseDto response = LoungeListResponseDto.builder()
                     .idx(entity.getIdx())
                     .title(entity.getTitle())
@@ -190,10 +192,10 @@ public class LoungeService {
     }
 
     // 라운지 목록 + 페이징 + Slice활용
-    public Slice<LoungeEntity> getAllLoungeWithPagingWithSlice(Long lastIdx, Pageable pageable){
+    public Slice<LoungeEntity> getAllLoungeWithPagingWithSlice(Long lastIdx, Pageable pageable) {
 
 //        Pageable pageable = PageRequest.of(0, 9);
-        return  loungeRepository.getAllLoungeWithPaging2(lastIdx, pageable);
+        return loungeRepository.getAllLoungeWithPaging2(lastIdx, pageable);
 
     }
 }

@@ -29,28 +29,50 @@
         margin: 20px auto;
     }
 
-    .modal-title{
-        font-size: 17px;
-        text-align:left;
-        font-weight: bold;
-    }
-    .modal_table{
-        width:100%;
-    }
-    #modal_userImg{
-        width:50px;
-        height:50px;
-        border-radius: 75%;
-    }
-    #modal_userId{
-        width:200px;
-    }
-    #modal_userFollow{
-        margin:10px;
-        text-align: right;
+    body {
+        width: 100%;
+        height: 100vh;
     }
 
+    .modal-header {
+        border-bottom: none;
+    }
+
+    .modal-content {
+        width: 28vw;
+    }
+
+    .modal-body {
+        font-weight: 400;
+        color: rgb(73, 80, 87);
+    }
+
+    .modal-footer {
+        border-top: none;
+
+    }
+
+    .btn-light {
+        border-radius: 0.5rem;
+        border: 0.0625rem solid rgb(206, 212, 218);
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .btn-success {
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+
+
+
+
+
 </style>
+<body>
+
 <div class="wrapper d-flex mt-lg-5">
 
    <form:form action="${root}community/lounge/modifyProc" method="post" id="frmContact" enctype="multipart/form-data"
@@ -108,7 +130,7 @@
        </div>
        <div class="row">
            <div class="col">
-               <button type="button" class="btn btn-outline-danger" id="cancelModal" <%--data-toggle="modal" data-target="#exampleModal"--%>>취소</button>
+               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modifyCancelModal">취소</button>
                <form:button type="submit" class="btn btn-primary ">등록</form:button>
            </div>
        </div>
@@ -116,32 +138,27 @@
 
 </div>
 
-<div class="container">
-    <h1>Bootstrap Modal Example</h1>
-    <!-- Button to Open the Modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-        Open Modal
-    </button>
+<div class="container modalContainer">
 
     <!-- The Modal -->
-    <div class="modal" id="myModal">
+    <div class="modal" id="modifyCancelModal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Heading</h4>
+                    <h4 class="modal-title" style="font-weight: bold">작성 취소</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal Body -->
                 <div class="modal-body">
-                    Modal body content goes here.
+                    작성 중인 글이 있어요. 취소하시겠어요?
                 </div>
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal" style="width: 45%">취소</button>
+                    <button type="button" class="btn btn-success" id="closeModifyBtn" style="width: 45%">나가기</button>
                 </div>
 
             </div>
@@ -149,6 +166,10 @@
     </div>
 
 </div>
+
+
+</body>
+
 
 <script>
 
@@ -169,10 +190,11 @@
 </script>
 <script>
     $(document).ready(function (){
-       $("#cancelModal").click(function (){
-           console.log("cancelModalBtnClick.....");
-           $("#exampleModal").modal();
-       })
+
+        $("#closeModifyBtn").click(function (e){
+            e.preventDefault();
+            location.href = '${root}community/lounge/${findLounge.idx}';
+        })
     });
 </script>
 

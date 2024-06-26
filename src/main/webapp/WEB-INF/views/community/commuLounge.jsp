@@ -8,6 +8,10 @@
 <%--community header--%>
 <c:import url="/WEB-INF/views/layout/communityHeader.jsp"/>
 <style>
+
+    section {
+        width: 85%;
+    }
     .container_loungeContainer {
         display: flex;
         flex-direction: row;
