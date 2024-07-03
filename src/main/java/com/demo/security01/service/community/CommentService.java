@@ -84,14 +84,14 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional
-    public ModifyCommentResponseDto modifyComment(CommentModifyRequestDto request, String username){
+    public ModifyCommentResponseDto modifyComment(Long commentId ,CommentModifyRequestDto request, String loginUsername){
 
-        CommentEntity findComment = commentRepository.findById(request.getId())
+        CommentEntity findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException());
 
         String commentUsername = findComment.getUser().getUsername();
 
-        if (!commentUsername.equals(username)){
+        if (!commentUsername.equals(loginUsername)){
             throw new CommentUserNotMatchException();
         }
 

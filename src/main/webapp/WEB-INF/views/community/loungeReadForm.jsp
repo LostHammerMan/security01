@@ -277,6 +277,31 @@
         border-top: none;
     }
 
+    #commentModifyInput {
+        width: 98%;
+    }
+
+    .comment_modifyWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    #comment_modifyCancelBtn {
+        background-color: #fff;
+        border-width: 1px;
+
+        padding: 12px 24px;
+        /*height: 40px;*/
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+    }
+
 
 
 </style>
@@ -301,10 +326,10 @@
             </div>
             <c:if test="${loginUsername == findLounge.user.username}">
                 <div class="lounge_modifyBtn justify-content-end" style="margin-left: 63%">
-                    <button type="button" class="btn btn-light" data-toggle="dropdown" aria-expanded="false">
+                    <button type="button" class="btn btn-light drop1" <%--id="dropdownMenu1"--%> data-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis"></i>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <a class="dropdown-item" href="${root}community/lounge/modifyForm/${findLounge.idx}">
                             <i class="fa-regular fa-pen-to-square"></i>
                             수정
@@ -412,6 +437,8 @@
     // });
 
     $(document).ready(function (){
+        //$("#dropdownMenu1").dropdown();
+
         getCommentList();
         getCommentListCount();
         // 좋아요 버튼 이벤트
@@ -543,7 +570,8 @@
                     // console.log(result.body)
                     result.forEach(function (comment){
 
-                        commentsHtml += '<li class="commentList_item_container">';
+                        // commentsHtml += '<li class="commentList_item_container" data-index=' + comment.commentId + '"+'>';
+                        commentsHtml += '<li class="commentList_item_container" data-index="' + comment.commentId + '">';
                         commentsHtml += '<section class="commentItem_header">';
                         commentsHtml += '<div class="commentItem_profileWrapper">';
                         commentsHtml += '<img class="commentItem_profileImg" alt="프로필" src="${root}api/profileImages/' + comment.profileFilePath + '"+' + '>';
@@ -557,15 +585,49 @@
                         commentsHtml += '</div>';
                         commentsHtml += '</div>';
                         commentsHtml += '</div>';
+                        commentsHtml += '<div class="commentItem_commentMore">';
+                        commentsHtml += '<button type="button" class="btn btn-light drop2" data-toggle="dropdown" aria-expanded="false">';
+                        // commentsHtml += '<button type="button" class="btn btn-light" id="commentDropdown" data-bs-toggle="collapse" aria-expanded="false">';
+                        commentsHtml += '<i class="fa-solid fa-ellipsis"></i>';
+                        commentsHtml += '</button>';
+                        <%--<button type="button" class="btn btn-light" data-toggle="dropdown" aria-expanded="false">--%>
+                        <%--    <i class="fa-solid fa-ellipsis"></i>--%>
+                        <%--</button>--%>
+                        <%--<div class="dropdown-menu">--%>
+                        <%--    <a class="dropdown-item" href="${root}community/lounge/modifyForm/${findLounge.idx}">--%>
+                        <%--        <i class="fa-regular fa-pen-to-square"></i>--%>
+                        <%--        수정--%>
+                        <%--    </a>--%>
+                        <%--    <a class="dropdown-item" data-toggle="modal" data-target="#loungeDeleteModal">--%>
+                        <%--        <i class="fa-solid fa-trash-can"></i>--%>
+                        <%--        삭제--%>
+                        <%--    </a>--%>
+                        <%--</div>--%>
+                        commentsHtml += '<div class="dropdown-menu" aria-labelledby="dropdownMenu2">';
+                        // commentsHtml += '<div class="collapse">';
+                        commentsHtml += '<button type="button" class="dropdown-item" id="commentModifyBtn">';
+                        commentsHtml += '<i class="fa-regular fa-pen-to-square"></i>';
+                        commentsHtml += '수정';
+                        commentsHtml += '</button>';
+                        commentsHtml += '<button type="button" class="dropdown-item" id="commentDeleteBtn">';
+                        commentsHtml += '<i class="fa-solid fa-trash-can"></i>';
+                        commentsHtml += '삭제';
+                        commentsHtml += '</button>';
+
+                        commentsHtml += '</div>';
+                        commentsHtml += '</div>';
                         commentsHtml += '</section>';
-                        commentsHtml += '<section class="commentItem_content">';
+                        commentsHtml += '<section class="commentItem_content" id="content_section">';
                         // commentsHtml += '<p class="commentItem_content">'+ comment.content + '</p>';
-                        commentsHtml += '<pre class="commentItem_content">'+ comment.content + '</pre>';
+                        commentsHtml += '<pre class="commentItem_content_pre" id="comment_pre_item">'+ comment.content + '</pre>';
+                        commentsHtml += '<div class="comment_modifyWrapper">';
+                        commentsHtml += '</div>';
                         commentsHtml += '</section>';
                         commentsHtml += '</li>'
                     });
                     $(".commentList_item_container").html(commentsHtml);
 
+                    //$("#dropdownMenu2").dropdown();
 
 
                 },
@@ -596,17 +658,69 @@
             e.preventDefault();
             alert("해당 글이 삭제 되었습니다.");
             location.href = '${root}community/lounge/delete/${findLounge.idx}';
-            <%--$.ajax({--%>
-            <%--    url : '${root}community/lounge/delete/${findLounge.idx}',--%>
-            <%--    type : 'DELETE',--%>
-            <%--    success : function (){--%>
+        });
 
-            <%--    }--%>
-            <%--})--%>
-        })
+        let currentIndex = null;
+
+     // 댓글 수정 버튼 클릭
+        $(document).on('click', "#commentModifyBtn", function (e) {
+            e.preventDefault();
+            console.log("댓글 수정 버튼 클릭");
+            let otherIndex = $(this).closest(".commentList_item_container").attr("data-index");
+
+            // 다른 댓글 수정 버튼을 누른 경우
+            if (currentIndex != null && currentIndex !== otherIndex){
+                let $currentLi = $('.commentList_item_container[data-index="' + currentIndex + '"]');
+                let $currentTextarea = $currentLi.find(".comment_modifyWrapper");
+                let $currentPre = $currentLi.find("pre.commentItem_content_pre");
+
+                $currentPre.removeClass("d-none");
+                $currentTextarea.remove();
+            }
+
+            let $comment = $(this).closest(".commentList_item_container").find("pre.commentItem_content_pre");
+            let commentIdx = $comment.closest(".commentList_item_container").attr("data-index")
+            console.log("commentIdx = " + commentIdx);
+            console.log("$comment.text = " + $comment.text())
+
+            let commentModifyHtml = `
+                    <textarea class="commentInput_text ml-4" id="commentModifyInput" name="commentModifyInput"></textarea>
+                    <div class="modifyBtnWrapper">
+                        <button class="comment_modifyCancelBtn" id="comment_modifyCancelBtn" name="comment_modifyCancelBtn" style="text-align: center">취소</button>
+                        <button class="comment_completeButton" id="comment_modifyCompleteBtn" name="comment_modifyCompleteBtn" style="text-align: center">수정</button>
+                    </div>
+            `;
+
+            let $textarea = $(this).closest(".commentList_item_container").find(".comment_modifyWrapper");
+
+            $comment.addClass("d-none");
+            $textarea.html(commentModifyHtml);
+            $("#commentModifyInput").val($comment.text());
+
+            // commentModifyRequestDto
+            // private String content;
+            // private String commenter;
+            // private LocalDateTime updateDate;
+            console.log("currentIdx = ", currentIndex);
+            console.log("otherIndex = ", otherIndex);
+
+            currentIndex = otherIndex;
+        });
+
+        // 댓글 수정 저장 버튼 핸들러
+        $(document).on('click', "#comment_modifyCompleteBtn", function (e){
+            console.log("댓글 수정 완료 버튼 클릭...")
+
+            $.ajax({
+                url : '${root}'
+            })
+        });
+
+
     });
 
 
 
 </script>
+
 </html>

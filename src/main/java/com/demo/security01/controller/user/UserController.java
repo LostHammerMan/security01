@@ -77,7 +77,7 @@ public class UserController {
     // 스프링 시큐리티가 해당 주소를 낚아챔 - Security Config 파일 생성 후 작동 안함
 //    @GetMapping("/loginForm")
     @RequestMapping("/loginForm")
-    public String loginForm() {
+    public String loginForm(@RequestParam(value = "exception", required = false) String exception) {
         return "user/loginForm";
     }
 

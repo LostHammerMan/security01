@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "STUDY_ENTITY")
+@Table(name = "STUDY")
 public class StudyEntity {
 
     /*
@@ -40,9 +40,6 @@ public class StudyEntity {
 
     @Column(name = "PROGRESS_PERIOD")
     private String progressPeriod;
-
-    @Column(name = "SKILL_STACK")
-    private String skillStack;
 
     @Column(name = "RECRUIT_DEADLINE")
     private LocalDate recruitDeadline;
@@ -71,4 +68,6 @@ public class StudyEntity {
     @ManyToOne
     @JoinColumn(name = "USER_IDX")
     private User user;
+
+
 }

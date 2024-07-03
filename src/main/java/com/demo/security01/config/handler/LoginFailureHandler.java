@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;
@@ -25,13 +26,14 @@ import java.security.Provider;
 
 //@Data
 @Slf4j
-@Configuration
+//@Configuration
+@Component
 public class LoginFailureHandler implements AuthenticationFailureHandler {
 
     @Autowired
     MessageSourceAccessor messageSourceAccessor;
 
-    String defaultFailureUrl;
+//    private static final String DEFAULT_FAILURE_URL = "/user/loginForm?error = " + ;
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         log.info("============ loginFailureHandler called.. =================");
@@ -39,7 +41,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         String loginPassword = request.getParameter("password");
         String errorMsg = null;
 
-        defaultFailureUrl = "/user/loginForm";
+        final String DEFAULT_FAILURE_URL = "/user/loginForm?exception=" + exception.getMessage();
 
         // exception 에 따른 메시지 출력
         if (exception instanceof LoginFieldException){
@@ -49,15 +51,18 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         }else if (exception instanceof BadCredentialsException){
             errorMsg = exception.getMessage();
         }
-        log.info("errorMsg = {}", errorMsg);
-        log.info("defaultFailureUrl = {}", defaultFailureUrl);
 
-        /*request.setAttribute("loginPassword", loginUsername);
-        request.setAttribute("loginPassword", loginPassword);*/
+//        errorMsg = "로그인이 필요한 기능입니다";
+        log.info("errorMsg = {}", errorMsg);
+        log.info("defaultFailureUrl = {}", DEFAULT_FAILURE_URL);
+
         request.setAttribute("errorMsg", errorMsg);
-        request.getRequestDispatcher(defaultFailureUrl).forward(request, response);
+        request.getRequestDispatcher(DEFAULT_FAILURE_URL).forward(request, response);
+
+//        response.sendRedirect(DEFAULT_FAILURE_URL);
        /* assert errorMsg != null;
         response.sendRedirect(defaultFailureUrl + URLEncoder.encode(errorMsg, StandardCharsets.UTF_8));*/
     }
+
 
 }
