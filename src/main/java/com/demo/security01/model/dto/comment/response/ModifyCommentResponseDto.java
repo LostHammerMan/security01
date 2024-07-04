@@ -2,11 +2,13 @@ package com.demo.security01.model.dto.comment.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
+@NoArgsConstructor
 public class ModifyCommentResponseDto {
 
     private Long id;

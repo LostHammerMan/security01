@@ -7,6 +7,7 @@ import com.demo.security01.model.dto.comment.request.CommentModifyRequestDto;
 import com.demo.security01.model.dto.comment.request.CommentRequestDto;
 import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.model.dto.comment.response.ModifyCommentResponseDto;
+import com.demo.security01.model.dto.reponseDto.ResponseDto;
 import com.demo.security01.service.community.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,7 @@ public class CommentApiController {
 
 
     // 댓글 작성
-    @PostMapping("/api/addComment")
+    @PostMapping("/api/comment/add")
     public ResponseEntity<?> addComment(@RequestBody CommentRequestDto request, Principal principal){
         log.info("=== addComment =====");
 //        if (principal.getName() == null){
@@ -41,13 +43,26 @@ public class CommentApiController {
     // 댓글 수정
     @PutMapping("/api/comment/{commentId}")
     public ResponseEntity<?> modifyComment(@PathVariable Long commentId, @RequestBody CommentModifyRequestDto request, Principal principal){
+        log.info("====== modifyComment ============");
         String loginUsername = principal.getName();
-
+        log.info("request.getUpdateDate() = {}", request.getUpdateDate());
         ModifyCommentResponseDto responseDto = commentService.modifyComment(commentId, request, loginUsername);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
-    // 댓글 하나 조회
+    // 댓글 삭제
+    @DeleteMapping("/api/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId, Principal principal){
+        String loginUsername = principal.getName();
+        commentService.deleteComment(commentId, loginUsername);
+
+        ResponseDto response = ResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .message("댓글 삭제 완료")
+                .timeStamp(LocalDateTime.now()).build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 
     // 댓글 리스트 가져오기

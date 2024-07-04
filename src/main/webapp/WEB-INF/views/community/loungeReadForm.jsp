@@ -302,6 +302,10 @@
         text-align: center;
     }
 
+    .commentItem_content_pre {
+        font-size: 20px;
+    }
+
 
 
 </style>
@@ -377,7 +381,7 @@
             <span class="comment_count">$<%--{commentCount}--%></span>
         </div>
         <div class="comment_inputContainer d-flex">
-            <img class="comment_inputProfile" src="${root}api/profileImages/${findLounge.user.userProfile.fileName}"  alt="profile"/>
+            <img class="comment_inputProfile" src="${root}api/profileImages/${loginUserImgFileName.fileName}"  alt="profile"/>
             <label for="commentInput"></label>
             <textarea class="commentInput_text ml-4" id="commentInput" name="commentInput" placeholder="댓글 입력하세요"></textarea>
         </div>
@@ -540,7 +544,7 @@
             console.log("content = " + data.content);
 
             $.ajax({
-                url : '${root}api/addComment',
+                url : '${root}api/comment/add',
                 method : 'POST',
                 data : JSON.stringify(data),
                 contentType :'application/json',
@@ -569,8 +573,6 @@
 
                     // console.log(result.body)
                     result.forEach(function (comment){
-
-                        // commentsHtml += '<li class="commentList_item_container" data-index=' + comment.commentId + '"+'>';
                         commentsHtml += '<li class="commentList_item_container" data-index="' + comment.commentId + '">';
                         commentsHtml += '<section class="commentItem_header">';
                         commentsHtml += '<div class="commentItem_profileWrapper">';
@@ -578,8 +580,6 @@
                         commentsHtml += '<div class="commentItem_profileInfo">';
                         commentsHtml += '<div class="commentItem_username">' + comment.username + '</div>';
                         commentsHtml += '<div class="commentItem_registerDate">';
-                        <%--commentsHtml += '<fmt:parseDate value=' +'"'+ comment.regDate+ '"'+ pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />';--%>
-                        <%--commentsHtml += '<fmt:formatDate value="${parsedDateTime}" pattern="yyyy-MM-dd HH:mm" />';--%>
                         commentsHtml += '<div class="commentItem_registerDate">' + comment.regDate;
                         commentsHtml += '</div>';
                         commentsHtml += '</div>';
@@ -587,24 +587,9 @@
                         commentsHtml += '</div>';
                         commentsHtml += '<div class="commentItem_commentMore">';
                         commentsHtml += '<button type="button" class="btn btn-light drop2" data-toggle="dropdown" aria-expanded="false">';
-                        // commentsHtml += '<button type="button" class="btn btn-light" id="commentDropdown" data-bs-toggle="collapse" aria-expanded="false">';
                         commentsHtml += '<i class="fa-solid fa-ellipsis"></i>';
                         commentsHtml += '</button>';
-                        <%--<button type="button" class="btn btn-light" data-toggle="dropdown" aria-expanded="false">--%>
-                        <%--    <i class="fa-solid fa-ellipsis"></i>--%>
-                        <%--</button>--%>
-                        <%--<div class="dropdown-menu">--%>
-                        <%--    <a class="dropdown-item" href="${root}community/lounge/modifyForm/${findLounge.idx}">--%>
-                        <%--        <i class="fa-regular fa-pen-to-square"></i>--%>
-                        <%--        수정--%>
-                        <%--    </a>--%>
-                        <%--    <a class="dropdown-item" data-toggle="modal" data-target="#loungeDeleteModal">--%>
-                        <%--        <i class="fa-solid fa-trash-can"></i>--%>
-                        <%--        삭제--%>
-                        <%--    </a>--%>
-                        <%--</div>--%>
                         commentsHtml += '<div class="dropdown-menu" aria-labelledby="dropdownMenu2">';
-                        // commentsHtml += '<div class="collapse">';
                         commentsHtml += '<button type="button" class="dropdown-item" id="commentModifyBtn">';
                         commentsHtml += '<i class="fa-regular fa-pen-to-square"></i>';
                         commentsHtml += '수정';
@@ -626,13 +611,11 @@
                         commentsHtml += '</li>'
                     });
                     $(".commentList_item_container").html(commentsHtml);
-
-                    //$("#dropdownMenu2").dropdown();
-
-
                 },
-                error : function (err){
+                error : function (xhr, status, error){
                     console.log("ajax 댓글 불러오기 실패 ㅠㅠ")
+                    let response = xhr.responseJSON;
+                    alert(response.message);
                 }
             });
 
@@ -660,27 +643,41 @@
             location.href = '${root}community/lounge/delete/${findLounge.idx}';
         });
 
-        let currentIndex = null;
+        let beforeIndex = null;
 
      // 댓글 수정 버튼 클릭
         $(document).on('click', "#commentModifyBtn", function (e) {
+
             e.preventDefault();
             console.log("댓글 수정 버튼 클릭");
-            let otherIndex = $(this).closest(".commentList_item_container").attr("data-index");
+            let currentIdx = $(this).closest(".commentList_item_container").attr("data-index");
 
             // 다른 댓글 수정 버튼을 누른 경우
-            if (currentIndex != null && currentIndex !== otherIndex){
-                let $currentLi = $('.commentList_item_container[data-index="' + currentIndex + '"]');
-                let $currentTextarea = $currentLi.find(".comment_modifyWrapper");
-                let $currentPre = $currentLi.find("pre.commentItem_content_pre");
+            // if (beforeIndex !== null || beforeIndex !== currentIdx){
+            if (beforeIndex !== null && beforeIndex !== currentIdx){
+                console.log("다른 댓글의 수정 버튼 누른경우")
+                let $beforeLi = $('.commentList_item_container[data-index="' + beforeIndex + '"]');
+                let $beforeTextarea = $beforeLi.find(".comment_modifyWrapper");
+                let $beforePre = $beforeLi.find("pre.commentItem_content_pre");
 
-                $currentPre.removeClass("d-none");
-                $currentTextarea.remove();
+                console.log("beforeIndex = " + beforeIndex);
+                console.log("currentIdx = " + currentIdx);
+
+
+                $beforePre.removeClass("d-none");
+                $beforeTextarea.empty();
+
+                // empty() 와 remove() 의 차이
+                /* empty() : 선택된 요소의 하위 요소들만 제거
+                   remove() : 선택된 요소 포함, 하위 요소들까지 제거
+                *
+                *
+                * */
             }
 
             let $comment = $(this).closest(".commentList_item_container").find("pre.commentItem_content_pre");
-            let commentIdx = $comment.closest(".commentList_item_container").attr("data-index")
-            console.log("commentIdx = " + commentIdx);
+            // let commentIdx = $comment.closest(".commentList_item_container").attr("data-index")
+            // console.log("commentIdx = " + commentIdx);
             console.log("$comment.text = " + $comment.text())
 
             let commentModifyHtml = `
@@ -694,29 +691,97 @@
             let $textarea = $(this).closest(".commentList_item_container").find(".comment_modifyWrapper");
 
             $comment.addClass("d-none");
+            // $textarea.html(commentModifyHtml);
+            /*
+            *  .append("A") : 선택한 요소의 내용 끝에 추가
+            *  .html("A") : 선택한 요소의 내용을 가져오거나, 내용 대체
+            *  .attr() : 선택한 요소의 속성을 가져오거나, 속성 추가
+            * */
+
             $textarea.html(commentModifyHtml);
             $("#commentModifyInput").val($comment.text());
 
-            // commentModifyRequestDto
-            // private String content;
-            // private String commenter;
-            // private LocalDateTime updateDate;
-            console.log("currentIdx = ", currentIndex);
-            console.log("otherIndex = ", otherIndex);
+            beforeIndex = currentIdx;
 
-            currentIndex = otherIndex;
         });
 
-        // 댓글 수정 저장 버튼 핸들러
+        // drop-down menu 취소 버튼 클릭 핸들러
+        $(document).on("click", "#comment_modifyCancelBtn", function (){
+            let $textarea = $(this).closest(".commentList_item_container").find("#commentModifyInput");
+            let $commentContent = $(this).closest(".commentList_item_container").find("pre.commentItem_content_pre");
+            let $btnWrapper = $(this).closest(".commentList_item_container").find(".modifyBtnWrapper");
+
+            $commentContent.removeClass("d-none");
+            $textarea.remove();
+            $btnWrapper.remove();
+        });
+
+        // 댓글 수정 완료 버튼 핸들러
         $(document).on('click', "#comment_modifyCompleteBtn", function (e){
-            console.log("댓글 수정 완료 버튼 클릭...")
+            console.log("=== 댓글 수정 완료 버튼 클릭... ===");
+            let textareaVal = $(this).closest(".commentList_item_container").find("#commentModifyInput").val();
+            let $commentContent = $(this).closest(".commentList_item_container").find("pre.commentItem_content_pre");
+
+
+            let commentIdx = $(this).closest(".commentList_item_container").attr("data-index");
+
+
+            console.log("textareaVal = " + textareaVal);
+            console.log("commentIdx = " + commentIdx);
+
+            // if (textareaVal === null){
+            //     textareaVal = $commentContent.val();
+            // }
+
+            console.log("textareaVal = " + textareaVal);
+            let modifyRequest = {
+                'content': textareaVal
+            }
 
             $.ajax({
-                url : '${root}'
+                url : '${root}api/comment/' + commentIdx,
+                type : 'PUT',
+                contentType :'application/json',
+                data : JSON.stringify(modifyRequest),
+                success : function (){
+                    console.log("댓글 수정 전송 성공");
+                    getCommentList();
+                },
+                error : function (xhr, status, error){
+                    console.log("댓글 수정 전송 실패;;;;")
+                    let response = xhr.responseJSON;
+                    alert(response.message);
+                }
             })
         });
 
+        // $(document).on('click', "#comment_modifyCompleteBtn", function (e){
 
+            // 댓글 삭제 버튼 클릭
+        $(document).on('click', "#commentDeleteBtn", function (e){
+            console.log("=== 댓글 삭제 버튼 클릭... ===");
+
+            let commentIdx = $(this).closest(".commentList_item_container").attr("data-index")
+            console.log("commentIdx = " + commentIdx);
+            let result = confirm("댓글을 삭제하시겠습니까?");
+            if (result){
+                $.ajax({
+                    url : '${root}api/comment/' + commentIdx,
+                    type : 'DELETE',
+                    success : function (response){
+                        alert(response.message);
+                        getCommentList();
+                    },
+                    // error 단순히 전송실패에 대한 에러 뿐만 아니라, exception 이 발생한 경우도 이쪽으로 받음
+                    error : function (xhr, status, error){
+                        // 서버 에러 처리
+                        let response = xhr.responseJSON;
+                        alert("에러 발생 : " + response.message);
+                    }
+                })
+
+            }
+        });
     });
 
 

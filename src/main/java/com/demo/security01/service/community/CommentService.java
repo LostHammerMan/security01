@@ -117,9 +117,7 @@ public class CommentService {
         if (!commentUsername.equals(username)){
             throw new CommentUserNotMatchException();
         }
-
         commentRepository.deleteById(findComment.getId());
-
     }
 
     // 댓글 수 카운트

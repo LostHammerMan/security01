@@ -136,18 +136,13 @@ public class CommunityController {
     public String getLounge(@PathVariable Long loungeId, Model model, HttpServletRequest
                              request){
 
-        if (request.getUserPrincipal() == null){
-            model.addAttribute("msg", "로그인이 필요합니다...");
-            model.addAttribute("url", request.getContextPath() + "/user/loginForm");
-            return "error/loginError";
-        }
-
         String loginUsername = request.getUserPrincipal().getName();
 
         LoungeEntity findLounge = loungeService.getLounge(loungeId);
         boolean isCheck = loungeService.isCheckLike(loungeId, loginUsername);
         List<CommentResponseDto> comments = commentService.getCommentList(loungeId);
 
+        model.addAttribute("loginUserImgFileName", userService.getProfileFileName(loginUsername));
         model.addAttribute("loginUsername", loginUsername);
         model.addAttribute("findLounge", findLounge);
         model.addAttribute("isLikeCheck", isCheck);

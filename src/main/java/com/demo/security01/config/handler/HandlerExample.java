@@ -1,6 +1,7 @@
 package com.demo.security01.config.handler;
 
 import com.demo.security01.config.exception.CateCodeFormantException;
+import com.demo.security01.config.exception.CommentUserNotMatchException;
 import com.demo.security01.model.dto.error.ErrorResponseDto;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import lombok.extern.slf4j.Slf4j;
@@ -140,6 +141,7 @@ public class HandlerExample {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
     public ResponseEntity<Object> handlerIllegalArgumentException(IllegalArgumentException e){
         log.info("========= IllegalArgumentException ==========");
         ResponseEntityDto responseEntityDto = ResponseEntityDto.builder()
@@ -154,10 +156,23 @@ public class HandlerExample {
 
     @ExceptionHandler(CateCodeFormantException.class)
     public String handlerCateCodeFormantException(CateCodeFormantException e, Model model){
-        log.info("==== CateCodeFormantException =======");
+        log.info("==== CateCodeFormatException =======");
         model.addAttribute("errorMsg", e.getMessage());
 
         return "community/loungeWriteForm";
+    }
+
+    @ExceptionHandler(CommentUserNotMatchException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponseDto> handlerCommentUserNotMatchException(CommentUserNotMatchException e){
+        log.info("==== handlerCommentUserNotMatchException ===========");
+        e.printStackTrace();
+        ErrorResponseDto responseDto = ErrorResponseDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .localDateTime(LocalDateTime.now()).build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
 
 

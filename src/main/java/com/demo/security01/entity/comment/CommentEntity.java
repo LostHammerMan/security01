@@ -51,7 +51,8 @@ public class CommentEntity {
     // 댓글 수정
     public void modifyComment(CommentModifyRequestDto request){
         this.content = request.getContent();
-        this.regDate = request.getUpdateDate();
+//        this.regDate = request.getUpdateDate();
+        this.regDate = LocalDateTime.now();
     }
 
 
