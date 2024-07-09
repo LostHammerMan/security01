@@ -7,14 +7,22 @@ import com.demo.security01.model.dto.comment.request.CommentModifyRequestDto;
 import com.demo.security01.model.dto.comment.request.CommentRequestDto;
 import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.model.dto.comment.response.ModifyCommentResponseDto;
+import com.demo.security01.model.dto.error.ErrorResponseDto;
 import com.demo.security01.model.dto.reponseDto.ResponseDto;
 import com.demo.security01.service.community.CommentService;
+import com.demo.security01.validator.lounge.CommentModifyValidator;
+import com.demo.security01.validator.lounge.CommentWriteValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,28 +33,55 @@ import java.util.List;
 public class CommentApiController {
 
     private final CommentService commentService;
+//    private final CommentModifyValidator commentModifyValidator;
 
+    @Resource(name = "commentModifyValidator")
+    private Validator commentModifyValidator;
+
+    @Resource(name = "commentWriteValidator")
+    private Validator commentWriteValidator;
+
+    @InitBinder("commentRequestDto")
+    public void initCommentWriteBinder(WebDataBinder binder){
+        binder.addValidators(commentWriteValidator);
+    }
+
+    @InitBinder("commentModifyRequestDto")
+    public void initCommentModifyBinder(WebDataBinder binder){
+        binder.addValidators(commentModifyValidator);
+    }
 
     // 댓글 작성
     @PostMapping("/api/comment/add")
-    public ResponseEntity<?> addComment(@RequestBody CommentRequestDto request, Principal principal){
+    public ResponseEntity<?> addComment(@Valid @RequestBody CommentRequestDto commentRequestDto, BindingResult result, Principal principal){
         log.info("=== addComment =====");
-//        if (principal.getName() == null){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인 필요");
-//        }
-        request.setUsername(principal.getName());
-        log.info("commentRequest = {}", request);
-        CommentResponseDto response = commentService.addComment(request);
+        commentRequestDto.setUsername(principal.getName());
+
+        if (result.hasErrors()){
+            log.info("댓글 작성 중 에러 발생!!!");
+            log.info("error = {}", result.getAllErrors());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getAllErrors());
+        }
+
+        log.info("commentRequest = {}", commentRequestDto);
+        CommentResponseDto response = commentService.addComment(commentRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 댓글 수정
     @PutMapping("/api/comment/{commentId}")
-    public ResponseEntity<?> modifyComment(@PathVariable Long commentId, @RequestBody CommentModifyRequestDto request, Principal principal){
+    public ResponseEntity<?> modifyComment(@PathVariable Long commentId, @Valid @RequestBody CommentModifyRequestDto commentModifyRequestDto, BindingResult result, Principal principal){
         log.info("====== modifyComment ============");
         String loginUsername = principal.getName();
-        log.info("request.getUpdateDate() = {}", request.getUpdateDate());
-        ModifyCommentResponseDto responseDto = commentService.modifyComment(commentId, request, loginUsername);
+
+        log.info("request.getContent = {}", commentModifyRequestDto.getContent());
+
+        if (result.hasErrors()){
+            log.info("\t\t댓글 수정중 오류 발생 !!!!");
+            log.info("result = {}", result.getAllErrors());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getAllErrors());
+        }
+        ModifyCommentResponseDto responseDto = commentService.modifyComment(commentId, commentModifyRequestDto, loginUsername);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 

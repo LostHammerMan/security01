@@ -557,8 +557,14 @@
                     getCommentList();
                     getCommentListCount();
                 },
-                error : function (err){
+                error : function (xhr){
                     console.log("댓글 등록 실패");
+                    let errors = xhr.responseJSON;
+
+                    errors.forEach(function (error){
+                        alert(error.defaultMessage);
+                    });
+
                 }
             })
         });
@@ -734,25 +740,27 @@
             // }
 
             console.log("textareaVal = " + textareaVal);
-            let modifyRequest = {
-                'content': textareaVal
+            let data = {
+                content: textareaVal
             }
 
             $.ajax({
                 url : '${root}api/comment/' + commentIdx,
                 type : 'PUT',
                 contentType :'application/json',
-                data : JSON.stringify(modifyRequest),
+                data : JSON.stringify(data),
                 success : function (){
                     console.log("댓글 수정 전송 성공");
                     getCommentList();
                 },
                 error : function (xhr, status, error){
                     console.log("댓글 수정 전송 실패;;;;")
-                    let response = xhr.responseJSON;
-                    alert(response.message);
+                    let errors = xhr.responseJSON;
+                    errors.forEach(function (error){
+                        alert(error.defaultMessage);
+                    });
                 }
-            })
+            });
         });
 
         // $(document).on('click', "#comment_modifyCompleteBtn", function (e){
