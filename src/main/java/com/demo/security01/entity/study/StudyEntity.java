@@ -2,6 +2,7 @@ package com.demo.security01.entity.study;
 
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.user.User;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.util.StringUtils;
@@ -10,6 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Entity
@@ -44,8 +47,8 @@ public class StudyEntity {
     @Column(name = "RECRUIT_DEADLINE")
     private LocalDate recruitDeadline;
 
-    @Column(name = "RECRUIT_POSITION")
-    private String recruitPosition;
+    @OneToMany(mappedBy = "studyEntity",cascade = CascadeType.ALL)
+    private Set<Study_Positions> study_positions;
 
     @Column(name = "CONTACT_METHOD")
     private String contactMethod;
@@ -70,4 +73,20 @@ public class StudyEntity {
     private User user;
 
 
+
+    @Builder
+    public StudyEntity(Long idx, CategoryEntity category, Integer recruitedNumber, String progressMethod, String progressPeriod, LocalDate recruitDeadline, String contactMethod, String contactAddress, String title, String contents, User user) {
+        this.idx = idx;
+        this.category = category;
+        this.recruitedNumber = recruitedNumber;
+        this.progressMethod = progressMethod;
+        this.progressPeriod = progressPeriod;
+        this.recruitDeadline = recruitDeadline;
+        this.contactMethod = contactMethod;
+        this.contactAddress = contactAddress;
+        this.title = title;
+        this.contents = contents;
+        this.regDate = LocalDateTime.now();
+        this.user = user;
+    }
 }

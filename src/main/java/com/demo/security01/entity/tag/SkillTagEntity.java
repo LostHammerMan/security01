@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Table(name = "SKILLTAG")
-public class SKillTagEntity {
+public class SkillTagEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SKILL_TAG_IDX")

@@ -1,6 +1,7 @@
 package com.demo.security01.entity.tag;
 
 import com.demo.security01.entity.study.StudyEntity;
+import lombok.Builder;
 
 import javax.persistence.*;
 
@@ -18,5 +19,11 @@ public class StudySkillTagEntity {
 
     @ManyToOne
     @JoinColumn(name = "SKILL_TAG_IDX")
-    private SKillTagEntity skillTag;
+    private SkillTagEntity skillTag;
+
+    @Builder
+    public StudySkillTagEntity(StudyEntity study, SkillTagEntity skillTag) {
+        this.study = study;
+        this.skillTag = skillTag;
+    }
 }
