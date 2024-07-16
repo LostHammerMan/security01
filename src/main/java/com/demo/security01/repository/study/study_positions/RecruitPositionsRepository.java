@@ -1,4 +1,4 @@
-package com.demo.security01.repository.study;
+package com.demo.security01.repository.study.study_positions;
 
 import com.demo.security01.entity.study.RecruitPositions;
 import org.springframework.data.jpa.repository.JpaRepository;

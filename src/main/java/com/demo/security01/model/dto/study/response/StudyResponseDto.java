@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class StudyResponseDto {
 
-    private Long cateCode;
+    private String categoryName;
     private String title;
     private String contents;
     private Integer recruitedNumber;
@@ -22,10 +22,12 @@ public class StudyResponseDto {
     private Set<String> recruitPositions;
     private String contactMethod;
     private String contactAddress;
+    private Set<String> skillTags;
+    private Integer isFin;
 
     @Builder
-    public StudyResponseDto(Long cateCode, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, Set<String> recruitPositions, String contactMethod, String contactAddress) {
-        this.cateCode = cateCode;
+    public StudyResponseDto(String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, Set<String> recruitPositions, String contactMethod, String contactAddress, Set<String> skillTags, Integer isFin) {
+        this.categoryName = categoryName;
         this.title = title;
         this.contents = contents;
         this.recruitedNumber = recruitedNumber;
@@ -34,5 +36,23 @@ public class StudyResponseDto {
         this.recruitPositions = recruitPositions;
         this.contactMethod = contactMethod;
         this.contactAddress = contactAddress;
+        this.skillTags = skillTags;
+        this.isFin = isFin;
+    }
+
+    @Override
+    public String toString() {
+        return "StudyResponseDto{" +
+                "categoryName='" + categoryName + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", recruitedNumber=" + recruitedNumber +
+                ", progressPeriod='" + progressPeriod + '\'' +
+                ", recruitDeadline=" + recruitDeadline +
+                ", recruitPositions=" + recruitPositions +
+                ", contactMethod='" + contactMethod + '\'' +
+                ", contactAddress='" + contactAddress + '\'' +
+                ", skillTags=" + skillTags +
+                '}';
     }
 }

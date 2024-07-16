@@ -1,5 +1,6 @@
 package com.demo.security01.entity.lounge;
 
+import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.entity.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,10 @@ public class BoardLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LOUNGE_IDX", nullable = true)
     private LoungeEntity lounge;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STUDY_IDX", nullable = true)
+    private StudyEntity studyEntity;
 
     public BoardLike(User user, LoungeEntity lounge) {
         this.user = user;
