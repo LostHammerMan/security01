@@ -8,6 +8,7 @@ import com.demo.security01.entity.study.Study_Positions;
 import com.demo.security01.entity.tag.SkillTagEntity;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
@@ -25,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -194,9 +197,6 @@ public class StudyService {
                         () -> new EntityNotFoundException("해당 스터디/프로젝트는 존재하지 않습니다")
                 );
 
-        if (LocalDate.now() == findStudy.getRecruitDeadline()){
-            findStudy.setIsFIn(1);
-        }
 
         // 스킬 태그
         Set<String> skillTagNames = new HashSet<>();
@@ -228,7 +228,39 @@ public class StudyService {
     }
 
     // 목록 조회 + 페이징(no-offset)
+    public List<StudyResponseDto> getStudyList(StudyCriteria criteria){
 
+        List<StudyResponseDto> responseDtoList = new ArrayList<>();
+        for (StudyEntity findStudy : studyRepository.getStudyList(criteria)){
+            // 스킬 태그
+            Set<String> skillTagNames = new HashSet<>();
+            for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
+                skillTagNames.add(skillTag.getSkillTagName());
+            }
+
+            // 포지션
+            Set<String> positionNames = new HashSet<>();
+            for (Study_Positions study_position : findStudy.getStudy_positions()){
+                positionNames.add(study_position.getPositions().getPositionName());
+            }
+
+            StudyResponseDto responseDto = StudyResponseDto.builder()
+                    .categoryName(findStudy.getCategory().getCategoryName())
+                    .title(findStudy.getTitle())
+                    .contents(findStudy.getContents())
+                    .contactMethod(findStudy.getContactMethod())
+                    .contactAddress(findStudy.getContactAddress())
+                    .progressPeriod(findStudy.getProgressPeriod())
+                    .recruitDeadline(findStudy.getRecruitDeadline())
+                    .recruitedNumber(findStudy.getRecruitedNumber())
+                    .skillTags(skillTagNames)
+                    .recruitPositions(positionNames)
+                    .isFin(findStudy.getIsFIn()).build();
+
+            responseDtoList.add(responseDto);
+        }
+        return responseDtoList;
+    }
 
 
     // 스터디_ 스킬 태그 삭제 (테스트용)
