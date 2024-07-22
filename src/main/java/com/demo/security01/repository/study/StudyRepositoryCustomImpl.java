@@ -51,20 +51,23 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     }
 
     // 마감날짜 도달
-
-
     @Override
     public void updateIsFin() {
-        List<Tuple> studyEntities = queryFactory
-                .select(studyEntity.idx,studyEntity.isFIn)
+        List<Long> studyIdx = queryFactory
+                .select(studyEntity.idx)
                 .from(studyEntity)
                 .where(studyEntity.recruitDeadline.lt(LocalDate.now())
                         .and(studyEntity.isFIn.eq(0)))
                 .fetch();
 
-        for (Tuple tuple : studyEntities){
-            tuple.get(studyEntity.isFIn);
-            System.out.println("tuple = " + tuple);
+        // tuple 읽기 전용 - 값 수정 불가, 결국 엔티티 불러와야 함
+        // Tuple : 테이블의 row, 쿼리 결과로 나온 결과 행들을 타입에 맞춰 담을 수 있는 인터페이스
+        for (long result : studyIdx){
+            queryFactory
+                    .update(studyEntity)
+                    .set(studyEntity.isFIn, 1)
+                    .where(studyEntity.idx.eq(result))
+                    .execute();
         }
 
     }

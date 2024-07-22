@@ -20,6 +20,7 @@ import com.demo.security01.repository.study.study_skill.SkillTagRepository;
 import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
 import com.demo.security01.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StudyService {
@@ -260,6 +262,14 @@ public class StudyService {
             responseDtoList.add(responseDto);
         }
         return responseDtoList;
+    }
+
+    // 현재날짜가 마감일자를 넘긴 경우 -> isFin = 1
+    @Transactional
+    public void updateIsFin(){
+        log.info("====== StudyService called.... =======");
+        log.info("\t\tupdateIsFin call");
+        studyRepository.updateIsFin();
     }
 
 
