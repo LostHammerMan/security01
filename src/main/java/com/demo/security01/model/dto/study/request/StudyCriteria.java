@@ -13,4 +13,5 @@ public class StudyCriteria {
     private Integer isFin;
 
 
+
 }

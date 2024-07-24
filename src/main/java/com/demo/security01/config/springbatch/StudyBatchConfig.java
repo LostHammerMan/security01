@@ -33,16 +33,18 @@ public class StudyBatchConfig {
     public Job updateIsFinJob(){
         log.info("======== StudyBatchConfig - updateIsFinJob =========");
         return jobBuilderFactory.get("updateIsFinJob")
-                .incrementer(new RunIdIncrementer())
+                .incrementer(new RunIdIncrementer()) // 매 실행마다 고유한 Job 인터페이스를 생성하기 위해 사용됨 , RunIdIncrementer : Job이 실행될 때마다 runId 증가 -> 동일한 job을 여러번 실행 하더라도, 매번 새로운 인스턴스로 인식되어 중복 실행 가능
                 .start(updateIsFinStep())
                 .build();
     }
 
+    // step 구현방식 - Tasklet(배치작업이 쉬운경우), Chunk(대용양 처리시 효과적, 구현 대상이 많아 단순 작업에는 효율적이지 못함)
+    // 아래는 Tasklet 방식
     @Bean
     public Step updateIsFinStep(){
         log.info("======== StudyBatchConfig - updateIsFinStep =========");
         return stepBuilderFactory.get("updateIsFinStep")
-                .tasklet((contribution, chunkContext) -> {
+                .tasklet((contribution, chunkContext) -> {  // tasklet : 단일 작업을 수행한 인터페이스
                     studyService.updateIsFin();
                     return RepeatStatus.FINISHED;
                 })

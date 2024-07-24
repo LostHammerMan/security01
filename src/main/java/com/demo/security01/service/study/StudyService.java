@@ -8,12 +8,13 @@ import com.demo.security01.entity.study.Study_Positions;
 import com.demo.security01.entity.tag.SkillTagEntity;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.dto.paging.Paging;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.repository.category.CategoryRepository;
-import com.demo.security01.repository.study.*;
+import com.demo.security01.repository.study.StudyRepository;
 import com.demo.security01.repository.study.study_positions.RecruitPositionsRepository;
 import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
 import com.demo.security01.repository.study.study_skill.SkillTagRepository;
@@ -21,12 +22,12 @@ import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository
 import com.demo.security01.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -162,8 +163,6 @@ public class StudyService {
                                 () -> new EntityNotFoundException("해당 기술 스택은 존재하지 않습니다")
                         );
 
-
-
                 StudySkillTagEntity studySkillTagEntity = StudySkillTagEntity.builder()
                         .skillTag(skillTag)
                         .study(findStudy).build();
@@ -199,7 +198,6 @@ public class StudyService {
                         () -> new EntityNotFoundException("해당 스터디/프로젝트는 존재하지 않습니다")
                 );
 
-
         // 스킬 태그
         Set<String> skillTagNames = new HashSet<>();
         for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
@@ -229,11 +227,14 @@ public class StudyService {
         return responseDto;
     }
 
-    // 목록 조회 + 페이징(no-offset)
-    public List<StudyResponseDto> getStudyList(StudyCriteria criteria){
+    // 목록 조회 + 페이징
+    public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
+        log.info("======== StudyService ============");
+        log.info("\t\t getStudyList called.....");
 
         List<StudyResponseDto> responseDtoList = new ArrayList<>();
-        for (StudyEntity findStudy : studyRepository.getStudyList(criteria)){
+//        for (StudyEntity findStudy : studyRepository.getStudyList(criteria, pageable)){
+        for (StudyEntity findStudy : studyRepository.getStudyPageComplex(criteria, pageable)){
             // 스킬 태그
             Set<String> skillTagNames = new HashSet<>();
             for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
@@ -283,6 +284,12 @@ public class StudyService {
     @Transactional
     public void study_positionsDeleteByStudyIdx(Long studyIdx){
         study_positionsRepository.study_positionsDeleteByStudyIdx(studyIdx);
+    }
+
+    // 전체 삭제
+    @Transactional
+    public void studyDeleteAll(){
+        studyRepository.deleteAll();
     }
 
 

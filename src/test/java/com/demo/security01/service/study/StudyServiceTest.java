@@ -9,10 +9,13 @@ import com.demo.security01.repository.study.StudyRepository;
 import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
 import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,9 +39,13 @@ class StudyServiceTest {
     @Autowired
     private StudyRepository studyRepository;
 
+
     @Test
     @DisplayName("스터디 저장 성공")
     void studyGenerateSuccess(){
+
+        studyService.studyDeleteAll();
+
 
         Set<Long> positionIdx = new HashSet<>();
         positionIdx.add(1L);
@@ -73,6 +80,7 @@ class StudyServiceTest {
     @Test
     @DisplayName("스터디 수정 성공")
     void modifySuccessTest(){
+
 
         Set<Long> positionIdx = new HashSet<>();
         positionIdx.add(1L);
@@ -121,6 +129,7 @@ class StudyServiceTest {
     @Test
     @DisplayName("스터디 리스트 - 성공")
     void getStudyList(){
+        Pageable pageable = PageRequest.of(1, 5);
 
         StudyCriteria criteria = new StudyCriteria();
 
@@ -136,10 +145,13 @@ class StudyServiceTest {
         log.info("criteria = {}", criteria);
 
 //        studyService.getStudyList(indexes);
-        for (StudyResponseDto study : studyService.getStudyList(criteria)){
-            log.info("study = {}", study);
-        }
+//        for (StudyResponseDto study : studyService.getStudyList(criteria, pageable)){
+//            log.info("studyList = {}", study);
+//        }
 
+        for (StudyResponseDto study : studyService.getStudyList(criteria, pageable)){
+            log.info("studyList = {}", study);
+        }
     }
 
 

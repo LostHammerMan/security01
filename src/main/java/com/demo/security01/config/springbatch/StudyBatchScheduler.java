@@ -18,7 +18,7 @@ public class StudyBatchScheduler {
     private final Job updateIsFinJob;
 
     //  cron = " 초 분 시 일 월 요일 연도 "
-    @Scheduled(cron = "0 0/2 * * * ?") // 5분마다 실행
+    @Scheduled(cron = "0 0 12 * * ?") // 12시마다 실행
     public void runJob() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
