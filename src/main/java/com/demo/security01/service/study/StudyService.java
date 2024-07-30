@@ -265,6 +265,23 @@ public class StudyService {
         return responseDtoList;
     }
 
+    //
+    public List<StudyResponseDto> getListByIsFin(StudyCriteria criteria){
+        List<StudyResponseDto> dtos = new ArrayList<>();
+
+        List<StudyEntity> list = studyRepository.getListByIsFin(criteria);
+        for (StudyEntity result : list){
+            StudyResponseDto dto = StudyResponseDto.builder()
+                    .title(result.getTitle())
+                    .contents(result.getContents())
+                    .isFin(result.getIsFIn()).build();
+
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+
     // 현재날짜가 마감일자를 넘긴 경우 -> isFin = 1
     @Transactional
     public void updateIsFin(){

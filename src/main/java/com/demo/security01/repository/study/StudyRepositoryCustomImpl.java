@@ -7,7 +7,9 @@ import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.entity.tag.QSkillTagEntity;
 import com.demo.security01.entity.tag.QStudySkillTagEntity;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
+import com.demo.security01.model.dto.paging.Criteria;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.demo.security01.entity.study.QRecruitPositions.*;
@@ -50,7 +53,8 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
                         skillIdxEq(criteria.getSkillIdx()),
-                        positionIdxEq(criteria.getPositionIdx())
+                        positionIdxEq(criteria.getPositionIdx()),
+                        isNotFin(criteria.getIsFin())
                 )
                 .orderBy(studyEntity.regDate.desc())
                 .offset(pageable.getOffset()) // 페이지 번호
@@ -115,16 +119,31 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     ///* 정렬 조건 */
     // 기술 스택별
     private BooleanExpression skillIdxEq(List<Long> skillIdx){
+        if (skillIdx == null) return null;
         return studyEntity.studySkillTagEntity.any().skillTag.idx.in(skillIdx);
     }
 
     // 모집 분야별
     private BooleanExpression positionIdxEq(List<Long> positionIdx){
+        if (positionIdx == null) return null;
         return studyEntity.study_positions.any().positions.idx.in(positionIdx);
     }
 
     // 마감여부별
     private BooleanExpression isNotFin(Integer isFin){
+        if (isFin == null) return null;
         return studyEntity.isFIn.eq(isFin);
     }
+
+    // 마감여부 따른 리스트조회(테스트용)
+    public List<StudyEntity> getListByIsFin(StudyCriteria criteria){
+        List<StudyResponseDto> responseDtoList = new ArrayList<>();
+
+        List<StudyEntity> findStudyList = queryFactory
+                .selectFrom(studyEntity)
+                .where(isNotFin(criteria.getIsFin()))
+                .fetch();
+        return findStudyList;
+    }
+
 }

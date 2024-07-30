@@ -18,4 +18,7 @@ public interface StudyRepositoryCustom {
     Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable);
     // 스터디가 마감날짜에 도달
     void updateIsFin();
+
+    // 마감여부 따른 리스트조회(테스트용)
+    public List<StudyEntity> getListByIsFin(StudyCriteria criteria);
 }

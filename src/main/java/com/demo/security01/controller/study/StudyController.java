@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/study")
 public class StudyController {
 
-    @GetMapping("/main")
+    @GetMapping("")
     public String studyMain(){
         return "study/studyMain";
+    }
+
+    @GetMapping("/getStudyWriteForm")
+    public String getStudyWriteFrom(){
+        return "study/studyWriteForm";
     }
 }

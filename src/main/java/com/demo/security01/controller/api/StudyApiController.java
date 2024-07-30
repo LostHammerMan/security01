@@ -23,12 +23,18 @@ public class StudyApiController {
     private final StudyService studyService;
 
     @GetMapping("/study/studyList")
-    public List<StudyResponseDto> getStudyList(StudyCriteria criteria, @RequestParam(name = "page") int page, @RequestParam(name = "size") int size){
+    public List<StudyResponseDto> getStudyList(StudyCriteria criteria, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "9") int size){
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
         log.info("Criteria = {}", criteria);
         Pageable paging = PageRequest.of(page, size);
         List<StudyResponseDto> result = studyService.getStudyList(criteria, paging);
+        return result;
+    }
+
+    @GetMapping("/study/getListIsFin")
+    public List<StudyResponseDto> getResult(StudyCriteria criteria){
+        List<StudyResponseDto> result = studyService.getListByIsFin(criteria);
         return result;
     }
 }
