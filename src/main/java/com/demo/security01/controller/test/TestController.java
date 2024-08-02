@@ -41,6 +41,10 @@ public class TestController {
     @Autowired
     private ItemRepository itemRepository;
 
+    @GetMapping("/divTest")
+    public String divTest(){
+        return "test/divTest";
+    }
 
     @GetMapping("/test")
     public String test(){

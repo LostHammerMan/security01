@@ -84,6 +84,22 @@
         gap: 10px;
     }
 
+    .input_container {
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .select_container {
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        border-color: #cccccc;
+        border-radius: 4px;
+        border-style: solid;
+        border-width: 1px;
+        cursor: default;
+    }
+
     .ck-editor__editable[role="textbox"] {
         /* editing area */
         min-height: 500px;
@@ -165,13 +181,18 @@
             <li class="studyInfo_inputList_item">
                 <label class="selectBox_labelText">모집 스킬</label>
                 <div class="input-group mb-3">
-                    <select class="custom-select" id="skillTagIdx">
-                        <option selected>모집하고 있는 기술 스택</option>
-                        <option value="3">스프링</option>
-                        <option value="4">자바</option>
-                        <option value="5">파이썬</option>
-                        <option value="6">자바스크립트</option>
-                    </select>
+<%--                    <select class="custom-select" id="skillTagIdx">--%>
+<%--                        <option selected>모집하고 있는 기술 스택</option>--%>
+<%--                        <option value="3">스프링</option>--%>
+<%--                        <option value="4">자바</option>--%>
+<%--                        <option value="5">파이썬</option>--%>
+<%--                        <option value="6">자바스크립트</option>--%>
+<%--                    </select>--%>
+                    <div class="input_container">
+                        <div class="select_container">
+
+                        </div>
+                    </div>
                 </div>
             </li>
 
