@@ -13,28 +13,24 @@
   <title>기술 스택 선택기</title>
   <style>
     .selected-items {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px;
-      width: 500px; /* 가로 정렬을 위한 넓이 설정 */
-      display: flex; /* Flexbox를 사용하여 가로 정렬 */
-      flex-wrap: wrap; /* 5개를 넘으면 줄바꿈 */
-      gap: 5px; /* 항목 간격 */
-      position: relative; /* availableList 위치 조정을 위한 설정 */
+      align-items: center;
+      display: flex;
+      flex: 1 1 0;
+      padding: 2px 8px;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+      flex-direction: row;
+      flex-wrap: wrap;
+      border: 5px solid #1c7430;
     }
     .available-items {
       border: 1px solid #ccc;
       padding: 10px;
       margin: 10px;
       width: 200px;
-      position: absolute; /* selected-items 내에 위치하게 설정 */
-      top: 100%; /* selected-items 바로 아래에 위치하게 설정 */
-      left: 0;
-      display: none; /* 초기에는 숨김 */
-      background-color: white; /* 배경색 설정 */
-      z-index: 1; /* 다른 요소보다 위에 표시되도록 설정 */
     }
-    .item {
+    .skill {
       cursor: pointer;
       padding: 5px;
       margin: 2px;
@@ -42,46 +38,63 @@
       border-radius: 4px;
       background-color: #f9f9f9;
     }
+    .select_placeholder {
+      font-size: 16px;
+      color: #aaa;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<div class="selected-items">
-  <div id="selectedList"></div>
+<div class="select_container">
+  <div class="selected-items" id="selected-items">
+    <div class="select_placeholder">프로젝트 사용 스택</div>
+    <div class="selectedList" id="selectedList"></div>
+  </div>
   <div class="available-items" id="availableList">
-    <div class="item" id="item1">JavaScript</div>
-    <div class="item" id="item2">React</div>
-    <div class="item" id="item3">TypeScript</div>
-    <div class="item" id="item4">Vue</div>
-    <div class="item" id="item5">Nodejs</div>
-    <div class="item" id="item6">Spring</div>
-    <div class="item" id="item7">Java</div>
-    <div class="item" id="item8">Nextjs</div>
-    <div class="item" id="item9">Nestjs</div>
+    <div class="skill" id="item1">JavaScript</div>
+    <div class="skill" id="item2">Python</div>
+    <div class="skill" id="item3">Spring</div>
+    <div class="skill" id="item4">Vue</div>
   </div>
 </div>
+
 <script>
   $(document).ready(function() {
     const originalOrder = $('#availableList').children().toArray().map(item => item.id);
 
-    $('#availableList').on('click', '.item', function() {
-      if ($('#selectedList .item').length < 5) {
-        var selectedItem = $(this);
-
-        // 선택된 항목을 위쪽 div로 이동
-        $('#selectedList').append(selectedItem.clone());
-
-        // 기존 목록에서 항목 제거
-        selectedItem.remove();
-
-        // availableList를 숨김
-        $('#availableList').hide();
+    function togglePlaceholder() {
+      if ($('#selectedList .skill').length === 0) {
+        $('.select_placeholder').show();
       } else {
-        alert("최대 5개의 항목만 선택할 수 있습니다.");
+        $('.select_placeholder').hide();
+      }
+    }
+
+    // 초기 상태 확인
+    togglePlaceholder();
+
+    // availableList toggle on selected-items click
+    $('.selected-items').click(function(e) {
+      // if (!$(e.target).closest('.skill').length) {
+      if (!$(e.target).closest('.skill').length) {
+        $('#availableList').toggle();
       }
     });
 
-    $('#selectedList').on('click', '.item', function() {
+    // Add item from availableList to selectedList
+    $('#availableList').on('click', '.skill', function() {
+      if ($('#selectedList .skill').length < 5) {
+        $('#selectedList').append($(this));
+        $('#availableList').hide();
+        togglePlaceholder();
+      } else {
+        alert('최대 5개의 항목만 선택할 수 있습니다.');
+      }
+    });
+
+    // Remove item from selectedList and move back to availableList
+    $('#selectedList').on('click', '.skill', function() {
       var selectedItem = $(this);
       var itemId = selectedItem.attr('id');
 
@@ -89,28 +102,16 @@
       var originalIndex = originalOrder.indexOf(itemId);
 
       // 선택된 항목을 원래 목록으로 이동
-      var target = $('#availableList .item').toArray().findIndex(item => originalOrder.indexOf(item.id) > originalIndex);
+      var target = $('#availableList .skill').toArray().findIndex(item => originalOrder.indexOf(item.id) > originalIndex);
       if (target === -1) {
         $('#availableList').append(selectedItem.clone());
       } else {
-        $(selectedItem.clone()).insertBefore($('#availableList .item').eq(target));
+        $(selectedItem.clone()).insertBefore($('#availableList .skill').eq(target));
       }
 
       // 선택 목록에서 항목 제거
       selectedItem.remove();
-    });
-
-    $('.selected-items').on('click', function(e) {
-      e.stopPropagation(); // 이벤트 버블링 방지
-      $('#availableList').toggle();
-    });
-
-    $(document).on('click', function() {
-      $('#availableList').hide();
-    });
-
-    $('#availableList').on('click', function(e) {
-      e.stopPropagation(); // 이벤트 버블링 방지
+      togglePlaceholder();
     });
   });
 </script>

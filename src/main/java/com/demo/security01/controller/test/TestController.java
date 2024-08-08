@@ -46,6 +46,11 @@ public class TestController {
         return "test/divTest";
     }
 
+    @GetMapping("/divTest2")
+    public String divTest2(){
+        return "test/divTest2";
+    }
+
     @GetMapping("/test")
     public String test(){
         return "test/button_test";
