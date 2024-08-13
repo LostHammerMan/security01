@@ -84,20 +84,39 @@
         gap: 10px;
     }
 
-    .input_container {
-        position: relative;
+    .select-container {
+        display: flex;
+    }
+
+    .select-placeHolder {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .availableItems {
+        display: none;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        width: 100%;
+        box-sizing: border-box;
+        font-weight: normal;
+        font-family: sans-serif;
+        font-size: 18px;
+        padding: .375rem 1.75rem .375rem .75rem;
+        white-space: nowrap;
+        appearance: none;
+    }
+
+    .available-item {
+        width: 100%;
         box-sizing: border-box;
     }
 
-    .select_container {
-        display: flex;
-        align-items: center;
-        background-color: #ffffff;
-        border-color: #cccccc;
-        border-radius: 4px;
-        border-style: solid;
-        border-width: 1px;
-        cursor: default;
+    .available-item:hover {
+        background-color: #2977ff;
+        color: white;
+        width: 100%;
     }
 
     .ck-editor__editable[role="textbox"] {
@@ -128,7 +147,6 @@
                         <option value="3">스터디</option>
                         <option value="4">프로젝트</option>
                     </select>
-
                 </div>
             </li>
             <li class="studyInfo_inputList_item">
@@ -180,7 +198,7 @@
         <ul class="studyInfo_inputList">
             <li class="studyInfo_inputList_item">
                 <label class="selectBox_labelText">모집 스킬</label>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 select-container">
 <%--                    <select class="custom-select" id="skillTagIdx">--%>
 <%--                        <option selected>모집하고 있는 기술 스택</option>--%>
 <%--                        <option value="3">스프링</option>--%>
@@ -188,10 +206,14 @@
 <%--                        <option value="5">파이썬</option>--%>
 <%--                        <option value="6">자바스크립트</option>--%>
 <%--                    </select>--%>
-                    <div class="input_container">
-                        <div class="select_container">
-
-                        </div>
+                    <div class="custom-select selectedItems" id="selectedItems-skill" style="width: 100%">
+                        <div class="select-placeHolder">프로젝트 사용스택</div>
+                        <div class="selectedList" id="selectedList-skill"></div>
+                    </div>
+                    <div class="availableItems" id="availableItems-skill">
+                        <div class="available-item" id="item1" data-name="3">Spring</div>
+                        <div class="available-item" id="item2" data-name="4">Python</div>
+                        <div class="available-item" id="item3" data-name="5">aws</div>
                     </div>
                 </div>
             </li>
@@ -254,6 +276,46 @@
 
 </body>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
+<script>
+    $(document).ready(function (){
+
+        // selectedItems-skill 클릭시 토글
+        $('#selectedItems-skill').on('click', function (e){
+            e.stopPropagation();
+            console.log("토글 이벤트");
+            if (!$(e.target).closest('.available-item').length){
+                $('#availableItems-skill').toggle();
+            }
+        });
+
+        //
+
+        // 선택한 목록 추가 이벤트
+        $('#availableItems-skill').on('click', '.available-item', function (){
+            let selectedSkill = $(this);
+
+            $('#selectedList-skill').append(selectedSkill.clone());
+            selectPlaceHolder();
+            $('#availableItems-skill').hide();
+            selectedSkill.remove();
+        });
+
+
+
+    });
+
+    function selectPlaceHolder(){
+        if ($('.selectedList .available-item').length === 0){
+            $('.select-placeHolder').show();
+        }else {
+            $('.select-placeHolder').hide();
+
+        }
+    }
+
+</script>
+
+
 <script>
     // datePicker
     $('.datepicker').datepicker({

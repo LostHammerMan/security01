@@ -58,6 +58,7 @@
   </style>
 </head>
 <body>
+<form>
 <div class="select_container">
   <div class="selected-items" id="selected-items">
     <div class="select_placeholder">프로젝트 사용 스택</div>
@@ -72,7 +73,7 @@
 
   </div>
 </div>
-
+</form>
 
 </body>
 <script>
