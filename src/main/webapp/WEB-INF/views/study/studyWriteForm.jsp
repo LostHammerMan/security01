@@ -94,7 +94,16 @@
         align-items: center;
     }
 
-    .availableItems {
+    .selectedList {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
+        height: auto;
+        position: relative;
+    }
+
+    .availableItem-list {
         display: none;
         border: 1px solid #ced4da;
         border-radius: .25rem;
@@ -106,17 +115,46 @@
         padding: .375rem 1.75rem .375rem .75rem;
         white-space: nowrap;
         appearance: none;
+        height: auto;
     }
+
+    .item-container {
+        display: flex;
+        height: auto;
+        gap: 10px;
+    }
+
 
     .available-item {
-        width: 100%;
+        /*display: none;*/
+        width: 30%;
         box-sizing: border-box;
+        border: 1px solid #F2F2F2;
+        border-radius: .25rem;
+        background-color: #F2F2F2;
     }
 
-    .available-item:hover {
-        background-color: #2977ff;
-        color: white;
-        width: 100%;
+    .available-item-recruit {
+        width: 30%;
+        box-sizing: border-box;
+        border: 1px solid #F2F2F2;
+        border-radius: .25rem;
+        background-color: #F2F2F2;
+    }
+
+
+    /*.available-item:hover {*/
+    /*    background-color: #2977ff;*/
+    /*    color: white;*/
+    /*    width: 100%;*/
+    /*}*/
+
+    .selectedItem {
+        border: 1px solid #F2F2F2;
+        border-radius: .25rem;
+        background-color: #F2F2F2;
+        width: auto;
+        height: auto;
     }
 
     .ck-editor__editable[role="textbox"] {
@@ -144,8 +182,8 @@
                 <div class="input-group mb-3">
                     <select class="custom-select" id="category">
                         <option selected>스터디/프로젝트</option>
-                        <option value="3">스터디</option>
-                        <option value="4">프로젝트</option>
+                        <option value="5">스터디</option>
+                        <option value="6">프로젝트</option>
                     </select>
                 </div>
             </li>
@@ -154,13 +192,13 @@
                 <div class="input-group mb-3">
                     <select class="custom-select" id="recruitedNumber">
                         <option selected>인원미정 ~ 6명이상</option>
-                        <option value="3">인원미정</option>
-                        <option value="4">1명</option>
-                        <option value="4">2명</option>
-                        <option value="4">3명</option>
+                        <option value="0">인원미정</option>
+                        <option value="1">1명</option>
+                        <option value="2">2명</option>
+                        <option value="3">3명</option>
                         <option value="4">4명</option>
-                        <option value="4">5명</option>
-                        <option value="4">6명</option>
+                        <option value="5">5명</option>
+                        <option value="6">6명</option>
                     </select>
 
                 </div>
@@ -199,35 +237,35 @@
             <li class="studyInfo_inputList_item">
                 <label class="selectBox_labelText">모집 스킬</label>
                 <div class="input-group mb-3 select-container">
-<%--                    <select class="custom-select" id="skillTagIdx">--%>
-<%--                        <option selected>모집하고 있는 기술 스택</option>--%>
-<%--                        <option value="3">스프링</option>--%>
-<%--                        <option value="4">자바</option>--%>
-<%--                        <option value="5">파이썬</option>--%>
-<%--                        <option value="6">자바스크립트</option>--%>
-<%--                    </select>--%>
                     <div class="custom-select selectedItems" id="selectedItems-skill" style="width: 100%">
                         <div class="select-placeHolder">프로젝트 사용스택</div>
                         <div class="selectedList" id="selectedList-skill"></div>
                     </div>
-                    <div class="availableItems" id="availableItems-skill">
-                        <div class="available-item" id="item1" data-name="3">Spring</div>
-                        <div class="available-item" id="item2" data-name="4">Python</div>
-                        <div class="available-item" id="item3" data-name="5">aws</div>
+                    <div class="availableItem-list" id="availableItems-skill">
+                        <div class="item-container" id="item-container-skill">
+                            <div class="available-item" id="item1" data-name="3">Spring</div>
+                            <div class="available-item" id="item2" data-name="4">Python</div>
+                            <div class="available-item" id="item3" data-name="5">AWS</div>
+                        </div>
                     </div>
                 </div>
             </li>
 
             <li class="studyInfo_inputList_item">
                 <label class="selectBox_labelText">모집 분야</label>
-                <div class="input-group mb-3">
-                    <select class="custom-select" id="recruitPositions">
-                        <option selected>모집하고 있는 기술 스택</option>
-                        <option value="3">백엔드</option>
-                        <option value="4">프론트엔트</option>
-                        <option value="5">Manager</option>
-                        <option value="6">디자이너</option>
-                    </select>
+                <div class="input-group mb-3 select-container">
+                    <div class="custom-select selectedItems" id="selectedItems-recruit" style="width: 100%; height: auto; min-height: 60px">
+                        <div class="select-placeHolder" id="placeHolder-recruit">백엔드, 프론트엔드...</div>
+                        <div class="selectedList recruit" id="selectedList-recruit"></div>
+                    </div>
+                    <div class="availableItem-list" id="availableItems-recruit">
+                        <div class="item-container" id="item-container-recruit">
+                            <div class="available-item-recruit" id="recruit1" data-name="3">백엔드</div>
+                            <div class="available-item-recruit" id="recruit2" data-name="4">프론트엔드</div>
+                            <div class="available-item-recruit" id="recruit3" data-name="5">Manager</div>
+                            <div class="available-item-recruit" id="recruit4" data-name="6">웹디자이너</div>
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -243,11 +281,13 @@
                 <label class="selectBox_labelText">연락 방법</label>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="contactMethod">
-                        <option value="6">카카오톡</option>
+                        <option value="kakaoTalk">카카오톡</option>
+                        <option value="email">이메일</option>
+                        <option value="googleForm">구글폼</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <input id="contactAddress"/>
+                    <div class="contactDetails"></div>
                 </div>
 
             </li>
@@ -277,41 +317,83 @@
 </body>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 <script>
-    $(document).ready(function (){
+    $(document).ready(function () {
 
-        // selectedItems-skill 클릭시 토글
-        $('#selectedItems-skill').on('click', function (e){
-            e.stopPropagation();
-            console.log("토글 이벤트");
-            if (!$(e.target).closest('.available-item').length){
-                $('#availableItems-skill').toggle();
-            }
-        });
+        const originalOrder = $('#item-container-skill').children().toArray().map(item => item.id);
+        const originalOrder_recruitment = $('#item-container-recruit').children().toArray().map(item => item.id);
 
-        //
+        // 사용가능 리스트 토글 이벤트
+        toggleList('#selectedItems-skill', '.available-item', '#availableItems-skill');
+        toggleList('#selectedItems-recruit', '.available-item-recruit', '#availableItems-recruit');
 
         // 선택한 목록 추가 이벤트
-        $('#availableItems-skill').on('click', '.available-item', function (){
-            let selectedSkill = $(this);
+        addItem('#availableItems-skill', '.available-item', '#availableItems-skill', '#selectedList-skill');
+        addItem('#availableItems-recruit', '.available-item-recruit', '#availableItems-recruit', '#selectedList-recruit');
 
-            $('#selectedList-skill').append(selectedSkill.clone());
-            selectPlaceHolder();
-            $('#availableItems-skill').hide();
-            selectedSkill.remove();
-        });
-
-
-
+        // 추가된 요소 다시 클릭하면 제거, 제거 후 원래 자리로 이동
+        removeItem('#selectedList-skill', '.available-item', originalOrder, '#item-container-skill');
+        removeItem('#selectedList-recruit', '.available-item-recruit', originalOrder_recruitment, '#item-container-recruit');
     });
 
-    function selectPlaceHolder(){
-        if ($('.selectedList .available-item').length === 0){
-            $('.select-placeHolder').show();
-        }else {
-            $('.select-placeHolder').hide();
-
+    // placeHolder 토글
+    function togglePlaceHolder(classSelector, itemSelector, holderSelector) {
+        console.log("홀더 호출됨")
+        if ($(classSelector + ' ' + itemSelector).length === 0) {
+            $(holderSelector).show();
+        } else {
+            $(holderSelector).hide();
         }
     }
+
+    // 사용가능 리스트 토글
+    function toggleList(idSelector, availableItemSelector, targetSelector) {
+        $(idSelector).on('click', function (e) {
+            if (!$(e.target).closest(availableItemSelector).length) {
+                $(targetSelector).toggle();
+            }
+        })
+    }
+
+    // 아이템 클릭시 추가 이벤트
+    function addItem(idSelector, listClassSelector, listIdSelector, selectedListIdSelector){
+        $(idSelector).on('click', listClassSelector, function (){
+           let selectedItem = $(this);
+           $(selectedListIdSelector).append(selectedItem.clone());
+           togglePlaceHolder('#selectedList-skill', '.available-item', '.select-placeHolder');
+           togglePlaceHolder('#selectedList-recruit', '.available-item-recruit', '#placeHolder-recruit');
+           $(listIdSelector).hide();
+           selectedItem.remove();
+        });
+    }
+
+    // 다시 선택시 제거 이벤트
+    function removeItem(idSelector, itemClassSelector, originalOrderSelector, containerSelector){
+        $(idSelector).on('click', itemClassSelector, function (e){
+            e.stopPropagation();
+            let selectedItem = $(this);
+
+            // 선택 요소의 id 값
+            let itemIdx = selectedItem.attr('id');
+
+            // 원래 순서에서 id
+            let originalIdx = originalOrderSelector.indexOf(itemIdx);
+
+            // 선택된 item 클릭시 다시 원래 자리로 이동
+            let target = $(containerSelector + ' ' + itemClassSelector).toArray()
+                .findIndex(item => originalOrderSelector.indexOf(item.id) > originalIdx);
+
+            if (target === -1){
+                console.log("제일 마지막인 경우")
+                $(containerSelector).append(selectedItem.clone());
+            }else {
+                $(selectedItem.clone()).insertBefore($(containerSelector + ' ' + itemClassSelector).eq(target));
+            }
+            selectedItem.remove();
+            togglePlaceHolder('#selectedList-skill', '.available-item', '.select-placeHolder');
+            togglePlaceHolder('#selectedList-recruit', '.available-item-recruit', '#placeHolder-recruit');
+        });
+    }
+
 
 </script>
 

@@ -44,7 +44,7 @@ public class LoungeWriteValidator implements Validator {
         // null != 5L --> NPE
 
         // 카테고리 코드 정확하지 여부
-        if (request.getCateCode() != 5L && request.getCateCode() != 6L){
+        if (request.getCateCode() != 3L && request.getCateCode() != 4L){
             errors.rejectValue("cateCode", "invalidCateCode");
             return;
         }

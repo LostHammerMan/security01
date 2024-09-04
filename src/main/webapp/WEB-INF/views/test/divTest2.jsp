@@ -65,7 +65,7 @@
     <div class="selectedList" id="selectedList"></div>
 
   </div>
-  <div class="available-items" id="availableList">
+  <div class="available-items" id="available-items">
     <div class="skill" id="item1">JavaScript</div>
     <div class="skill" id="item2">Python</div>
     <div class="skill" id="item3">Spring</div>
@@ -84,7 +84,7 @@
     let skillId = selectedSkill.attr("id");
 
     // available 자식의 id 를 리스트로 변환
-    const originalIdxOrder = $("#availableList").children().toArray().map(item => item.id);
+    const originalIdxOrder = $("#available-items").children().toArray().map(item => item.id);
 
 
     // 기술 스택칸 클릭시
@@ -95,7 +95,7 @@
       // e.target : 클릭한 요소
       // selectedList 에 skill 을 선택한 경우가 아닐때만 toggle 작동
       if (!$(e.target).closest('.skill').length){
-        $("#availableList").toggle();
+        $("#available-items").toggle();
       }
       // if ($("#selectedList .skill").length < 1){
       //   $('.select_placeholder').show();
@@ -106,15 +106,15 @@
 
 
     // 선택 목록 추가
-    $("#availableList").on("click", ".skill", function (){
+    $('#available-items').on('click', '.skill', function (){
       console.log("아이템 클릭");
 
       let selectedSkill = $(this);
 
       // 위 div 로 이동
       $('#selectedList').append(selectedSkill.clone());
+      $('#available-items').hide();
       select_placeHolder();
-      $('#availableList').hide();
       // 기존 항목에서 제거
       selectedSkill.remove()
     });
@@ -131,14 +131,16 @@
         let originalIdx = originalIdxOrder.indexOf(skillIdx);
 
         // 선택된 skill 클릭시 다시 원래 자리로 이동
-        let target = $('#availableList .skill').toArray()
+        let target = $('#available-items .skill').toArray()
                 .findIndex(item => originalIdxOrder.indexOf(item.id) > originalIdx);
 
         if (target === -1){
           // 선택한 요소가 가장 마지막인 경우
-          $("#availableList").append(selectedSkill.clone());
+          console.log("제일마지막인 경우");
+          $("#available-items").append(selectedSkill.clone());
         }else {
-          $(selectedSkill.clone()).insertBefore($('#availableList .skill').eq(target));
+          console.log("마지막이 아닌 경우");
+          $(selectedSkill.clone()).insertBefore($('#available-items .skill').eq(target));
         }
         // $("#selectedList").append(selectedSkill.clone());
         // $("#availableList").hide();

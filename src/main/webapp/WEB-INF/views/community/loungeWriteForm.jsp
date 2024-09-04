@@ -50,8 +50,8 @@
                    <div class="dropdown">
                        <form:select class="form-control dropdown-toggle" path="cateCode">
                            <option class="dropdown-menu">카테고리 선택</option>
-                           <option class="dropdown-item" value="5">자유주제</option>
-                           <option class="dropdown-item" value="6">커리어 고민</option>
+                           <option class="dropdown-item" value="3">자유주제</option>
+                           <option class="dropdown-item" value="4">커리어 고민</option>
                        </form:select>
 <%--                       <spring:hasBindErrors name="loungeWriteRequest">--%>
 <%--                           <c:if test="${errors.hasFieldErrors('cateCode')}">--%>

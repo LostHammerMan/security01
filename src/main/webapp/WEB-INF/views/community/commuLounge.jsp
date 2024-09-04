@@ -10,7 +10,7 @@
 <style>
 
     section {
-        width: 85%;
+        width: 100%;
     }
     .container_loungeContainer {
         display: flex;
@@ -214,7 +214,7 @@
     }
 
     .adImg {
-        width: 100%;
+        width: 70%;
         max-height: 400px;
         border-radius: 10px;
 

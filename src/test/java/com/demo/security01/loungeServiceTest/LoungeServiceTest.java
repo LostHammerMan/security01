@@ -72,18 +72,22 @@ public class LoungeServiceTest {
     void test1(){
         // 카테고리
 //        CategoryEntity findCate = categoryRepository.findById(2L).orElseThrow();
-        Long cateCode = 2L;
-        // 유저
-        User findUser = userRepository.findById(1).orElseThrow(() ->
-                new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
 
-        // 게시글 저장
-        LoungeWriteRequest request = LoungeWriteRequest.builder()
-                .title("제목1")
-                .contents("내용1")
-                .cateCode(cateCode).build();
 
-        loungeService.loungeSave(request, findUser.getUsername());
+        for (int i=0; i <50; i++){
+            Long cateCode = 4L;
+            // 유저
+            User findUser = userRepository.findById(2).orElseThrow(() ->
+                    new UsernameNotFoundException("해당 유저를 찾을 수 없습니다"));
+
+            // 게시글 저장
+            LoungeWriteRequest request = LoungeWriteRequest.builder()
+                    .title("제목" + i)
+                    .contents("내용" + i)
+                    .cateCode(cateCode).build();
+
+            loungeService.loungeSave(request, findUser.getUsername());
+        }
     }
 
     @Test

@@ -51,7 +51,7 @@
     <div class="select_placeholder">프로젝트 사용 스택</div>
     <div class="selectedList" id="selectedList"></div>
   </div>
-  <div class="available-items" id="availableList">
+  <div class="available-items" id="available-items">
     <div class="skill" id="item1">JavaScript</div>
     <div class="skill" id="item2">Python</div>
     <div class="skill" id="item3">Spring</div>
@@ -61,7 +61,7 @@
 
 <script>
   $(document).ready(function() {
-    const originalOrder = $('#availableList').children().toArray().map(item => item.id);
+    const originalOrder = $('#available-items').children().toArray().map(item => item.id);
 
     function togglePlaceholder() {
       if ($('#selectedList .skill').length === 0) {
@@ -78,15 +78,15 @@
     $('.selected-items').click(function(e) {
       // if (!$(e.target).closest('.skill').length) {
       if (!$(e.target).closest('.skill').length) {
-        $('#availableList').toggle();
+        $('#available-items').toggle();
       }
     });
 
     // Add item from availableList to selectedList
-    $('#availableList').on('click', '.skill', function() {
+    $('#available-items').on('click', '.skill', function() {
       if ($('#selectedList .skill').length < 5) {
         $('#selectedList').append($(this));
-        $('#availableList').hide();
+        $('#available-items').hide();
         togglePlaceholder();
       } else {
         alert('최대 5개의 항목만 선택할 수 있습니다.');
@@ -102,11 +102,11 @@
       var originalIndex = originalOrder.indexOf(itemId);
 
       // 선택된 항목을 원래 목록으로 이동
-      var target = $('#availableList .skill').toArray().findIndex(item => originalOrder.indexOf(item.id) > originalIndex);
+      var target = $('#available-items .skill').toArray().findIndex(item => originalOrder.indexOf(item.id) > originalIndex);
       if (target === -1) {
-        $('#availableList').append(selectedItem.clone());
+        $('#available-items').append(selectedItem.clone());
       } else {
-        $(selectedItem.clone()).insertBefore($('#availableList .skill').eq(target));
+        $(selectedItem.clone()).insertBefore($('#available-items .skill').eq(target));
       }
 
       // 선택 목록에서 항목 제거

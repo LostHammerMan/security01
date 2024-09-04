@@ -17,7 +17,7 @@ public class UserProfile {
     @Column(name = "PROFILE_IDX")
     private int profileIdx;
 
-    @Column(name = "FILE_NAME", unique = true)
+    @Column(name = "FILE_NAME")
     private String fileName;
 
     @Column(name = "FILE_URL")
