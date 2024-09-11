@@ -153,10 +153,13 @@
 
       $(document).on('click', function (){
         $('#availableList').hide();
+        
+
+
+        
       });
 
       // $('#availableList').on('click', function (e){
-      //   e.stopPropagation();
       // });
   });
 

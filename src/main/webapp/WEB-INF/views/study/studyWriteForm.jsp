@@ -157,6 +157,24 @@
         height: auto;
     }
 
+    .contactDetails {
+        display: inline-block;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem 1.75rem .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
     .ck-editor__editable[role="textbox"] {
         /* editing area */
         min-height: 500px;
@@ -243,9 +261,9 @@
                     </div>
                     <div class="availableItem-list" id="availableItems-skill">
                         <div class="item-container" id="item-container-skill">
-                            <div class="available-item" id="item1" data-name="3">Spring</div>
-                            <div class="available-item" id="item2" data-name="4">Python</div>
-                            <div class="available-item" id="item3" data-name="5">AWS</div>
+                            <div class="available-item" id="item1" data-value="1">Spring</div>
+                            <div class="available-item" id="item2" data-value="2">Python</div>
+                            <div class="available-item" id="item3" data-value="3">AWS</div>
                         </div>
                     </div>
                 </div>
@@ -260,10 +278,10 @@
                     </div>
                     <div class="availableItem-list" id="availableItems-recruit">
                         <div class="item-container" id="item-container-recruit">
-                            <div class="available-item-recruit" id="recruit1" data-name="3">백엔드</div>
-                            <div class="available-item-recruit" id="recruit2" data-name="4">프론트엔드</div>
-                            <div class="available-item-recruit" id="recruit3" data-name="5">Manager</div>
-                            <div class="available-item-recruit" id="recruit4" data-name="6">웹디자이너</div>
+                            <div class="available-item-recruit" id="recruit1" data-value="1">백엔드</div>
+                            <div class="available-item-recruit" id="recruit2" data-value="2">프론트엔드</div>
+                            <div class="available-item-recruit" id="recruit3" data-value="3">Manager</div>
+                            <div class="available-item-recruit" id="recruit4" data-value="4">웹디자이너</div>
                         </div>
                     </div>
                 </div>
@@ -274,20 +292,20 @@
             <li class="studyInfo_inputList_item">
                 <label class="selectBox_labelText">모집 마감일</label>
                 <div class="input-group mb-3">
-                    <input type="text" id="startDate" class="custom-select datepicker" placeholder="클릭 후 날짜 지정">
+                    <input type="text" id="endDate" class="custom-select datepicker" placeholder="클릭 후 날짜 지정">
                 </div>
             </li>
             <li class="studyInfo_inputList_item">
                 <label class="selectBox_labelText">연락 방법</label>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="contactMethod">
-                        <option value="kakaoTalk">카카오톡</option>
+                        <option value="kakao">카카오톡</option>
                         <option value="email">이메일</option>
                         <option value="googleForm">구글폼</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <div class="contactDetails"></div>
+                    <input class="contactDetails" id="contactDetails" placeholder="오픈톡링크"/>
                 </div>
 
             </li>
@@ -300,7 +318,7 @@
         </div>
         <div class="studyTitle_wrapper">
             <label class="selectBox_labelText">제목</label><br>
-            <input class="studyInfo_title" placeholder="제목 입력해주세요">
+            <input class="studyInfo_title" id="studyInfo_title" placeholder="제목 입력해주세요">
         </div>
         <div class="studyContents_wrapper">
             <label for="editor"></label><textarea id="editor"></textarea>
@@ -308,7 +326,7 @@
 
         <div class="studyWrite_btn_wrapper">
             <button class="btn btn-outline-danger">취소</button>
-            <button class="btn btn-primary">등록</button>
+            <button class="btn btn-primary" id="studySubmitBtn">등록</button>
         </div>
     </section>
 
@@ -333,11 +351,107 @@
         // 추가된 요소 다시 클릭하면 제거, 제거 후 원래 자리로 이동
         removeItem('#selectedList-skill', '.available-item', originalOrder, '#item-container-skill');
         removeItem('#selectedList-recruit', '.available-item-recruit', originalOrder_recruitment, '#item-container-recruit');
+
+        // contactMethod 에 따라 placeholder 값 변경
+        $('#contactMethod').change(function(){
+
+            let selectedMethod = $(this).val();
+            let placeHolderText = '';
+
+            if(selectedMethod === 'kakao'){
+                placeHolderText = '오픈톡링크';
+            }else if(selectedMethod === 'email'){
+                placeHolderText = '이메일 주소';
+            }else if(selectedMethod ==='googleForm'){
+                placeHolderText = '링크 입력';
+            }
+
+            console.log("placeHolderText = " + placeHolderText);
+
+            $('#contactDetails').attr('placeholder', placeHolderText);
+
+
+        });
+    });
+
+    // 등록 버튼 클릭시 이벤트
+    $('#studySubmitBtn').on('click', function(e){
+        e.preventDefault();
+        let selectedSkillArr = [];
+        let selectedRecruitArr = [];
+
+        // 모집구분
+        let category = $('#category').val();
+        if(category === '스터디/프로젝트'){
+            alert("모집 구분을 선택해주세요")
+            return false;
+        }
+        console.log("category = " + category);
+
+        // 모집인원
+        let recruitedNumber = $('#recruitedNumber').val();
+
+        if(recruitedNumber === '인원미정 ~ 6명이상'){
+            alert("모집 인원 선택해주세요");
+            return false;
+        }
+        console.log("recruitedNumber = " + recruitedNumber);
+
+        // 진행방식
+        let progressMethod = $('#progressMethod').val();
+        if(progressMethod === '전체'){
+            alert("진행 방식 선택해주새요");
+            return false;
+        }
+
+        console.log("progressMethod = " + progressMethod);
+
+        // 진행 기간
+        let progressPeriod = $('#progressPeriod').val();
+        if(progressPeriod === '기간 미정 ~ 5개월 이상'){
+            alert("진행 기간 선택해주세요");
+            return false;
+        }
+        console.log("progressPeriod = " + progressPeriod);
+        
+
+        // 모집 스킬
+        $('#selectedList-skill .available-item').each(function(){
+            selectedSkillArr.push($(this).data('value'));
+        });
+
+        // 모집 분야
+        $('#selectedList-recruit .available-item-recruit').each(function () {
+            selectedRecruitArr.push($(this).data('value'));
+          });
+        
+        console.log("selectedSkillArr = " + selectedSkillArr);
+        console.log("selectedRecruitArr = " + selectedRecruitArr);
+
+        // 모집 마감일
+        let endDate = $('#endDate').val();
+        if(!endDate){ // 자바스크립트에서 공백체크시 === 보다, !String 사용
+            alert("모집 마감일을 선택해주세요");
+            return false;
+        }
+        console.log("endDate = " + endDate);
+
+        // 연락 방법
+        let contactMethod = $('#contactMethod').val();
+        let contactDetails = $('#contactDetails').val();
+        console.log("contactMethod = " + contactMethod);
+        console.log("contactDetails = " + contactDetails);
+
+        // 상세 정보
+        let studyInfo_title = $('#studyInfo_title').val();
+        const studyInfo_contents = editorInstance.getData();
+        console.log("studyInfo_title = " + studyInfo_title);
+        console.log("studyInfo_contents = " + studyInfo_contents);
+
     });
 
     // placeHolder 토글
     function togglePlaceHolder(classSelector, itemSelector, holderSelector) {
-        console.log("홀더 호출됨")
         if ($(classSelector + ' ' + itemSelector).length === 0) {
             $(holderSelector).show();
         } else {
@@ -410,8 +524,13 @@
     });
 </script>
 <script>
+    // classicEditor
+    let editorInstance;
     ClassicEditor
         .create(document.querySelector('#editor'))
+        .then(editor => {
+            editorInstance = editor;
+        })
         .catch(error => {
             console.error(error);
         });

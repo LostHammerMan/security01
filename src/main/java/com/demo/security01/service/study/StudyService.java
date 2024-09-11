@@ -265,7 +265,7 @@ public class StudyService {
         return responseDtoList;
     }
 
-    //
+   
     public List<StudyResponseDto> getListByIsFin(StudyCriteria criteria){
         List<StudyResponseDto> dtos = new ArrayList<>();
 
