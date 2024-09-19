@@ -28,6 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +63,9 @@ public class StudyService {
                         () -> new EntityNotFoundException("해당 카테고리는 존재하지 않습니다")
                 );
 
+        // String -> LocalDate
+        LocalDate endDate = LocalDate.parse(requestDto.getRecruitDeadline(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
         StudyEntity studyEntity = StudyEntity.builder()
                 .category(findCategory)
                 .user(findUser)
@@ -68,7 +74,7 @@ public class StudyService {
                 .contactAddress(requestDto.getContactAddress())
                 .contactMethod(requestDto.getContactMethod())
                 .progressPeriod(requestDto.getProgressPeriod())
-                .recruitDeadline(requestDto.getRecruitDeadline())
+                .recruitDeadline(endDate)
                 .recruitedNumber(requestDto.getRecruitedNumber())
                 .progressMethod(requestDto.getProgressMethod())
                 .isFIn(0)

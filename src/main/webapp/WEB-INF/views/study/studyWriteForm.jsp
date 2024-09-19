@@ -376,13 +376,20 @@
 
     // 등록 버튼 클릭시 이벤트
     $('#studySubmitBtn').on('click', function(e){
+
+        const studyWriteForm = $('<form>', {
+            action: '${root}study/writeProc',
+            method: 'post'
+        });
+
+
         e.preventDefault();
         let selectedSkillArr = [];
         let selectedRecruitArr = [];
 
         // 모집구분
-        let category = $('#category').val();
-        if(category === '스터디/프로젝트'){
+        let cateCode = $('#category').val();
+        if(cateCode === '스터디/프로젝트'){
             alert("모집 구분을 선택해주세요")
             return false;
         }
@@ -447,6 +454,38 @@
         const studyInfo_contents = editorInstance.getData();
         console.log("studyInfo_title = " + studyInfo_title);
         console.log("studyInfo_contents = " + studyInfo_contents);
+
+        // ajax 가 아닌 가상 form
+        // - 스터디 작성 이후 스터디 리스트로 이동(리다이렉트 필요) 
+        // - 페이지 변환이 있는 경우 전통적 폼 제출 방식이 더 적합
+
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'cateCode', value: cateCode}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'title', value: studyInfo_title}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'contents', value: studyInfo_contents}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'recruitedNumber', value: recruitedNumber}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'progressPeriod', value: progressPeriod}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'progressMethod', value: progressMethod}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'recruitDeadline', value: endDate}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'recruitPositions', value: selectedRecruitArr}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'contactMethod', value: contactMethod}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'contactAddress', value: contactDetails}));
+        studyWriteForm.append($('<input>', {type: 'hidden', name: 'skillTagIdx', value: selectedSkillArr}));
+
+        // 폼 제출
+        studyWriteForm.appendTo('body').submit();
+
+    //     private Long cateCode;
+    // private String title;
+    // private String contents;
+    // private Integer recruitedNumber;
+    // private String progressPeriod;
+    // private String progressMethod; // 온라인, 오프라인
+    // private LocalDate recruitDeadline;
+    // private Set<Long> recruitPositions;
+    // private String contactMethod;
+    // private String contactAddress;
+    // private List<Long> skillTagIdx;
+
 
     });
 

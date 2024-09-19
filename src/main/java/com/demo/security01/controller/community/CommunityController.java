@@ -90,8 +90,8 @@ public class CommunityController {
 
         log.info("\tgetLoungeWriteForm called........");
         if (request.getUserPrincipal() == null){
-            model.addAttribute("msg", "로그인이 필요합니다...");
-            model.addAttribute("url", request.getContextPath() + "/community/lounge");
+//            model.addAttribute("msg", "로그인이 필요합니다...");
+//            model.addAttribute("url", request.getContextPath() + "/community/lounge");
             return "error/loginError";
         }
         model.addAttribute("loungeWriteRequest", loungeWriteRequest);
@@ -104,8 +104,8 @@ public class CommunityController {
                               BindingResult result, HttpServletRequest request, Model model, Principal principal){
         String username = principal.getName();
 
-        log.info("\t CommunityController - loungeWrite called.....");
 
+        log.info("\t CommunityController - loungeWrite called.....");
         log.info(loungeWriteRequest.getContents());
 
         if (result.hasErrors()){

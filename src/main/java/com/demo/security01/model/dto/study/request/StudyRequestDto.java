@@ -4,12 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 @Getter @Setter
+@ToString
 @NoArgsConstructor
 public class StudyRequestDto {
 
@@ -19,14 +20,14 @@ public class StudyRequestDto {
     private Integer recruitedNumber;
     private String progressPeriod;
     private String progressMethod; // 온라인, 오프라인
-    private LocalDate recruitDeadline;
+    private String recruitDeadline;
     private Set<Long> recruitPositions;
     private String contactMethod;
     private String contactAddress;
     private List<Long> skillTagIdx;
 
     @Builder
-    public StudyRequestDto(Long cateCode, String title, String contents, Integer recruitedNumber, String progressPeriod, String progressMethod, LocalDate recruitDeadline, Set<Long> recruitPositions, String contactMethod, String contactAddress, List<Long> skillTagIdx) {
+    public StudyRequestDto(Long cateCode, String title, String contents, Integer recruitedNumber, String progressPeriod, String progressMethod, String recruitDeadline, Set<Long> recruitPositions, String contactMethod, String contactAddress, List<Long> skillTagIdx) {
         this.cateCode = cateCode;
         this.title = title;
         this.contents = contents;

@@ -1,15 +1,11 @@
 package com.demo.security01.service.study;
 
-import com.demo.security01.entity.study.StudyEntity;
-import com.demo.security01.model.dto.study.request.StudyCriteria;
-import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
-import com.demo.security01.model.dto.study.request.StudyRequestDto;
-import com.demo.security01.model.dto.study.response.StudyResponseDto;
-import com.demo.security01.repository.study.StudyRepository;
-import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
-import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Before;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.demo.security01.model.dto.study.request.StudyCriteria;
+import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
+import com.demo.security01.model.dto.study.request.StudyRequestDto;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
+import com.demo.security01.repository.study.StudyRepository;
+import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
+import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @Slf4j
@@ -44,7 +44,7 @@ class StudyServiceTest {
     @DisplayName("스터디 저장 성공")
     void studyGenerateSuccess(){
 
-        studyService.studyDeleteAll();
+//        studyService.studyDeleteAll();
 
 
         Set<Long> positionIdx = new HashSet<>();
@@ -54,19 +54,21 @@ class StudyServiceTest {
         List<Long> tagIdx = new ArrayList<>();
 //        tagIdx.add(3L);
 //        tagIdx.add(4L);
-        tagIdx.add(5L);
+        tagIdx.add(1L);
+        tagIdx.add(2L);
+        tagIdx.add(3L);
 
         // category code : 7 - 프로젝트, 8 - 스터디
         for (int i=0; i < 10; i++){
             StudyRequestDto studyRequestDto = StudyRequestDto.builder()
-                    .cateCode(8L)
+                    .cateCode(5L)
                     .title(i +"번째 프로젝트 모집합니다.")
                     .contents("열심히 하실분")
                     .contactMethod("핸드폰")
                     .contactAddress("010-000-0000")
                     .progressMethod("온라인")
                     .progressPeriod("6개월")
-                    .recruitDeadline(LocalDate.now())
+                    .recruitDeadline("2024-10-09")
                     .recruitedNumber(6)
                     .recruitPositions(positionIdx)
                     .skillTagIdx(tagIdx)
@@ -119,7 +121,7 @@ class StudyServiceTest {
     @Test
     @DisplayName("단건 조회 - 성공")
     void getStudy(){
-        Long idx = 6L;
+        Long idx = 4L;
 
         StudyResponseDto response = studyService.getStudy(idx);
         log.info("response = {}", response.toString());
@@ -129,20 +131,20 @@ class StudyServiceTest {
     @Test
     @DisplayName("스터디 리스트 - 성공")
     void getStudyList(){
-        Pageable pageable = PageRequest.of(1, 5);
+        Pageable pageable = PageRequest.of(0, 9);
 
         StudyCriteria criteria = new StudyCriteria();
 
-        List<Long> skillIndexes = new ArrayList<>();
-        skillIndexes.add(5L);
+//        List<Long> skillIndexes = new ArrayList<>();
+//        skillIndexes.add(5L);
+//
+//        List<Long> positions = new ArrayList<>();
+//        positions.add(2L);
 
-        List<Long> positions = new ArrayList<>();
-        positions.add(2L);
+//        criteria.setSkillIdx(skillIndexes);
+//        criteria.setPositionIdx(positions);
 
-        criteria.setSkillIdx(skillIndexes);
-        criteria.setPositionIdx(positions);
-
-        log.info("criteria = {}", criteria);
+//        log.info("criteria = {}", criteria);
 
 //        studyService.getStudyList(indexes);
 //        for (StudyResponseDto study : studyService.getStudyList(criteria, pageable)){
