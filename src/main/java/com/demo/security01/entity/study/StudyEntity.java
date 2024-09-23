@@ -1,6 +1,7 @@
 package com.demo.security01.entity.study;
 
 import com.demo.security01.entity.CategoryEntity;
+import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.lounge.BoardLike;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
@@ -87,7 +88,16 @@ public class StudyEntity {
 
     @Column(name = "IS_FIN")
     private Integer isFIn;
+    
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
+    private List<CommentEntity> commentEntities;
 
+    @Column(name = "LIKE_COUNT", columnDefinition = "integer default 0")
+    private Integer likeCount = 0;
+    
+    @Column(name = "VIEW_COUNT", columnDefinition = "integer default 0")
+    private Integer viewCount = 0;
+    
 //    public User getUser() {
 //        return user;
 //    }
@@ -147,4 +157,12 @@ public class StudyEntity {
                 ", studySkillTagEntity=" + studySkillTagEntity +
                 '}';
     }
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
+	}
+	
+	public void setLikeCount(int num) {
+		this.likeCount = num;
+	}
 }

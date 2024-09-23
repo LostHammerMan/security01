@@ -1,5 +1,14 @@
 package com.demo.security01.service.community;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.demo.security01.config.exception.LoungeNotFountException;
 import com.demo.security01.config.exception.UserNotMatchException;
 import com.demo.security01.entity.CategoryEntity;
@@ -13,20 +22,9 @@ import com.demo.security01.repository.category.CategoryRepository;
 import com.demo.security01.repository.comment.CommentRepository;
 import com.demo.security01.repository.community.LoungeRepository;
 import com.demo.security01.repository.user.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

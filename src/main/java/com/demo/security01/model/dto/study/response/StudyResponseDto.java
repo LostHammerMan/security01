@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -23,10 +24,15 @@ public class StudyResponseDto {
     private String contactMethod;
     private String contactAddress;
     private Set<String> skillTags;
+    private LocalDateTime regDate;
     private Integer isFin;
+    private String username;
+    private Integer likeCount;
+    private Integer viewCount;
 
     @Builder
-    public StudyResponseDto(String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, Set<String> recruitPositions, String contactMethod, String contactAddress, Set<String> skillTags, Integer isFin) {
+    public StudyResponseDto(String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, Set<String> recruitPositions, String contactMethod, 
+    		String contactAddress, Set<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount) {
         this.categoryName = categoryName;
         this.title = title;
         this.contents = contents;
@@ -38,6 +44,10 @@ public class StudyResponseDto {
         this.contactAddress = contactAddress;
         this.skillTags = skillTags;
         this.isFin = isFin;
+        this.regDate = regDate;
+        this.username = username;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
     }
 
     @Override

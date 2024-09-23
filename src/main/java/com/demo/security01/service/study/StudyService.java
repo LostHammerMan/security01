@@ -152,7 +152,8 @@ public class StudyService {
                 Study_Positions study_positions = Study_Positions.builder()
                         .positions(recruitPositions)
                         .studyEntity(findStudy).build();
-
+            	
+                
                 study_positionsRepository.save(study_positions);
             }
         }
@@ -215,6 +216,8 @@ public class StudyService {
         for (Study_Positions study_position : findStudy.getStudy_positions()){
             positionNames.add(study_position.getPositions().getPositionName());
         }
+        
+        findStudy.setViewCount(findStudy.getViewCount() + 1);
 
         // entity -> dto
         StudyResponseDto responseDto = StudyResponseDto.builder()
@@ -226,6 +229,8 @@ public class StudyService {
                 .progressPeriod(findStudy.getProgressPeriod())
                 .recruitDeadline(findStudy.getRecruitDeadline())
                 .recruitedNumber(findStudy.getRecruitedNumber())
+                .viewCount(findStudy.getViewCount())
+                .likeCount(findStudy.getLikeCount())
                 .skillTags(skillTagNames)
                 .recruitPositions(positionNames)
                 .isFin(findStudy.getIsFIn()).build();
@@ -264,6 +269,10 @@ public class StudyService {
                     .recruitedNumber(findStudy.getRecruitedNumber())
                     .skillTags(skillTagNames)
                     .recruitPositions(positionNames)
+                    .regDate(findStudy.getRegDate())
+                    .username(findStudy.getUser().getUsername())
+                    .viewCount(findStudy.getViewCount())
+                    .likeCount(findStudy.getLikeCount())
                     .isFin(findStudy.getIsFIn()).build();
 
             responseDtoList.add(responseDto);

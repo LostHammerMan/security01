@@ -19,7 +19,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        gap: 4rem;
+        gap: 1rem;
         margin-left: auto;
         margin-right: auto;
         font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -65,8 +65,10 @@
         flex-direction: column;
         justify-content: flex-start;
         padding: 20px 25px 0;
-        width: 300px;
-        height: 340px;
+        width: auto;
+        max-width: 300px;
+        /* height: 340px; */
+        height: auto;
         background: #fff;
         border: 2px solid #d1d1d1;
         border-radius: 30px;
@@ -168,6 +170,7 @@
         grid-gap: 10px;
         gap: 10px;
         align-items: center;
+        margin-right: 5px;
     }
 
     .userInfo_avatar {
@@ -205,12 +208,13 @@
 
     .loungeContainerAside {
         display: flex;
-        width: 25%;
+        width: 17%;
         flex-direction: column;
         align-items: initial;
         justify-content: flex-start;
         flex-shrink: 0;
         gap: 5rem;
+        margin-right: 50px;
     }
 
     .adImg {
@@ -227,7 +231,7 @@
 </style>
 
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
-<section class="pt-5 pb-5">
+<section class="pt-5 pb-5" style="width: 100%;">
     <div class="container_loungeContainer">
 
         <main class="loungeContainerMain">
@@ -258,7 +262,77 @@
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 <script>
     $(document).ready(function (){
-		
+		getStudyList();
+        
     });
+
+    function getStudyList(){  
+            $.ajax({
+                url: '${root}api/study/studyList',
+                method: 'GET',
+                success: function(result){
+                    result.forEach(function(item){
+                    let itemHtml = '';
+                    itemHtml += `
+                <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
+                    <%--<a href="${root}community/lounge/${allLounge.idx}">--%>
+                        <li>
+                            <div class="loungeItem_badgeWrapper">
+                                <div class="badge_categoryWrapper">
+                                    <div class="badge_category">
+                                        ${'${item.categoryName}'}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="loungeItem_regDate">
+                                <p class="loungeItem_regDateTitle">등록일 |</p>
+                                <p>${'${item.regDate}'}</p>
+                            </div>
+                            <h1 class="loungeItem_title">${'${item.title}'}</h1>
+                            <ul class="loungeItem_positions">
+                                ${'${item.recruitPositions.map(position => `<li>123</li>`)}'}
+                                <%--<li>${'${item.recruitPositions.map(position => <li>123</li>)}'}</li>-->
+                            </ul>
+                            <ul class="loungeItem_skill">
+                                <li>${'${item.skillTags}'}</li>
+                            </ul> 
+                            <div class="loungeItem_boarder"></div>
+                            <section class="loungeItem_info">
+                                <div class="loungeItem_userInfo">
+                                    <div class="userInfo_avatar">
+                                        <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
+                                    </div>
+<%--                                    ${root}api/profileImages/${allLounge.user.userProfile.fileName}--%>
+                                    <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
+                                </div>
+                                <div class="loungeItem_viewsAndComments">
+                                    <div class="loungeItem_views">
+                                        <i class="fa-regular fa-eye" style="color: #999999;"></i>
+                                        <p>${'${item.viewCount}'}</p>
+                                    </div>
+                                    <div class="loungeItem_views">
+                                        <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                                        <p>${'${item.likeCount}'}</p>
+                                    </div>
+                                    <div class="loungeItem_views">
+                                        <i class="fa-regular fa-comment" style="color: #999999;"></i>
+                                        <p>${'${item.commentCount}'}</p>
+                                    </div>
+                                </div>
+                            </section>
+                        </li>
+                </a>
+                   `;
+
+                   $('.loungeList_container').append(itemHtml);
+                    });
+                   
+                },
+                error: function(err){
+                    console.log('스터디 목록 불러오기 실패');
+                }
+
+            });
+        }
 </script>
 </html>

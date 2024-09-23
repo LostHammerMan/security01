@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -25,9 +26,11 @@ public class StudyRequestDto {
     private String contactMethod;
     private String contactAddress;
     private List<Long> skillTagIdx;
+//    private LocalDate regDate;
 
     @Builder
-    public StudyRequestDto(Long cateCode, String title, String contents, Integer recruitedNumber, String progressPeriod, String progressMethod, String recruitDeadline, Set<Long> recruitPositions, String contactMethod, String contactAddress, List<Long> skillTagIdx) {
+    public StudyRequestDto(Long cateCode, String title, String contents, Integer recruitedNumber, String progressPeriod, 
+    		String progressMethod, String recruitDeadline, Set<Long> recruitPositions, String contactMethod, String contactAddress, List<Long> skillTagIdx) {
         this.cateCode = cateCode;
         this.title = title;
         this.contents = contents;
@@ -39,5 +42,6 @@ public class StudyRequestDto {
         this.contactMethod = contactMethod;
         this.contactAddress = contactAddress;
         this.skillTagIdx = skillTagIdx;
+//        this.regDate = regDate;
     }
 }

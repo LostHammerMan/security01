@@ -1,17 +1,17 @@
 package com.demo.security01.controller.api;
 
-import com.demo.security01.entity.lounge.LoungeEntity;
-import com.demo.security01.model.dto.community.LoungeListResponseDto;
-import com.demo.security01.service.community.LoungeService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.demo.security01.model.dto.community.LoungeListResponseDto;
+import com.demo.security01.service.community.LoungeService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor

@@ -29,8 +29,16 @@ public class BoardLike {
     @JoinColumn(name = "STUDY_IDX", nullable = true)
     private StudyEntity studyEntity;
 
+    // 라운지 관련
     public BoardLike(User user, LoungeEntity lounge) {
         this.user = user;
         this.lounge = lounge;
+        
+    }
+    
+    // 스터디 관련
+    public BoardLike(User user, StudyEntity study) {
+    	this.user = user;
+    	this.studyEntity = study;
     }
 }
