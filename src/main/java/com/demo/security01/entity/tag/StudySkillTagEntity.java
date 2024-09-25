@@ -30,8 +30,15 @@ public class StudySkillTagEntity {
     public Long getSkillTagIdx(){
         return skillTag.getIdx();
     }
+    
+	public String getStudyImgName() {
+//		return study.getSkillImgName();
+		return skillTag.getSkillImgName();
+	}
 
-    @Builder
+	
+
+	@Builder
     public StudySkillTagEntity(StudyEntity study, SkillTagEntity skillTag) {
         this.study = study;
         this.skillTag = skillTag;

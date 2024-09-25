@@ -206,13 +206,16 @@ public class StudyService {
                 );
 
         // 스킬 태그
-        Set<String> skillTagNames = new HashSet<>();
+//        Set<String> skillTagNames = new HashSet<>();
+        List<String> skillTagNames = new ArrayList<String>();
         for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
-            skillTagNames.add(skillTag.getSkillTagName());
+//            skillTagNames.add(skillTag.getSkillTagName());
+            skillTagNames.add(skillTag.getStudyImgName());
+            log.info("skillTag.getStudyImgName() = ", skillTag.getStudyImgName());
         }
 
         // 포지션
-        Set<String> positionNames = new HashSet<>();
+        List<String> positionNames = new ArrayList<String>();
         for (Study_Positions study_position : findStudy.getStudy_positions()){
             positionNames.add(study_position.getPositions().getPositionName());
         }
@@ -247,15 +250,16 @@ public class StudyService {
 //        for (StudyEntity findStudy : studyRepository.getStudyList(criteria, pageable)){
         for (StudyEntity findStudy : studyRepository.getStudyPageComplex(criteria, pageable)){
             // 스킬 태그
-            Set<String> skillTagNames = new HashSet<>();
+            List<String> skillTagNames = new ArrayList<String>();
             for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
-                skillTagNames.add(skillTag.getSkillTagName());
+                skillTagNames.add(skillTag.getStudyImgName());
             }
 
             // 포지션
-            Set<String> positionNames = new HashSet<>();
+//            Set<String> postionNames = new HashSet<>();
+            List<String> positionNames = new ArrayList<String>();
             for (Study_Positions study_position : findStudy.getStudy_positions()){
-                positionNames.add(study_position.getPositions().getPositionName());
+            	positionNames.add(study_position.getPositions().getPositionName());
             }
 
             StudyResponseDto responseDto = StudyResponseDto.builder()

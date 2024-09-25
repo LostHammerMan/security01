@@ -98,6 +98,8 @@ public class StudyEntity {
     @Column(name = "VIEW_COUNT", columnDefinition = "integer default 0")
     private Integer viewCount = 0;
     
+    
+    
 //    public User getUser() {
 //        return user;
 //    }
@@ -157,6 +159,7 @@ public class StudyEntity {
                 ", studySkillTagEntity=" + studySkillTagEntity +
                 '}';
     }
+    
 
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;

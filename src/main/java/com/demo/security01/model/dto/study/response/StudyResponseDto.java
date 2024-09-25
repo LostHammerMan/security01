@@ -20,19 +20,22 @@ public class StudyResponseDto {
     private Integer recruitedNumber;
     private String progressPeriod;
     private LocalDate recruitDeadline;
-    private Set<String> recruitPositions;
+    private List<String> recruitPositions;
+//    private Set<String> recruitPositions;
     private String contactMethod;
     private String contactAddress;
-    private Set<String> skillTags;
+    private List<String> skillTags;
+//    private Set<String> skillTags;
     private LocalDateTime regDate;
     private Integer isFin;
     private String username;
     private Integer likeCount;
     private Integer viewCount;
+    private String skillImgName;
 
     @Builder
-    public StudyResponseDto(String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, Set<String> recruitPositions, String contactMethod, 
-    		String contactAddress, Set<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount) {
+    public StudyResponseDto(String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, List<String> recruitPositions, String contactMethod, 
+    		String contactAddress, List<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount, String skillImgName) {
         this.categoryName = categoryName;
         this.title = title;
         this.contents = contents;
@@ -48,6 +51,7 @@ public class StudyResponseDto {
         this.username = username;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
+        this.skillImgName = skillImgName;
     }
 
     @Override

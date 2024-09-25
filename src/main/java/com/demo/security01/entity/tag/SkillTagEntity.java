@@ -17,6 +17,9 @@ public class SkillTagEntity {
 
     @Column(name = "TAG_NAME")
     private String tagName;
+    
+    @Column(name = "SKILL_IMG_NAME")
+    private String skillImgName;
 
     @OneToMany(mappedBy = "skillTag", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySkillTagEntity> studySkillTagEntity;
@@ -28,4 +31,10 @@ public class SkillTagEntity {
     public Long getIdx() {
         return idx;
     }
+
+	public String getSkillImgName() {
+		return skillImgName;
+	}
+
+    
 }

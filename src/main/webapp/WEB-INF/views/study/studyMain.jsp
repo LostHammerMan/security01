@@ -65,16 +65,21 @@
         flex-direction: column;
         justify-content: flex-start;
         padding: 20px 25px 0;
-        width: auto;
-        max-width: 300px;
+        width: 300px;
+        /* max-width: 300px; */
         /* height: 340px; */
-        height: auto;
+        height: 340px;
         background: #fff;
         border: 2px solid #d1d1d1;
         border-radius: 30px;
         position: relative;
         cursor: pointer;
         transition: .2s ease-in
+    }
+
+    .loungeItem_list {
+        display: flex;
+        flex-direction: column;
     }
 
     .loungeItem_badgeWrapper {
@@ -101,7 +106,6 @@
     .loungeItem_regDate {
         display: flex;
         font-size: 14px;
-        grid-gap: 8px;
         gap: 8px;
         color: #999;
         font-weight: 500;
@@ -110,14 +114,44 @@
 
     .loungeItem_title {
         font-size: 17px;
-        min-height: 50px;
-        line-height: 28px;
+        /* min-height: 50px; */
+        /* line-height: 28px; */
         font-weight: 900;
         /*letter-spacing: -0.5em;*/
-        margin: 7px 0 10px;
+        /* margin: 7px 0 10px; */
         word-break: break-all;
         overflow: hidden;
     }
+
+    .loungeItem_positions {
+        display: flex;
+        height: 22px;
+        margin-bottom: 7px;
+        /* grid-gap: 3px; */
+        gap: 3px;
+        padding: 0px;
+    }
+
+    .skillImg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .loungeItem_boarder {
+        border-top: 2px solid #F2F2F2;
+        margin-top: 0.5rem;
+    }
+
+    .loungeItem_info {
+        display: flex;
+        font-size: 14px;
+        font-weight: 500;
+        justify-content: space-between;
+        margin-top: 8px;
+        align-items: center;
+    }
+
+
 
     ul {
         display: block;
@@ -151,19 +185,9 @@
         font-weight: bold;
     }
 
-    .loungeItem_boarder {
-        border-top: 2px solid #F2F2F2;
-        margin-top: 5rem;
-    }
+    
 
-    .loungeItem_info {
-        display: flex;
-        font-size: 14px;
-        font-weight: 500;
-        justify-content: space-between;
-        margin-top: 8px;
-        align-items: center;
-    }
+    
 
     .loungeItem_userInfo {
         display: flex;
@@ -191,6 +215,27 @@
         color: #999;
         grid-gap: 5px;
         gap: 5px;
+    }
+
+    
+
+    .loungeItem_tag {
+        padding: 3px 10px;
+        grid-gap: 5px;
+        gap: 5px;
+        height: 22px;
+        background: #f2f4f8;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 16px;
+        color: #3e86f5;
+    }
+
+    .loungeItem_skill {
+        display: flex;
+        gap: 5px;
+        padding: 0px;
     }
 
     li {
@@ -224,9 +269,6 @@
 
     }
 
-    .card_bottom {
-
-    }
 
 </style>
 
@@ -275,8 +317,7 @@
                     let itemHtml = '';
                     itemHtml += `
                 <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
-                    <%--<a href="${root}community/lounge/${allLounge.idx}">--%>
-                        <li>
+                        <li class="loungeItem_list">
                             <div class="loungeItem_badgeWrapper">
                                 <div class="badge_categoryWrapper">
                                     <div class="badge_category">
@@ -290,11 +331,31 @@
                             </div>
                             <h1 class="loungeItem_title">${'${item.title}'}</h1>
                             <ul class="loungeItem_positions">
-                                ${'${item.recruitPositions.map(position => `<li>123</li>`)}'}
-                                <%--<li>${'${item.recruitPositions.map(position => <li>123</li>)}'}</li>-->
+
+                            `;
+
+                            item.recruitPositions.forEach(function (position) {
+                                itemHtml += `<li class="loungeItem_tag">${'${position}'}</li>`;
+                              });
+
+                            
+                            itemHtml += `
                             </ul>
                             <ul class="loungeItem_skill">
-                                <li>${'${item.skillTags}'}</li>
+                            `;
+                            
+                            item.skillTags.forEach(function(imgName){
+                                console.log(imgName);
+                                // itemHtml += `<li>${'${imgName}'}</li>`;
+                                itemHtml += `<li><img class="skillImg" src="${root}static/img/study/${'${imgName}'}"></li>`;
+                                // ${root}static/img/community/42.png
+                              
+                            });
+
+                            
+
+
+                            itemHtml += `    
                             </ul> 
                             <div class="loungeItem_boarder"></div>
                             <section class="loungeItem_info">
@@ -302,7 +363,7 @@
                                     <div class="userInfo_avatar">
                                         <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
                                     </div>
-<%--                                    ${root}api/profileImages/${allLounge.user.userProfile.fileName}--%>
+                                
                                     <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
                                 </div>
                                 <div class="loungeItem_viewsAndComments">
@@ -320,6 +381,7 @@
                                     </div>
                                 </div>
                             </section>
+                           
                         </li>
                 </a>
                    `;
