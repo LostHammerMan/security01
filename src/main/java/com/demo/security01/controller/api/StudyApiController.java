@@ -6,8 +6,11 @@ import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.service.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +30,16 @@ public class StudyApiController {
     private final StudyService studyService;
 
     @GetMapping("/study/studyList")
-    public ResponseEntity<?> getStudyList(StudyCriteria criteria, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "9") int size){
+    public ResponseEntity<?> getStudyList(StudyCriteria criteria,@PageableDefault(size = 10, page = 0)  Pageable pageable){
+//    	public ResponseEntity<?> getStudyList(StudyCriteria criteria, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "9") int size){
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
         log.info("Criteria = {}", criteria);
-        Pageable paging = PageRequest.of(page, size);
-        List<StudyResponseDto> result = studyService.getStudyList(criteria, paging);
+//        Pageable paging = PageRequest.of(page, size);
+        List<StudyResponseDto> result = studyService.getStudyList(criteria, pageable);
 //        return result;
+//        Page<StudyResponseDto> result2 = studyService.getStudyList(criteria, paging);
+//        return ResponseEntity.ok().body(result);
         return ResponseEntity.ok().body(result);
     }
 

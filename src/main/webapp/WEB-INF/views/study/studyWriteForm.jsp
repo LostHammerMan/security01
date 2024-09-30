@@ -474,17 +474,7 @@
         // 폼 제출
         studyWriteForm.appendTo('body').submit();
 
-    //     private Long cateCode;
-    // private String title;
-    // private String contents;
-    // private Integer recruitedNumber;
-    // private String progressPeriod;
-    // private String progressMethod; // 온라인, 오프라인
-    // private LocalDate recruitDeadline;
-    // private Set<Long> recruitPositions;
-    // private String contactMethod;
-    // private String contactAddress;
-    // private List<Long> skillTagIdx;
+
 
 
     });

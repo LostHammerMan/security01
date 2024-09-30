@@ -269,6 +269,33 @@
 
     }
 
+    .study_paginationWrapper {
+        display: flex;
+        justify-content: center;
+        margin: 32px 0;
+        width: 120vh;
+    }
+
+    .pagination {
+        display: inline-block;
+    }
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+
+    .pagination a.active {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .pagination a:hover:not(.active){
+        background-color: #ddd;
+    }
+
 
 </style>
 
@@ -283,7 +310,11 @@
             </header>
             <ul class="loungeList_container">
             </ul>
-
+            <div class="study_paginationWrapper">
+                <div class="pagination">
+                    
+                </div>
+        </div>
         </main>
         <aside class="loungeContainerAside">
             <div>
@@ -293,6 +324,7 @@
                 <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
             </div>
         </aside>
+        
 
     </div>
 </section>
@@ -305,6 +337,7 @@
 <script>
     $(document).ready(function (){
 		getStudyList();
+        getPagingList();
         
     });
 
@@ -315,6 +348,7 @@
                 success: function(result){
                     result.forEach(function(item){
                     let itemHtml = '';
+                    let pagingHtml = '';
                     itemHtml += `
                 <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
                         <li class="loungeItem_list">
@@ -352,9 +386,6 @@
                               
                             });
 
-                            
-
-
                             itemHtml += `    
                             </ul> 
                             <div class="loungeItem_boarder"></div>
@@ -385,16 +416,33 @@
                         </li>
                 </a>
                    `;
-
-                   $('.loungeList_container').append(itemHtml);
-                    });
-                   
+                            
+                        $('.loungeList_container').append(itemHtml);
+                    })
                 },
                 error: function(err){
                     console.log('스터디 목록 불러오기 실패');
                 }
-
+                
             });
-        }
+        
+    }
+    
+    // 페이징 
+    function getPagingList() { 
+        // paging 
+        let pagingHtml = '';
+        pagingHtml += `
+                    <a href="#">&laquo</a>
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">&raquo</a>
+                `;
+
+        $('.pagination').append(pagingHtml);
+
+                    
+         }
 </script>
 </html>

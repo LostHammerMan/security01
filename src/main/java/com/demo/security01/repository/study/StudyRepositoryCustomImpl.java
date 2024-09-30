@@ -89,9 +89,9 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
         log.info("========= StudyRepositoryCustomImpl ============");
         log.info("\t\t getStudyPageComplex called...");
         List<StudyEntity> contents = getStudyList(criteria, pageable);
-        Long count = getStudyListCount(criteria);
+        Long totalCount = getStudyListCount(criteria);
 
-        return new PageImpl<>(contents, pageable, count);
+        return new PageImpl<>(contents, pageable, totalCount);
     }
 
     // 마감날짜 도달시 update

@@ -1,10 +1,9 @@
 package com.demo.security01.model.dto.paging;
 
 import com.demo.security01.config.annotation.PagingAnno;
-import com.demo.security01.config.converter.PagingConverter2;
+
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.convert.converter.Converter;
 
 // 페이지 자체를 관리하는 객체, 페이지당 보여줄 개수 담당
 @ToString

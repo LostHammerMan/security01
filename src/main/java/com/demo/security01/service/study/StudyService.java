@@ -1,5 +1,17 @@
 package com.demo.security01.service.study;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.demo.security01.config.exception.UserNotMatchException;
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.study.RecruitPositions;
@@ -8,7 +20,7 @@ import com.demo.security01.entity.study.Study_Positions;
 import com.demo.security01.entity.tag.SkillTagEntity;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
-import com.demo.security01.model.dto.paging.Paging;
+import com.demo.security01.model.dto.paging.PageResponseDto;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
@@ -20,21 +32,9 @@ import com.demo.security01.repository.study.study_positions.Study_PositionsRepos
 import com.demo.security01.repository.study.study_skill.SkillTagRepository;
 import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
 import com.demo.security01.repository.user.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -243,6 +243,7 @@ public class StudyService {
 
     // 목록 조회 + 페이징
     public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
+//    	public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
         log.info("======== StudyService ============");
         log.info("\t\t getStudyList called.....");
 
@@ -281,6 +282,10 @@ public class StudyService {
 
             responseDtoList.add(responseDto);
         }
+        
+        PageResponseDto<StudyResponseDto> result = PageResponseDto.builder()
+        		.responseDtoList(responseDtoList)
+        		.
         return responseDtoList;
     }
 
