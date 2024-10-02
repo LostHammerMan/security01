@@ -346,7 +346,9 @@
                 url: '${root}api/study/studyList',
                 method: 'GET',
                 success: function(result){
-                    result.forEach(function(item){
+                    
+                    // 본문
+                    result.dtoList.forEach(function(item){
                     let itemHtml = '';
                     let pagingHtml = '';
                     itemHtml += `
@@ -418,7 +420,28 @@
                    `;
                             
                         $('.loungeList_container').append(itemHtml);
-                    })
+                    });
+
+                    // 본문 끝
+                    // 페이징
+                    // paging 
+        let pagingHtml = '';
+        pagingHtml += `
+                    <a href="#">&laquo</a>
+                    `;
+
+                    result.pageNumList.forEach(function(pageNum){
+                        pagingHtml += `
+                        <a href="#">${'${pageNum}'}</a> 
+                        `;
+                    });
+                    
+                    <!--<a href="#">&raquo</a>-->
+                
+
+        $('.pagination').append(pagingHtml);
+        
+        // 페이징 끝
                 },
                 error: function(err){
                     console.log('스터디 목록 불러오기 실패');
@@ -428,21 +451,6 @@
         
     }
     
-    // 페이징 
-    function getPagingList() { 
-        // paging 
-        let pagingHtml = '';
-        pagingHtml += `
-                    <a href="#">&laquo</a>
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">&raquo</a>
-                `;
-
-        $('.pagination').append(pagingHtml);
-
-                    
-         }
+    
 </script>
 </html>

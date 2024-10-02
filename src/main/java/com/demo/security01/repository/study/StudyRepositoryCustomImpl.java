@@ -65,15 +65,16 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 //        return PageableExecutionUtils.getPage(entities, pageable, count);
     }
 
-    // count 쿼리
+    // count 쿼리 
+    // study 개수만 구하면 되는데 왜 left join?
     @Override
     public Long getStudyListCount(StudyCriteria criteria) {
-        Long count = queryFactory.select(studyEntity.count())
+        Long count = queryFactory.select(studyEntity.idx.countDistinct())
                 .from(studyEntity)
-                .leftJoin(studySkillTagEntity).on(studySkillTagEntity.study.eq(studyEntity))
-                .leftJoin(skillTagEntity).on(studySkillTagEntity.skillTag.eq(skillTagEntity))
-                .leftJoin(study_Positions).on(study_Positions.studyEntity.eq(studyEntity))
-                .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
+//                .leftJoin(studySkillTagEntity).on(studySkillTagEntity.study.eq(studyEntity))
+//                .leftJoin(skillTagEntity).on(studySkillTagEntity.skillTag.eq(skillTagEntity))
+//                .leftJoin(study_Positions).on(study_Positions.studyEntity.eq(studyEntity))
+//                .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
                         skillIdxEq(criteria.getSkillIdx()),

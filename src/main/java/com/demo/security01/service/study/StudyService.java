@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -242,14 +243,17 @@ public class StudyService {
     }
 
     // 목록 조회 + 페이징
-    public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
+    public PageResponseDto<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
 //    	public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
         log.info("======== StudyService ============");
         log.info("\t\t getStudyList called.....");
+        
+        Page<StudyEntity> studyList= studyRepository.getStudyPageComplex(criteria, pageable);
 
         List<StudyResponseDto> responseDtoList = new ArrayList<>();
 //        for (StudyEntity findStudy : studyRepository.getStudyList(criteria, pageable)){
-        for (StudyEntity findStudy : studyRepository.getStudyPageComplex(criteria, pageable)){
+//        for (StudyEntity findStudy : studyRepository.getStudyPageComplex(criteria, pageable)){
+    	for (StudyEntity findStudy : studyList){
             // 스킬 태그
             List<String> skillTagNames = new ArrayList<String>();
             for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
@@ -283,10 +287,15 @@ public class StudyService {
             responseDtoList.add(responseDto);
         }
         
-        PageResponseDto<StudyResponseDto> result = PageResponseDto.builder()
-        		.responseDtoList(responseDtoList)
-        		.
-        return responseDtoList;
+        // 제네릭 클래스로 빌더를 만든경우, builder 앞에 제네릭 타입 들어감 주의!
+        PageResponseDto<StudyResponseDto> result = PageResponseDto.<StudyResponseDto>builder()
+        		.dtoList(responseDtoList)
+        		.pageable(studyList.getPageable())
+        		.totalCount(studyList.getTotalElements())
+        		.build();
+        
+        
+        return result;
     }
 
    
