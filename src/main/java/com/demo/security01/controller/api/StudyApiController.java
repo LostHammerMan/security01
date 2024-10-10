@@ -43,6 +43,7 @@ public class StudyApiController {
 //        return ResponseEntity.ok().body(result);
         log.info("result.getPageable = {}", result.getPageable());
         log.info("result.totalCount() = {}", result.getTotalCount());
+        log.info("result.realEnd = {}", result.getRealEnd());
         return ResponseEntity.ok().body(result);
     }
 

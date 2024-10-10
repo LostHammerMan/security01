@@ -257,6 +257,7 @@ public class StudyService {
             // 스킬 태그
             List<String> skillTagNames = new ArrayList<String>();
             for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
+//                skillTagNames.add(skillTag.getStudyImgName());
                 skillTagNames.add(skillTag.getStudyImgName());
             }
 
@@ -264,7 +265,8 @@ public class StudyService {
 //            Set<String> postionNames = new HashSet<>();
             List<String> positionNames = new ArrayList<String>();
             for (Study_Positions study_position : findStudy.getStudy_positions()){
-            	positionNames.add(study_position.getPositions().getPositionName());
+//            	positionNames.add(study_position.getPositions().getPositionName());
+            	positionNames.add(study_position.getPostsionName());
             }
 
             StudyResponseDto responseDto = StudyResponseDto.builder()

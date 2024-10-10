@@ -59,10 +59,10 @@ class StudyServiceTest {
         tagIdx.add(3L);
 
         // category code : 7 - 프로젝트, 8 - 스터디
-        for (int i=0; i < 10; i++){
+        for (int i=0; i < 200; i++){
             StudyRequestDto studyRequestDto = StudyRequestDto.builder()
                     .cateCode(5L)
-                    .title(i +"번째 프로젝트 모집합니다.")
+                    .title(i +"번째 스터디 모집합니다.")
                     .contents("열심히 하실분")
                     .contactMethod("핸드폰")
                     .contactAddress("010-000-0000")

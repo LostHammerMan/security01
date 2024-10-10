@@ -25,10 +25,16 @@ public class Study_Positions {
     public RecruitPositions getPositions() {
         return positions;
     }
+    
+    public String getPostsionName() {
+    	return positions.getPositionName();
+    }
 
     @Builder
     public Study_Positions(StudyEntity studyEntity, RecruitPositions positions) {
         this.studyEntity = studyEntity;
         this.positions = positions;
     }
+    
+    
 }

@@ -1,14 +1,15 @@
 package com.demo.security01.model.dto.study.response;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -26,6 +27,8 @@ public class StudyResponseDto {
     private String contactAddress;
     private List<String> skillTags;
 //    private Set<String> skillTags;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
     private Integer isFin;
     private String username;

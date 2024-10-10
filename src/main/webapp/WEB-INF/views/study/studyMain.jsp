@@ -47,7 +47,7 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: initial;
-        width: 70%;
+        width: 97%;
         gap: 1.5rem;
     }
 
@@ -185,10 +185,6 @@
         font-weight: bold;
     }
 
-    
-
-    
-
     .loungeItem_userInfo {
         display: flex;
         grid-gap: 10px;
@@ -216,8 +212,6 @@
         grid-gap: 5px;
         gap: 5px;
     }
-
-    
 
     .loungeItem_tag {
         padding: 3px 10px;
@@ -250,7 +244,6 @@
         margin-inline-end: 0px;
     }
 
-
     .loungeContainerAside {
         display: flex;
         width: 17%;
@@ -273,27 +266,33 @@
         display: flex;
         justify-content: center;
         margin: 32px 0;
-        width: 120vh;
+        width: 97%;
     }
 
     .pagination {
-        display: inline-block;
+        display: flex;
+        gap: 5px;
     }
 
-    .pagination a {
+    .pagination {
         color: black;
         float: left;
         padding: 8px 16px;
         text-decoration: none;
     }
 
-    .pagination a.active {
+    .pagination-btn:active {
         background-color: #4caf50;
         color: white;
     }
 
-    .pagination a:hover:not(.active){
+    .pagination-btn:hover:not(.active){
         background-color: #ddd;
+    }
+
+    .pagination-btn {
+        border: 0;
+        background-color: transparent;
     }
 
 
@@ -316,14 +315,14 @@
                 </div>
         </div>
         </main>
-        <aside class="loungeContainerAside">
+        <!-- <aside class="loungeContainerAside">
             <div>
                 <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
             </div>
             <div class="mt-lg-5">
                 <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
             </div>
-        </aside>
+        </aside> -->
         
 
     </div>
@@ -338,14 +337,18 @@
     $(document).ready(function (){
 		getStudyList();
         getPagingList();
-        
     });
 
-    function getStudyList(){  
+    function getStudyList(pageNum=0, pageSize=12){  
             $.ajax({
                 url: '${root}api/study/studyList',
                 method: 'GET',
+                data : {page : pageNum,
+                        size : pageSize
+                },
                 success: function(result){
+                    $('.loungeList_container').empty();
+                    $('.pagination').empty();
                     
                     // 본문
                     result.dtoList.forEach(function(item){
@@ -422,24 +425,49 @@
                         $('.loungeList_container').append(itemHtml);
                     });
 
+                    // 페이징 초기화
+                    $('.pagination').empty();
+
                     // 본문 끝
                     // 페이징
                     // paging 
         let pagingHtml = '';
         pagingHtml += `
-                    <a href="#">&laquo</a>
+                    <button class="pagination-btn" data-page="0"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/></svg></button>
                     `;
 
-                    result.pageNumList.forEach(function(pageNum){
-                        pagingHtml += `
-                        <a href="#">${'${pageNum}'}</a> 
-                        `;
-                    });
-                    
-                    <!--<a href="#">&raquo</a>-->
-                
+        if(result.prev == true){
+            pagingHtml += `            
+                    <button class="pagination-btn" data-page="${'${result.prevPage}'}"><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></button>
+                    `;
+        }
+        
+
+        result.pageNumList.forEach(function(pageNum){
+            pagingHtml += `
+            <button class="pagination-btn" data-page="${'${pageNum - 1}'}">${'${pageNum}'}</button> 
+            `;
+        });
+
+        if(result.next == true){
+            pagingHtml += `
+            <button class="pagination-btn" data-page=${'${result.nextPage}'}><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></button>
+            `;
+        }
+        pagingHtml += `
+            <button class="pagination-btn" data-page="${'${result.realEnd}'}"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg></button>
+        `;
 
         $('.pagination').append(pagingHtml);
+
+        // 페이지 버튼 클릭
+        $('.pagination-btn').on('click', function(){
+            let selectedPage = $(this).data('page');
+            // $('.pagination').children.remove();
+            // $('.loungeList_container').empty();
+            // $('.pagination').empty();
+            getStudyList(selectedPage);
+        });
         
         // 페이징 끝
                 },
