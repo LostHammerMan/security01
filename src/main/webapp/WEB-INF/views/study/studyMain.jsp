@@ -355,7 +355,7 @@
                     let itemHtml = '';
                     let pagingHtml = '';
                     itemHtml += `
-                <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
+                <a class="loungeList_loungeItem" href="${root}study/${'${item.studyIdx}'}">
                         <li class="loungeItem_list">
                             <div class="loungeItem_badgeWrapper">
                                 <div class="badge_categoryWrapper">

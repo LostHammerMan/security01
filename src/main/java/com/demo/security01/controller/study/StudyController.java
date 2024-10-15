@@ -8,10 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.service.study.StudyService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,5 +54,20 @@ public class StudyController {
     	request.setAttribute("msg", "스터디/프로젝트 작성 완료");
     	request.setAttribute("url", request.getContextPath() + "/study");
     	return "study/studyWriteOk";
+    }
+    
+    // 스터디 단건 조회
+    @GetMapping("/{studyIdx}")
+    public String getStudy(@PathVariable Long studyIdx, Model model, HttpServletRequest request) {
+    	
+//    	String loginUsername = principal.getName();
+    	String loginUsername = request.getUserPrincipal().getName();
+    	
+    	StudyResponseDto result = studyService.getStudy(studyIdx);
+    	
+    	
+    	model.addAttribute("result", result);
+    	
+    	return "study/studyReadForm";
     }
 }

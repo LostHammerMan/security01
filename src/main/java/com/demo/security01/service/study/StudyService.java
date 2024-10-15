@@ -225,6 +225,7 @@ public class StudyService {
 
         // entity -> dto
         StudyResponseDto responseDto = StudyResponseDto.builder()
+        		.studyIdx(findStudy.getIdx())
                 .categoryName(findStudy.getCategory().getCategoryName())
                 .title(findStudy.getTitle())
                 .contents(findStudy.getContents())
@@ -270,6 +271,7 @@ public class StudyService {
             }
 
             StudyResponseDto responseDto = StudyResponseDto.builder()
+            		.studyIdx(findStudy.getIdx())
                     .categoryName(findStudy.getCategory().getCategoryName())
                     .title(findStudy.getTitle())
                     .contents(findStudy.getContents())

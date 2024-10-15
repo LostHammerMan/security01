@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class StudyResponseDto {
-
+	private Long studyIdx;
     private String categoryName;
     private String title;
     private String contents;
@@ -37,8 +37,9 @@ public class StudyResponseDto {
     private String skillImgName;
 
     @Builder
-    public StudyResponseDto(String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, List<String> recruitPositions, String contactMethod, 
+    public StudyResponseDto(Long studyIdx, String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, List<String> recruitPositions, String contactMethod, 
     		String contactAddress, List<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount, String skillImgName) {
+    	this.studyIdx = studyIdx;
         this.categoryName = categoryName;
         this.title = title;
         this.contents = contents;
