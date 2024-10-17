@@ -5,13 +5,16 @@ import com.demo.security01.config.exception.CommentUserNotMatchException;
 import com.demo.security01.config.exception.LoungeNotFountException;
 import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.BoardType;
 import com.demo.security01.model.dto.comment.request.CommentModifyRequestDto;
 import com.demo.security01.model.dto.comment.request.CommentRequestDto;
 import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.model.dto.comment.response.ModifyCommentResponseDto;
 import com.demo.security01.repository.comment.CommentRepository;
 import com.demo.security01.repository.community.LoungeRepository;
+import com.demo.security01.repository.study.StudyRepository;
 import com.demo.security01.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -28,6 +33,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final LoungeRepository loungeRepository;
+    private final StudyRepository studyRepository;
 
     @Transactional
     public CommentResponseDto addComment(CommentRequestDto request){
@@ -35,25 +41,49 @@ public class CommentService {
         User findUser = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저는 존재하지 않음"));
 
-        LoungeEntity findLounge = loungeRepository.findById(request.getBoardIdx())
-                .orElseThrow(() -> new LoungeNotFountException());
+        if(request.getBoardType() == BoardType.LOUNGE) {
+        	LoungeEntity findLounge = loungeRepository.findById(request.getBoardIdx())
+                    .orElseThrow(() -> new LoungeNotFountException());
 
-        CommentEntity addedComment = CommentEntity.builder()
-                .content(request.getContent())
-                .lounge(findLounge)
-                .user(findUser)
-                .build();
+            CommentEntity addedComment = CommentEntity.builder()
+                    .content(request.getContent())
+                    .lounge(findLounge)
+                    .user(findUser)
+                    .build();
 
-        CommentEntity comment = commentRepository.save(addedComment);
+            CommentEntity comment = commentRepository.save(addedComment);
 
-        CommentResponseDto response = CommentResponseDto.builder()
-                .id(comment.getId())
-                .content(comment.getContent())
-                .username(findUser.getUsername())
-                .filePath(findUser.getUserProfile().getFileName())
-                .regDate(comment.getRegDate()).build();
+            CommentResponseDto response = CommentResponseDto.builder()
+                    .id(comment.getId())
+                    .content(comment.getContent())
+                    .username(findUser.getUsername())
+                    .filePath(findUser.getUserProfile().getFileName())
+                    .regDate(comment.getRegDate()).build();
+            return response;
+        }else if(request.getBoardType() == BoardType.STUDY) {
+        	
+        	StudyEntity findStudy = studyRepository.findById(request.getBoardIdx())
+        			.orElseThrow(
+        					() -> new EntityNotFoundException("해당 스터디/프로젝트는 존재하지 않음"));
 
-        return response;
+            CommentEntity addedComment = CommentEntity.builder()
+                    .content(request.getContent())
+                    .study(findStudy)
+                    .user(findUser)
+                    .build();
+
+            CommentEntity comment = commentRepository.save(addedComment);
+
+            CommentResponseDto response = CommentResponseDto.builder()
+                    .id(comment.getId())
+                    .content(comment.getContent())
+                    .username(findUser.getUsername())
+                    .filePath(findUser.getUserProfile().getFileName())
+                    .regDate(comment.getRegDate()).build();
+            return response;
+        }
+		throw new IllegalArgumentException("해당 게시판은 존재하지 않습니다.");
+        
     }
 
     // 전체 댓글 가져오기 + 페이징 X

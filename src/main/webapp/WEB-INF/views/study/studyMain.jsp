@@ -365,8 +365,8 @@
                                 </div>
                             </div>
                             <div class="loungeItem_regDate">
-                                <p class="loungeItem_regDateTitle">등록일 |</p>
-                                <p>${'${item.regDate}'}</p>
+                                <p class="loungeItem_regDateTitle">마감일 |</p>
+                                <p>${'${item.recruitDeadline}'}</p>
                             </div>
                             <h1 class="loungeItem_title">${'${item.title}'}</h1>
                             <ul class="loungeItem_positions">

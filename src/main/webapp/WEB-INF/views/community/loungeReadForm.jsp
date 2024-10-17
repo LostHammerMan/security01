@@ -390,8 +390,7 @@
             style="text-align: center">댓글 등록</button>
         </div>
         <ul class="commentList_list">
-                <li class="commentList_item_container">
-                </li>
+                
         </ul>
     </div>
 </div>
@@ -537,12 +536,11 @@
             console.log("댓글 등록 클릭");
             let data = {
                 "content" : commentInput,
-                "boardIdx" : ${findLounge.idx}
+                "boardIdx" : ${findLounge.idx},
+                "boardType" : 'LOUNGE'
             };
 
-            console.log("boardIdx : " + ${findLounge.idx})
-            console.log("content = " + data.content);
-
+            console.log(data.boardType);
             $.ajax({
                 url : '${root}api/comment/add',
                 method : 'POST',
@@ -616,7 +614,8 @@
                         commentsHtml += '</section>';
                         commentsHtml += '</li>'
                     });
-                    $(".commentList_item_container").html(commentsHtml);
+                    // $(".commentList_item_container").html(commentsHtml);
+                    $(".commentList_list").html(commentsHtml);
                 },
                 error : function (xhr, status, error){
                     console.log("ajax 댓글 불러오기 실패 ㅠㅠ")

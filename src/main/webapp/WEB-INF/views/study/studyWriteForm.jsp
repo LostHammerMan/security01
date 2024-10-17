@@ -241,7 +241,7 @@
                     <select class="custom-select" id="progressPeriod">
                         <option selected>기간 미정 ~ 5개월 이상</option>
                         <option value="기간미정">기간미정</option>
-                        <option value="1개월">1명</option>
+                        <option value="1개월">1개월</option>
                         <option value="2개월">2개월</option>
                         <option value="3개월">3개월</option>
                         <option value="4개월">4개월</option>

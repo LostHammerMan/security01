@@ -2,9 +2,11 @@ package com.demo.security01.model.dto.study.response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +22,9 @@ public class StudyResponseDto {
     private String contents;
     private Integer recruitedNumber;
     private String progressPeriod;
+    private String process;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDate recruitDeadline;
     private List<String> recruitPositions;
 //    private Set<String> recruitPositions;
@@ -28,8 +33,12 @@ public class StudyResponseDto {
     private List<String> skillTags;
 //    private Set<String> skillTags;
     
+    
+//    private LocalDateTime regDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
+    private String formattedRegDate;
+    
     private Integer isFin;
     private String username;
     private Integer likeCount;
@@ -38,13 +47,14 @@ public class StudyResponseDto {
 
     @Builder
     public StudyResponseDto(Long studyIdx, String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, List<String> recruitPositions, String contactMethod, 
-    		String contactAddress, List<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount, String skillImgName) {
+    		String contactAddress, List<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount, String skillImgName, String process) {
     	this.studyIdx = studyIdx;
         this.categoryName = categoryName;
         this.title = title;
         this.contents = contents;
         this.recruitedNumber = recruitedNumber;
         this.progressPeriod = progressPeriod;
+        this.process = process;
         this.recruitDeadline = recruitDeadline;
         this.recruitPositions = recruitPositions;
         this.contactMethod = contactMethod;
@@ -56,21 +66,28 @@ public class StudyResponseDto {
         this.viewCount = viewCount;
         this.likeCount = likeCount;
         this.skillImgName = skillImgName;
+        this.formattedRegDate = toformattedRegDate();
+    }
+    
+    
+    private String toformattedRegDate() {
+    	DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+    	return this.regDate.format(fmt);
     }
 
-    @Override
-    public String toString() {
-        return "StudyResponseDto{" +
-                "categoryName='" + categoryName + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", recruitedNumber=" + recruitedNumber +
-                ", progressPeriod='" + progressPeriod + '\'' +
-                ", recruitDeadline=" + recruitDeadline +
-                ", recruitPositions=" + recruitPositions +
-                ", contactMethod='" + contactMethod + '\'' +
-                ", contactAddress='" + contactAddress + '\'' +
-                ", skillTags=" + skillTags +
-                '}';
-    }
+
+	@Override
+	public String toString() {
+		return "StudyResponseDto [studyIdx=" + studyIdx + ", categoryName=" + categoryName + ", title=" + title
+				+ ", contents=" + contents + ", recruitedNumber=" + recruitedNumber + ", progressPeriod="
+				+ progressPeriod + ", process=" + process + ", recruitDeadline=" + recruitDeadline
+				+ ", recruitPositions=" + recruitPositions + ", contactMethod=" + contactMethod + ", contactAddress="
+				+ contactAddress + ", skillTags=" + skillTags + ", regDate=" + regDate + ", formattedRegDate="
+				+ formattedRegDate + ", isFin=" + isFin + ", username=" + username + ", likeCount=" + likeCount
+				+ ", viewCount=" + viewCount + ", skillImgName=" + skillImgName + "]";
+	}
+
+	
+
+    
 }

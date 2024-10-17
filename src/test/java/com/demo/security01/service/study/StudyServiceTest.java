@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.demo.security01.model.BoardType;
+import com.demo.security01.model.dto.comment.request.CommentRequestDto;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
@@ -20,6 +22,7 @@ import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.repository.study.StudyRepository;
 import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
 import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
+import com.demo.security01.service.community.CommentService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +41,9 @@ class StudyServiceTest {
 
     @Autowired
     private StudyRepository studyRepository;
+    
+    @Autowired
+    private CommentService commentService;
 
 
     @Test
@@ -179,6 +185,23 @@ class StudyServiceTest {
     @DisplayName("isFIn update 전 조회")
     void updateIsFIn(){
         studyRepository.updateIsFin();
+    }
+    
+    // 스터디 댓글 등록 테스트
+    @Test
+    @DisplayName("스터디 댓글 등록 - 성공")
+    void addCommentTest() {
+    	
+    	CommentRequestDto request = CommentRequestDto.builder()
+    			
+    			.boardIdx(379L)
+    			.content("되냐")
+    			.boardType(BoardType.STUDY)
+    			.build();
+    	
+    	request.setUsername("admin");
+    	
+    	commentService.addComment(request);
     }
 
 }

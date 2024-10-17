@@ -1,39 +1,38 @@
 package com.demo.security01.controller.community;
 
-import com.demo.security01.config.annotation.LoungeWriteRequestAnno;
-import com.demo.security01.entity.comment.CommentEntity;
-import com.demo.security01.entity.lounge.LoungeEntity;
-import com.demo.security01.entity.user.User;
-import com.demo.security01.model.dto.category.CategoryDto;
-import com.demo.security01.model.dto.comment.response.CommentResponseDto;
-import com.demo.security01.model.dto.community.LoungeModifyRequest;
-import com.demo.security01.model.dto.community.LoungeWriteRequest;
-import com.demo.security01.repository.category.CategoryRepositoryCustom;
-import com.demo.security01.service.category.CategoryService;
-import com.demo.security01.service.community.CommentService;
-import com.demo.security01.service.community.LikeService;
-import com.demo.security01.service.community.LoungeService;
-import com.demo.security01.service.user.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.security.Principal;
-import java.util.List;
+import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.model.dto.comment.response.CommentResponseDto;
+import com.demo.security01.model.dto.community.LoungeModifyRequest;
+import com.demo.security01.model.dto.community.LoungeWriteRequest;
+import com.demo.security01.service.category.CategoryService;
+import com.demo.security01.service.community.CommentService;
+import com.demo.security01.service.community.LikeService;
+import com.demo.security01.service.community.LoungeService;
+import com.demo.security01.service.user.UserService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j

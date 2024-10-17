@@ -1,6 +1,7 @@
 package com.demo.security01.service.study;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -200,11 +202,13 @@ public class StudyService {
     }
 
     // 단건 조회
+    @Transactional
     public StudyResponseDto getStudy(Long studyIdx){
         StudyEntity findStudy = studyRepository.findById(studyIdx)
                 .orElseThrow(
                         () -> new EntityNotFoundException("해당 스터디/프로젝트는 존재하지 않습니다")
                 );
+        
 
         // 스킬 태그
 //        Set<String> skillTagNames = new HashSet<>();
@@ -223,15 +227,19 @@ public class StudyService {
         
         findStudy.setViewCount(findStudy.getViewCount() + 1);
 
+        
         // entity -> dto
         StudyResponseDto responseDto = StudyResponseDto.builder()
         		.studyIdx(findStudy.getIdx())
                 .categoryName(findStudy.getCategory().getCategoryName())
                 .title(findStudy.getTitle())
                 .contents(findStudy.getContents())
+//                .regDate(findStudy.getRegDate())
+                .regDate(findStudy.getRegDate())
                 .contactMethod(findStudy.getContactMethod())
                 .contactAddress(findStudy.getContactAddress())
                 .progressPeriod(findStudy.getProgressPeriod())
+                .process(findStudy.getProgressMethod())
                 .recruitDeadline(findStudy.getRecruitDeadline())
                 .recruitedNumber(findStudy.getRecruitedNumber())
                 .viewCount(findStudy.getViewCount())
@@ -240,6 +248,7 @@ public class StudyService {
                 .recruitPositions(positionNames)
                 .isFin(findStudy.getIsFIn()).build();
 
+        log.info("responseDto = {}", responseDto);
         return responseDto;
     }
 
@@ -269,6 +278,7 @@ public class StudyService {
 //            	positionNames.add(study_position.getPositions().getPositionName());
             	positionNames.add(study_position.getPostsionName());
             }
+            
 
             StudyResponseDto responseDto = StudyResponseDto.builder()
             		.studyIdx(findStudy.getIdx())
@@ -278,6 +288,7 @@ public class StudyService {
                     .contactMethod(findStudy.getContactMethod())
                     .contactAddress(findStudy.getContactAddress())
                     .progressPeriod(findStudy.getProgressPeriod())
+                    .process(findStudy.getProgressMethod())
                     .recruitDeadline(findStudy.getRecruitDeadline())
                     .recruitedNumber(findStudy.getRecruitedNumber())
                     .skillTags(skillTagNames)

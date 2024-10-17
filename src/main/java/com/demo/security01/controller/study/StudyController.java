@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.service.study.StudyService;
+import com.demo.security01.service.user.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StudyController {
 	
 	private final StudyService studyService;
+	private final UserService userService;
 
     @GetMapping("")
     public String studyMain(){
@@ -59,14 +61,17 @@ public class StudyController {
     // 스터디 단건 조회
     @GetMapping("/{studyIdx}")
     public String getStudy(@PathVariable Long studyIdx, Model model, HttpServletRequest request) {
-    	
+    	log.info("\t\t 스터디 단건 조회");
 //    	String loginUsername = principal.getName();
     	String loginUsername = request.getUserPrincipal().getName();
+    	
     	
     	StudyResponseDto result = studyService.getStudy(studyIdx);
     	
     	
     	model.addAttribute("result", result);
+    	model.addAttribute("loginUsername", loginUsername);
+    	model.addAttribute("loginUserImgFileName", userService.getProfileFileName(loginUsername));
     	
     	return "study/studyReadForm";
     }
