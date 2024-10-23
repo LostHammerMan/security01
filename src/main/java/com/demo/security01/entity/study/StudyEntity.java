@@ -83,7 +83,7 @@ public class StudyEntity {
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySkillTagEntity> studySkillTagEntity;
 
-    @OneToMany(mappedBy = "studyEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
     private List<BoardLike> boardLikes;
 
     @Column(name = "IS_FIN")

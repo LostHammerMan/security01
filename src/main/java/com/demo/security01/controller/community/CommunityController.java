@@ -139,7 +139,6 @@ public class CommunityController {
 
         LoungeEntity findLounge = loungeService.getLounge(loungeId);
         boolean isCheck = loungeService.isCheckLike(loungeId, loginUsername);
-        List<CommentResponseDto> comments = commentService.getCommentList(loungeId);
 
         model.addAttribute("loginUserImgFileName", userService.getProfileFileName(loginUsername));
         model.addAttribute("loginUsername", loginUsername);

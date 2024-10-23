@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.security01.model.BoardType;
 import com.demo.security01.model.dto.comment.request.CommentModifyRequestDto;
 import com.demo.security01.model.dto.comment.request.CommentRequestDto;
 import com.demo.security01.model.dto.comment.response.CommentResponseDto;
@@ -105,10 +106,12 @@ public class CommentApiController {
 
 
     // 댓글 리스트 가져오기
-    @GetMapping("/api/getComments/{boardId}")
-    public ResponseEntity<?> getComment(@PathVariable Long boardId){
+    @GetMapping("/api/getComments/{boardType}/{boardId}")
+    public ResponseEntity<?> getComment(@PathVariable(name="boardType") BoardType boardType, @PathVariable(name="boardId") Long boardId){
         log.info("===== Ajax getComments =====");
-        List<CommentResponseDto> commentList = commentService.getCommentList(boardId);
+        
+       
+        List<CommentResponseDto> commentList = commentService.getCommentList(boardId, boardType);
         return ResponseEntity.status(HttpStatus.OK).body(commentList);
     }
 

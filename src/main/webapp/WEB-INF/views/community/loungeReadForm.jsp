@@ -454,7 +454,7 @@
 
                 console.log("active")
                 $.ajax({
-                    url : '${root}api/addLike',
+                    url : '${root}api/addLike/lounge',
                     method : 'POST',
                     data : JSON.stringify(data),
                     contentType :'application/json',
@@ -569,7 +569,7 @@
      // 댓글 불러오기
      function getCommentList(){
             $.ajax({
-                url : '${root}api/getComments/${findLounge.idx}',
+                url : '${root}api/getComments/lounge/${findLounge.idx}',
                 type : 'GET',
                 success : function (result){
                     console.log("ajax 댓글 불러오기 성공 !!!");

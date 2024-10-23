@@ -26,6 +26,7 @@ public class StudyResponseDto {
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDate recruitDeadline;
+    private String formattedRecruitDeadline;
     private List<String> recruitPositions;
 //    private Set<String> recruitPositions;
     private String contactMethod;
@@ -38,6 +39,7 @@ public class StudyResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
     private String formattedRegDate;
+    
     
     private Integer isFin;
     private String username;
@@ -66,13 +68,19 @@ public class StudyResponseDto {
         this.viewCount = viewCount;
         this.likeCount = likeCount;
         this.skillImgName = skillImgName;
-        this.formattedRegDate = toformattedRegDate();
+        this.formattedRegDate = toformattedDate(this.regDate);
+        this.formattedRecruitDeadline = toformattedDate(this.recruitDeadline.atStartOfDay());
     }
     
     
-    private String toformattedRegDate() {
+//    private String toformattedRegDate() {
+//    	DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+//    	return this.regDate.format(fmt);
+//    }
+    
+    private String toformattedDate(LocalDateTime date) {
     	DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-    	return this.regDate.format(fmt);
+    	return date.format(fmt);
     }
 
 

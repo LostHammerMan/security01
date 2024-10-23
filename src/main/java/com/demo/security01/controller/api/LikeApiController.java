@@ -1,21 +1,25 @@
 package com.demo.security01.controller.api;
 
-import com.demo.security01.entity.lounge.BoardLike;
-import com.demo.security01.entity.user.User;
+import java.security.Principal;
+import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.demo.security01.model.BoardType;
 import com.demo.security01.model.dto.boardLike.BoardLikeRequestDto;
 import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.service.community.LikeService;
 import com.demo.security01.service.community.LoungeService;
 import com.demo.security01.service.user.UserService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,11 +31,12 @@ public class LikeApiController {
     private final LikeService likeService;
 
     // 좋아요 추가
-    @PostMapping("/api/addLike")
+    @PostMapping("/api/addLike/{boardType}")
     public ResponseEntity<Object> addLike(
-            @RequestBody BoardLikeRequestDto dto,
+            @RequestBody BoardLikeRequestDto dto, @PathVariable(name="boardType") BoardType boardType,
             Principal principal){
         log.info("== addLike called .. == ");
+        log.info("boardType = ", boardType);
 
         if(principal == null){
             throw new RuntimeException("로그인이 필요한 기능임");
@@ -43,11 +48,9 @@ public class LikeApiController {
             throw new RuntimeException("로그인이 필요한 기능입니다.");
         }
 
-        if (dto.getBoardId() == null){
-            throw new RuntimeException("게시글이 존재하지 않음");
-        }
 
-        likeService.addLike(dto.getBoardId(), username);
+        likeService.addLike(dto.getBoardId(), username, boardType);
+        
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
