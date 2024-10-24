@@ -330,7 +330,7 @@
             </div>
             <c:if test="${loginUsername == findLounge.user.username}">
                 <div class="lounge_modifyBtn justify-content-end" style="margin-left: 63%">
-                    <button type="button" class="btn btn-light drop1" <%--id="dropdownMenu1"--%> data-toggle="dropdown" aria-expanded="false">
+                    <button type="button" class="btn btn-light drop1" data-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -367,7 +367,7 @@
                     </c:when>
                     <c:otherwise>
                         <i class="far fa-heart" style="width: 20px; height: auto"></i>
-                        <span class="post_heart" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.likeCount}</span>
+                        <span class="post_heart" id="boardLikeCount" style="color: #6e707e; font-size: 14px; font-weight: 500">${findLounge.likeCount}</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -444,6 +444,7 @@
 
         getCommentList();
         getCommentListCount();
+        getLikeCount();
         // 좋아요 버튼 이벤트
         const toggleBtn = $(".fa-heart");
         toggleBtn.click(function (){
@@ -461,23 +462,7 @@
 
                     success : function (response){
                         console.log("좋아요 추가 성공");
-                        console.log(${findLounge.idx});
-                        $.ajax({
-                            url : '${root}api/addLike/${findLounge.idx}',
-                            type : 'GET',
-                            <%--data : '${findLounge.idx}',--%>
-
-                            success : function (response){
-                                console.log("좋아요 수 불러오기 성공");
-                                console.log(response.objectData);
-                                // $(".post_heart").attr("text", response.objectData)
-                                $(".post_heart").text(response.objectData)
-
-                            },
-                            error : function (err){
-                                console.log(err);
-                            }
-                        });
+                        getLikeCount();
 
                     },
                     error : function (err){
@@ -487,38 +472,38 @@
             }else {
                 console.log("inactive")
                 $.ajax({
-                    url : '${root}api/deleteLike',
+                    url : '${root}api/deleteLike/lounge',
                     method : 'POST',
                     data : JSON.stringify(data),
                     contentType :'application/json',
-
                     success : function (response){
                         console.log("좋아요 취소 성공");
-
-                        $.ajax({
-                            url : '${root}api/addLike/${findLounge.idx}',
-                            type : 'GET',
-                            <%--data : '${findLounge.idx}',--%>
-
-                            success : function (response){
-                                console.log("좋아요 수 불러오기 성공");
-                                console.log(response.objectData);
-                                // $(".post_heart").attr("text", response.objectData)
-                                $(".post_heart").text(response.objectData)
-
-                            },
-                            error : function (err){
-                                console.log(err);
-                            }
-                        });
+                        getLikeCount();
                     },
                     error : function (err){
-
                         console.log("좋아요 취소 실패")
                     }
                 })
             }
         });
+
+        // 좋아요 수 불러오기
+        function getLikeCount(){
+            $.ajax({
+                    url : '${root}api/addLike/lounge/${findLounge.idx}',
+                    method : 'GET',
+                    success : function (response){
+                        console.log("좋아요 수 불러오기 성공");
+                        console.log(response.objectData);
+                        // $(".post_heart").attr("text", response.objectData)
+                        $("#boardLikeCount").text(response.objectData);
+
+                    },
+                    error : function (err){
+                        console.log(err);
+                    }
+                });
+        }
 
         // ======== 좋아요 버튼 끝 ============
 
@@ -626,10 +611,10 @@
 
      }
 
-        // 댓글 수 불러오기
+        // 댓글 수
         function getCommentListCount(){
             $.ajax({
-                url : '${root}api/getCommentsCount/${findLounge.idx}',
+                url : '${root}api/getCommentsCount/lounge/${findLounge.idx}',
                 type : 'GET',
                 success : function (result){
                     console.log("댓글 수 불러오기 성공");

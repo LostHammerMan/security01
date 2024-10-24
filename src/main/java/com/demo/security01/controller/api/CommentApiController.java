@@ -116,10 +116,10 @@ public class CommentApiController {
     }
 
     // 한 게시글 당 댓글 갯수
-    @GetMapping("/api/getCommentsCount/{boardId}")
-    public ResponseEntity<?> getCommentsListCount(@PathVariable Long boardId){
+    @GetMapping("/api/getCommentsCount/{boardType}/{boardId}")
+    public ResponseEntity<?> getCommentsListCount(@PathVariable(name = "boardType") BoardType boardType ,@PathVariable(name="boardId") Long boardId){
         log.info("=== api - getCommentsListCount ===");
-        Integer commentCount = commentService.getCommentCounts(boardId);
+        Integer commentCount = commentService.getCommentCounts(boardId, boardType);
         return ResponseEntity.status(HttpStatus.OK).body(commentCount);
     }
 }

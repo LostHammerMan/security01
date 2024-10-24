@@ -4,6 +4,7 @@ import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.comment.QCommentEntity;
 import com.demo.security01.entity.lounge.QLoungeEntity;
 import com.demo.security01.model.BoardType;
+import com.fasterxml.jackson.databind.util.ArrayBuilders.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +36,25 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom{
     }
 
     @Override
-    public Integer getCommentListCount(Long loungeIdx) {
-        return Math.toIntExact(queryFactory
+    public Integer getCommentListCount(Long loungeIdx, BoardType boardType) {
+    	Integer result = 0;
+    	BooleanExpression condition = null;
+    	
+    	if(boardType == BoardType.LOUNGE) {
+    		condition = commentEntity.lounge.idx.eq(loungeIdx);
+    	}else if(boardType == BoardType.STUDY) {
+    		condition = commentEntity.study.idx.eq(loungeIdx);
+    	}
+		result = Math.toIntExact(queryFactory
                 .select(commentEntity.count())
                 .from(commentEntity)
-//                        .join(commentEntity.lounge, QLoungeEntity.loungeEntity)
-                .where(commentEntity.lounge.idx.eq(loungeIdx))
-//                .where(QLoungeEntity.loungeEntity.idx.eq(loungeIdx))
+                .where(condition)
                 .fetchFirst());
+    	
+    	return result;
+    	
+    	
+    	
+        
     }
 }

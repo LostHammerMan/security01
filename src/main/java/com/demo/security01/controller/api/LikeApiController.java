@@ -55,10 +55,10 @@ public class LikeApiController {
     }
 
     // 좋아요 수 불러오기
-    @GetMapping("/api/addLike/{boardId}")
-    public ResponseEntity<Object> getLikeCount(@PathVariable Long boardId){
+    @GetMapping("/api/addLike/{boardType}/{boardId}")
+    public ResponseEntity<Object> getLikeCount(@PathVariable(name="boardType") BoardType boardType ,@PathVariable(name="boardId") Long boardId){
         log.info("getLikeCount() called...............");
-        int likeCount = likeService.getLikeCount(boardId);
+        int likeCount = likeService.getLikeCount(boardId, boardType);
         ResponseEntityDto response = ResponseEntityDto.builder()
                 .status(HttpStatus.OK.value())
                 .objectData(likeCount)
@@ -68,9 +68,9 @@ public class LikeApiController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/api/deleteLike")
+    @PostMapping("/api/deleteLike/{boardType}")
     public ResponseEntity<Object> deleteLike(@RequestBody BoardLikeRequestDto dto,
-                                             Principal principal){
+                                             Principal principal, @PathVariable(name="boardType") BoardType boardType){
         log.info("=== deleteLike called ... =====");
         String username = principal.getName();
 
@@ -82,7 +82,7 @@ public class LikeApiController {
             throw new RuntimeException("게시글이 존재하지 않음");
         }
 
-        likeService.deleteLike(dto.getBoardId(), username);
+        likeService.deleteLike(dto.getBoardId(), username, boardType);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }

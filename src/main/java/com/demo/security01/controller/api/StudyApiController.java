@@ -1,27 +1,24 @@
 package com.demo.security01.controller.api;
 
-import com.demo.security01.model.dto.paging.PageResponseDto;
-import com.demo.security01.model.dto.study.request.StudyCriteria;
-import com.demo.security01.model.dto.study.request.StudyRequestDto;
-import com.demo.security01.model.dto.study.response.StudyResponseDto;
-import com.demo.security01.service.study.StudyService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.security.Principal;
+import java.util.List;
 
-import org.springframework.aop.support.AopUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-import java.util.List;
+import com.demo.security01.model.dto.paging.PageResponseDto;
+import com.demo.security01.model.dto.study.request.StudyCriteria;
+import com.demo.security01.model.dto.study.request.StudyRequestDto;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
+import com.demo.security01.service.study.StudyService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController

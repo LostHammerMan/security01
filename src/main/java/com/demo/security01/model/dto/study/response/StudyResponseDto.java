@@ -23,6 +23,7 @@ public class StudyResponseDto {
     private Integer recruitedNumber;
     private String progressPeriod;
     private String process;
+    private String userProfileImgName;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDate recruitDeadline;
@@ -34,22 +35,21 @@ public class StudyResponseDto {
     private List<String> skillTags;
 //    private Set<String> skillTags;
     
-    
 //    private LocalDateTime regDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
     private String formattedRegDate;
     
-    
     private Integer isFin;
     private String username;
     private Integer likeCount;
     private Integer viewCount;
+    private Integer commentCount;
     private String skillImgName;
 
     @Builder
     public StudyResponseDto(Long studyIdx, String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, List<String> recruitPositions, String contactMethod, 
-    		String contactAddress, List<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount, String skillImgName, String process) {
+    		String contactAddress, List<String> skillTags, Integer isFin, LocalDateTime regDate, String username, Integer viewCount, Integer likeCount, String skillImgName, String process, String userProfileImgName, Integer commentCount) {
     	this.studyIdx = studyIdx;
         this.categoryName = categoryName;
         this.title = title;
@@ -65,8 +65,10 @@ public class StudyResponseDto {
         this.isFin = isFin;
         this.regDate = regDate;
         this.username = username;
+        this.userProfileImgName = userProfileImgName;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
+        this.commentCount = commentCount;
         this.skillImgName = skillImgName;
         this.formattedRegDate = toformattedDate(this.regDate);
         this.formattedRecruitDeadline = toformattedDate(this.recruitDeadline.atStartOfDay());

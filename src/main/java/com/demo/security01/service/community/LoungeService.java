@@ -14,6 +14,7 @@ import com.demo.security01.config.exception.UserNotMatchException;
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.BoardType;
 import com.demo.security01.model.dto.community.LoungeListResponseDto;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
@@ -183,7 +184,7 @@ public class LoungeService {
                     .profileFilename(entity.getUser().getUserProfile().getFileName())
                     .regDate(entity.getRegDate())
                     .viewCount(entity.getViewCount())
-                    .commentCount(commentRepository.getCommentListCount(entity.getIdx()))
+                    .commentCount(commentRepository.getCommentListCount(entity.getIdx(), BoardType.LOUNGE))
                     .likeCount(entity.getLikeCount()).build();
             dtos.add(response);
         }

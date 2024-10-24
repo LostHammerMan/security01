@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CommentRepositoryCustom {
     List<CommentEntity> getCommentList(Long boardId, BoardType boardType);
-    Integer getCommentListCount(Long loungeIdx);
+    Integer getCommentListCount(Long loungeIdx, BoardType boardType);
 }
 
 

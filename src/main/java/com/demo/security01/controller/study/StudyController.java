@@ -64,14 +64,13 @@ public class StudyController {
     	log.info("\t\t 스터디 단건 조회");
 //    	String loginUsername = principal.getName();
     	String loginUsername = request.getUserPrincipal().getName();
-    	
-    	
     	StudyResponseDto result = studyService.getStudy(studyIdx);
-    	
+    	boolean isLikeCheck = studyService.isCheckLike(studyIdx, loginUsername);
     	
     	model.addAttribute("result", result);
     	model.addAttribute("loginUsername", loginUsername);
     	model.addAttribute("loginUserImgFileName", userService.getProfileFileName(loginUsername));
+    	model.addAttribute("isLikeCheck", isLikeCheck);
     	
     	return "study/studyReadForm";
     }

@@ -1,7 +1,6 @@
 package com.demo.security01.service.study;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,6 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +21,15 @@ import com.demo.security01.entity.study.Study_Positions;
 import com.demo.security01.entity.tag.SkillTagEntity;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.BoardType;
 import com.demo.security01.model.dto.paging.PageResponseDto;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
+import com.demo.security01.repository.boardLike.LikeRepository;
 import com.demo.security01.repository.category.CategoryRepository;
+import com.demo.security01.repository.comment.CommentRepository;
 import com.demo.security01.repository.study.StudyRepository;
 import com.demo.security01.repository.study.study_positions.RecruitPositionsRepository;
 import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
@@ -52,6 +53,8 @@ public class StudyService {
     private final Study_PositionsRepository study_positionsRepository;
     private final SkillTagRepository skillTagRepository;
     private final Study_SkillTagRepository study_skillTagRepository;
+    private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
 
     // 스터디 만들기
     @Transactional
@@ -227,11 +230,15 @@ public class StudyService {
         
         findStudy.setViewCount(findStudy.getViewCount() + 1);
 
+        // 댓글 수 
+        
         
         // entity -> dto
         StudyResponseDto responseDto = StudyResponseDto.builder()
         		.studyIdx(findStudy.getIdx())
                 .categoryName(findStudy.getCategory().getCategoryName())
+                .username(findStudy.getUser().getUsername())
+                .userProfileImgName(findStudy.getUser().getUserProfile().getFileName())
                 .title(findStudy.getTitle())
                 .contents(findStudy.getContents())
 //                .regDate(findStudy.getRegDate())
@@ -243,6 +250,7 @@ public class StudyService {
                 .recruitDeadline(findStudy.getRecruitDeadline())
                 .recruitedNumber(findStudy.getRecruitedNumber())
                 .viewCount(findStudy.getViewCount())
+                
                 .likeCount(findStudy.getLikeCount())
                 .skillTags(skillTagNames)
                 .recruitPositions(positionNames)
@@ -279,6 +287,8 @@ public class StudyService {
             	positionNames.add(study_position.getPostsionName());
             }
             
+            // 
+            
 
             StudyResponseDto responseDto = StudyResponseDto.builder()
             		.studyIdx(findStudy.getIdx())
@@ -297,6 +307,7 @@ public class StudyService {
                     .username(findStudy.getUser().getUsername())
                     .viewCount(findStudy.getViewCount())
                     .likeCount(findStudy.getLikeCount())
+                    .commentCount(commentRepository.getCommentListCount(findStudy.getIdx(), BoardType.STUDY))
                     .isFin(findStudy.getIsFIn()).build();
 
             responseDtoList.add(responseDto);
@@ -311,6 +322,27 @@ public class StudyService {
         
         
         return result;
+    }
+    
+    // 좋아요 체크되어 있는지 여부
+    public boolean isCheckLike(Long studyIdx, String username) {
+    	
+    	boolean isLikeCheck = false;
+    	
+    	User findUser = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("해당 유저 없음")
+        );
+    	
+    	StudyEntity findStudy = studyRepository.findById(studyIdx).orElseThrow(
+    			() -> new EntityNotFoundException("해당 스터디는 존재하지 않음")
+		);
+    	
+    	if(likeRepository.existsByUserAndStudy(findUser, findStudy)) {
+    		return isLikeCheck = true;
+    	}else {
+    		return isLikeCheck;
+    	}
+    	
     }
 
    
