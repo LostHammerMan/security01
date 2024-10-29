@@ -12,7 +12,7 @@
     슽디 <span style="color: #ff681a">community</span>
   </a>
   <c:forEach var="category" items="${categoryDtos}">
-    <c:if test="${category.categoryIdx == 2}">
+    <c:if test="${category.categoryIdx == 1}">
       <c:forEach var="subCategory" items="${category.subCategory}">
         <a class="navbar-brand mr-lg-5 pt-2 navbar-1" id="menu1"
            href="${root}${subCategory.categoryPath}" style="font-size: 16px; font-family: D2Coding,serif; vertical-align: center">

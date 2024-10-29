@@ -6,7 +6,7 @@
 <%--main header--%>
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
 <%--community header--%>
-<c:import url="/WEB-INF/views/layout/communityHeader.jsp"/>
+<c:import url="/WEB-INF/views/layout/studyHeader.jsp"/>
 <style>
 
     section {
@@ -334,17 +334,21 @@
 
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 <script>
+
+    let selectedCategoryIdx = null;
     $(document).ready(function (){
+        // let selectedCategoryNum = null;
 		getStudyList();
-        getPagingList();
+        // getPagingList();
     });
 
-    function getStudyList(pageNum=0, pageSize=12){  
+    function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx){  
             $.ajax({
-                url: '${root}api/study/studyList',
+                url: '${root}api/study/studyList?',
                 method: 'GET',
                 data : {page : pageNum,
-                        size : pageSize
+                        size : pageSize,
+                        categoryIdx : selectedCategoryIdx
                 },
                 success: function(result){
                     $('.loungeList_container').empty();
@@ -384,7 +388,6 @@
                             `;
                             
                             item.skillTags.forEach(function(imgName){
-                                console.log(imgName);
                                 // itemHtml += `<li>${'${imgName}'}</li>`;
                                 itemHtml += `<li><img class="skillImg" src="${root}static/img/study/${'${imgName}'}"></li>`;
                                 // ${root}static/img/community/42.png
@@ -466,7 +469,7 @@
             // $('.pagination').children.remove();
             // $('.loungeList_container').empty();
             // $('.pagination').empty();
-            getStudyList(selectedPage);
+            getStudyList(selectedPage, pageSize, selectedCategoryIdx);
         });
         
         // 페이징 끝

@@ -21,8 +21,6 @@ public class CategoryService {
     // CategoryService 에서 findAll 한 결과를 CategoryDto 로 변환하여 List 로 받아 컨트롤러에 전달
     @Transactional
     public List<CategoryDto> getCategoryList(){
-        log.info("========== CategoryService =============");
-        log.info("\t getCategoryList");
 
         List<CategoryDto> results = categoryRepositoryCustom.findAllCategory()
                 .stream().map(CategoryDto::of).collect(Collectors.toList());
@@ -31,8 +29,6 @@ public class CategoryService {
 
     @Transactional
     public List<CategoryDto> getSubCategoryList(Long idx){
-        log.info("========== CategoryService =============");
-        log.info("\t getSubCategoryList");
 
         List<CategoryDto> subResults = categoryRepositoryCustom.findSubCategory(idx)
                 .stream().map(CategoryDto::of).collect(Collectors.toList());

@@ -1,34 +1,28 @@
 package com.demo.security01.repository.study;
 
-import com.demo.security01.entity.study.QRecruitPositions;
-import com.demo.security01.entity.study.QStudyEntity;
-import com.demo.security01.entity.study.QStudy_Positions;
-import com.demo.security01.entity.study.StudyEntity;
-import com.demo.security01.entity.tag.QSkillTagEntity;
-import com.demo.security01.entity.tag.QStudySkillTagEntity;
-import com.demo.security01.entity.tag.StudySkillTagEntity;
-import com.demo.security01.model.dto.paging.Criteria;
-import com.demo.security01.model.dto.study.request.StudyCriteria;
-import com.demo.security01.model.dto.study.response.StudyResponseDto;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
+import static com.demo.security01.entity.study.QRecruitPositions.recruitPositions;
+import static com.demo.security01.entity.study.QStudyEntity.studyEntity;
+import static com.demo.security01.entity.study.QStudy_Positions.study_Positions;
+import static com.demo.security01.entity.tag.QSkillTagEntity.skillTagEntity;
+import static com.demo.security01.entity.tag.QStudySkillTagEntity.studySkillTagEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.demo.security01.entity.study.QRecruitPositions.*;
-import static com.demo.security01.entity.study.QStudyEntity.*;
-import static com.demo.security01.entity.study.QStudy_Positions.*;
-import static com.demo.security01.entity.tag.QSkillTagEntity.*;
-import static com.demo.security01.entity.tag.QStudySkillTagEntity.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import com.demo.security01.entity.study.StudyEntity;
+import com.demo.security01.model.dto.study.request.StudyCriteria;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import antlr.StringUtils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -52,6 +46,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
+                		categoryEq(criteria.getCategoryIdx()),
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
                         isNotFin(criteria.getIsFin())
@@ -77,6 +72,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 //                .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
+                		categoryEq(criteria.getCategoryIdx()),
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
                         isNotFin(criteria.getIsFin())
@@ -118,6 +114,12 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     }
 
     ///* 정렬 조건 */
+    // 카테고리별  
+    private BooleanExpression categoryEq(Long categoryIdx) {
+    	if(categoryIdx == null) return null;
+    	return studyEntity.category.categoryIdx.eq(categoryIdx);
+    }
+    
     // 기술 스택별
     private BooleanExpression skillIdxEq(List<Long> skillIdx){
         if (skillIdx == null) return null;

@@ -30,18 +30,10 @@ public class StudyApiController {
 
     @GetMapping("/study/studyList")
     public ResponseEntity<?> getStudyList(StudyCriteria criteria,@PageableDefault(size = 12, page = 0)  Pageable pageable){
-//    	public ResponseEntity<?> getStudyList(StudyCriteria criteria, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "9") int size){
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
-        log.info("Criteria = {}", criteria);
-//        Pageable paging = PageRequest.of(page, size);
         PageResponseDto<StudyResponseDto> result = studyService.getStudyList(criteria, pageable);
-//        return result;
-//        Page<StudyResponseDto> result2 = studyService.getStudyList(criteria, paging);
-//        return ResponseEntity.ok().body(result);
-        log.info("result.getPageable = {}", result.getPageable());
-        log.info("result.totalCount() = {}", result.getTotalCount());
-        log.info("result.realEnd = {}", result.getRealEnd());
+        log.info("Criteria = {}", criteria);
         return ResponseEntity.ok().body(result);
     }
 

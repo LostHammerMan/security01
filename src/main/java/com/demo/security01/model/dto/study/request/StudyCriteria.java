@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class StudyCriteria {
 
+	private Long categoryIdx;
     private List<Long> skillIdx;
     private List<Long> positionIdx;
     private Integer isFin;
