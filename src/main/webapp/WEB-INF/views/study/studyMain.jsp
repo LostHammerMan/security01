@@ -295,6 +295,91 @@
         background-color: transparent;
     }
 
+    .studyCategoryContainer {
+        max-width: 1300px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0px 20px;
+    }
+
+    .css-1 {
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+    }
+
+    .category_containerr {
+        display: flex;
+        gap: 10px;
+    }
+
+    .study_searchContainer {
+        display: flex;
+        width: 300px;
+        height: 38px;
+        padding: 0 20px;
+        align-items: center;
+        grid-gap: 10px;
+        gap: 10px;
+        border-radius: 36px;
+        background: #f5f5f5;
+        position: relative;
+    }
+
+    .category_container {
+        display: flex;
+        gap: 10px;
+        width: 50%;
+    }
+
+    .selectedItems {
+    -webkit-box-align: center;
+    align-items: center;
+    border-radius: 36px;
+    box-shadow: none;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    justify-content: center;
+    min-height: 38px;
+    position: relative;
+    transition: 100ms;
+    box-sizing: border-box;
+    width: 203.328px;
+    height: 38px;
+    background: white;
+    color: #656565;
+    border: 1px solid rgb(227, 227, 227);
+    outline: 0px !important;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    padding-left: 10px;
+    }
+
+    .select-container {
+        width: 65%;
+    }
+
+    .select2-container--default .select2-selection--multiple {
+    background-color: white;
+    border: 1px solid rgb(227, 227, 227);
+    border-radius: 36px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    font-size: 16px;
+    padding-left: 10px;
+    }
+
+    .availableItem-list {
+        display: none;
+    }
 
 </style>
 
@@ -307,6 +392,37 @@
                 <h1 style="font-size: 16px; font-weight: bolder;">찾고 있는 스터디/프로젝트 있으신가요?</h1>
                 <a class="btn btn-primary ml-auto" href="${root}study/getStudyWriteForm">함께 해요</a>
             </header>
+            <div class="studyCategoryContainer">
+                <div class="css-1">
+                    <div class="category_container">
+                        <div class="input-group mb-3 select-container">
+                            <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-skill" multiple="multiple">
+                                <!-- <option disabled hidden selected>기술 스택</option> -->
+                                <option value="1">Spring</div>
+                                <option value="2">Python</div>
+                                <option value="3">AWS</div>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3 select-container">
+                            <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-recruit" multiple="multiple">
+                                <!-- <option disabled hidden selected>포지션</option> -->
+                                <option value="1">백엔드</div>
+                                <option value="2">프론트엔드</div>
+                                <option value="3">Manager</div>
+                                <option value="4">웹디자이너</div>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3 select-container">
+                            <select class="selectedItems" id="progressMethod" aria-placeholder="진행 방법">
+                                <option value="온라인">온라인</option>
+                                <option value="오프라인">오프라인</option>
+                                <option value="오프라인">온라인/오프라인</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="study_searchContainer"></div>
+                </div>
+            </div>
             <ul class="loungeList_container">
             </ul>
             <div class="study_paginationWrapper">
@@ -336,9 +452,27 @@
 <script>
 
     let selectedCategoryIdx = null;
+    let selectedSkillArr = [];
+    let selectedRecruitArr = [];
     $(document).ready(function (){
         // let selectedCategoryNum = null;
 		getStudyList();
+        // toggleList('#selectedItems-skill', '.available-item', '#availableItems-skill');
+        // toggleList('#selectedItems-recruit', '.available-item-recruit', '#availableItems-recruit');
+
+        $("#selected-recruit").select2({
+            placeholder: "모집 분야";
+            getStudyList();
+            
+        });
+
+        $("#selected-skill").select2({
+            placeholder: "기술 스택"
+        });
+
+        
+
+        
         // getPagingList();
     });
 
@@ -482,6 +616,24 @@
         
     }
     
-    
+    // placaHolder 토글
+    function togglePlaceHolder(classSelector, itemSelector, holderSelector) { 
+        if($(classSelector + ' ' + itemSelector).length === 0){
+            $(holderSelector).show();
+        }else{
+            $(holderSelector).hide();
+        }
+     }
+
+     // 사용가능 리스트 토글
+     function toggleList(idSelector, availableItemSelector, targetSelector) {
+        $(idSelector).on('click', function(e){
+            if(!$(e.target).closest(availableItemSelector).length){
+                $(targetSelector).toggle();
+            }
+        });
+       }
+
+
 </script>
 </html>

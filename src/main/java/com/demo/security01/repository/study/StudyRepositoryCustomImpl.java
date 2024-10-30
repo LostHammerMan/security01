@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
@@ -20,7 +21,6 @@ import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import antlr.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +46,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
+                		processEq(criteria.getProcess()),
                 		categoryEq(criteria.getCategoryIdx()),
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
@@ -72,6 +73,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 //                .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
+                		processEq(criteria.getProcess()),
                 		categoryEq(criteria.getCategoryIdx()),
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
@@ -118,6 +120,12 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     private BooleanExpression categoryEq(Long categoryIdx) {
     	if(categoryIdx == null) return null;
     	return studyEntity.category.categoryIdx.eq(categoryIdx);
+    }
+    
+    // 진행방식별
+    private BooleanExpression processEq(String process) {
+    	if(!StringUtils.hasText(process)) return null;
+    	return studyEntity.progressMethod.eq(process);
     }
     
     // 기술 스택별

@@ -11,6 +11,7 @@ public class StudyCriteria {
 	private Long categoryIdx;
     private List<Long> skillIdx;
     private List<Long> positionIdx;
+    private String process;
     private Integer isFin;
 
 
