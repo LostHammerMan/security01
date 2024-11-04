@@ -56,7 +56,6 @@
         grid-gap: 27px;
         gap: 27px;
         flex-wrap: wrap;
-        margin:  0 auto;
         padding: 0 20px;
     }
 
@@ -302,7 +301,6 @@
         flex-direction: column;
         gap: 30px;
         position: relative;
-        margin-left: auto;
         margin-right: auto;
         padding: 0px 20px;
     }
@@ -364,7 +362,7 @@
     }
 
     .select-container {
-        width: 65%;
+    width: 65%;
     }
 
     .select2-container--default .select2-selection--multiple {
@@ -378,7 +376,17 @@
     }
 
     .availableItem-list {
-        display: none;
+    display: none;
+    }
+
+    .searchInput {
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 0;
+    font-weight: 500;
+    font-size: 16px;
+    width: 100%;
     }
 
 </style>
@@ -413,14 +421,18 @@
                             </select>
                         </div>
                         <div class="input-group mb-3 select-container">
-                            <select class="selectedItems" id="progressMethod" aria-placeholder="진행 방법">
+                            <select class="selectedItems" id="process" aria-placeholder="진행 방법">
                                 <option value="온라인">온라인</option>
                                 <option value="오프라인">오프라인</option>
-                                <option value="오프라인">온라인/오프라인</option>
+                                <option value="">온라인/오프라인</option>
                             </select>
                         </div>
                     </div>
-                    <div class="study_searchContainer"></div>
+                    <div class="study_searchContainer">
+                        <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
+                        <input class="searchInput" placeholder="제목, 내용으로 검색해보세요">
+                        <i class="fa-solid fa-x seachInputCancelBtn" style="font-size: 10px; cursor: pointer;"></i>
+                    </div>
                 </div>
             </div>
             <ul class="loungeList_container">
@@ -452,37 +464,89 @@
 <script>
 
     let selectedCategoryIdx = null;
+    let selectedProcess = null;
     let selectedSkillArr = [];
     let selectedRecruitArr = [];
+
+    
     $(document).ready(function (){
-        // let selectedCategoryNum = null;
 		getStudyList();
-        // toggleList('#selectedItems-skill', '.available-item', '#availableItems-skill');
-        // toggleList('#selectedItems-recruit', '.available-item-recruit', '#availableItems-recruit');
 
-        $("#selected-recruit").select2({
-            placeholder: "모집 분야";
-            getStudyList();
-            
-        });
-
+        // 기술 스택 시작
         $("#selected-skill").select2({
             placeholder: "기술 스택"
         });
 
+        $("#selected-skill").on("change", function(e){
+            selectedSkillArr = $("#selected-skill").val();
+            console.log(selectedSkillArr);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess), e
+        });
         
+        // $("#selected-skill").on("select2:select", function(e){
+        //     selectedSkillArr = $("#selected-skill").val();
+        //     console.log(selectedSkillArr);
 
+        //     getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr), e
+        // });
+
+        // $("#selected-skill").on("select2:unselecting", function(e){
+        //     selectedSkillArr = [];
+        //     console.log(selectedSkillArr);
+
+        //     getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr), e
+        // });
+        // 기술 스택 끝
+
+        // 모집 분야 시작
+        $("#selected-recruit").select2({
+            placeholder: "모집 분야",
+        });
+
+        $("#selected-recruit").on("change", function(e){
+
+        // || 연산자: 왼쪽 값이 null, undefined, 0, false, '' (빈 문자열) 같은 "false" 값일 때, 오른쪽 값을 대신 반환
+
+        selectedRecruitArr = $("#selected-recruit").val() || [];
+        console.log(selectedRecruitArr);
+        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess), e
+        });
+
+        // 모집 분야 끝
+
+        /* process 시작 */
+        $("#process").on("change", function(e){
+            selectedProcess = $("#process").val() || "";
+
+            console.log(selectedProcess);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess)
+        });
+
+        /* process 끝 */
         
-        // getPagingList();
+        /* 검색 시작 */
+        // 검색 취소 버튼
+        $(document).on('click', '.seachInputCancelBtn', function(e){
+            console.log('검색 취소 버튼');
+            $('.searchInput').val("");
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess)
+        });
+
+
+        /* 검색 끝 */
     });
 
-    function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx){  
+    function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords){  
             $.ajax({
-                url: '${root}api/study/studyList?',
+                url: '${root}api/study/studyList',
                 method: 'GET',
                 data : {page : pageNum,
                         size : pageSize,
-                        categoryIdx : selectedCategoryIdx
+                        categoryIdx : selectedCategoryIdx,
+                        skillIdx : selectedSkillArr,
+                        positionIdx : selectedRecruitArr,
+                        process : selectedProcess,
+                        keyword : keywords
                 },
                 success: function(result){
                     $('.loungeList_container').empty();

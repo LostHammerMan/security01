@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -50,7 +51,8 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 		categoryEq(criteria.getCategoryIdx()),
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
-                        isNotFin(criteria.getIsFin())
+                        isNotFin(criteria.getIsFin()),
+                        searchWithTitleAndContents(criteria.getKeyword())
                 )
                 .orderBy(studyEntity.regDate.desc())
                 .offset(pageable.getOffset()) // 페이지 번호
@@ -77,7 +79,8 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 		categoryEq(criteria.getCategoryIdx()),
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
-                        isNotFin(criteria.getIsFin())
+                        isNotFin(criteria.getIsFin()),
+                        searchWithTitleAndContents(criteria.getKeyword())
                 )
                 .fetchOne();
         return count;
@@ -144,6 +147,25 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     private BooleanExpression isNotFin(Integer isFin){
         if (isFin == null) return null;
         return studyEntity.isFIn.eq(isFin);
+    }
+    
+    private BooleanBuilder searchWithTitleAndContents(String keyword) {
+    	BooleanBuilder builder = new BooleanBuilder();
+    	return builder
+    			.or(titleLike(keyword))
+    			.or(contentLike(keyword));
+    }
+    
+    // 제목 검색
+    private BooleanExpression titleLike(String keyword) {
+    	if (!StringUtils.hasText(keyword)) return null;
+    	return studyEntity.title.contains(keyword);
+    }
+    
+    // 내용 검색
+    private BooleanExpression contentLike(String keyword) {
+    	if (!StringUtils.hasText(keyword)) return null;
+    	return studyEntity.contents.contains(keyword);
     }
 
     // 마감여부 따른 리스트조회(테스트용)
