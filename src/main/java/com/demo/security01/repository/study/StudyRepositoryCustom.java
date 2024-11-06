@@ -21,4 +21,7 @@ public interface StudyRepositoryCustom {
 
     // 마감여부 따른 리스트조회(테스트용)
     public List<StudyEntity> getListByIsFin(StudyCriteria criteria);
+    
+    // 인기 스터디 top4
+    public List<StudyEntity> getStudyListTop4();
 }

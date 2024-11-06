@@ -14,10 +14,10 @@
     }
     .container_loungeContainer {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
         position: relative;
-        width: 100%;
+        width: 88%;
         height: 100%;
         gap: 1rem;
         margin-left: auto;
@@ -27,8 +27,93 @@
         min-height: 100%;
     }
 
-    .loungeContainerHeader {
+    
+
+    .topViewPost-container {
         width: 100%;
+        max-width: 1300px;
+        padding: 0px 15px;
+        margin-bottom: 60px;
+    }
+
+    .topViewPostHeader-container {
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+    }
+
+    .topViewPost-header {
+        color: rgb(0, 0, 0);
+        font-size: 26px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 100%;
+        letter-spacing: -0.78px;
+        margin: 0px 0px 24px;
+    }
+
+    .topViewPost-list {
+        display: flex;
+        gap: 15px;
+    }
+
+    .topViewPost-item {
+        color: black;
+        display: flex;
+        flex-direction: column;
+        width: 340px;
+        padding: 20px 25px;
+        gap: 10px;
+        border-radius: 20px;
+        border: 2px solid rgb(209, 209, 209);
+        background: rgb(255, 255, 255);
+    }
+
+    .topViewPost_categoryWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .badge_endDate {
+        padding: 2px 8px;
+        border-radius: 20px;
+        border: 1px solid rgb(234, 114, 111);
+        color: rgb(234, 114, 111);
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: -0.56px;
+    }
+    
+    .topViewPost-title {
+        margin: 10px 0px 0px;
+        color: rgb(0, 0, 0);
+        font-size: 18px;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 140%;
+        letter-spacing: -1px;
+        min-height: 50px;
+        display: -webkit-box;
+        word-break: break-all;
+        overflow: hidden;
+    }
+
+    .topViewPost-viewCount {
+        margin-top: 15px;
+        color: rgb(78, 78, 78);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%;
+        letter-spacing: -0.56px;
+        text-align: end;
+    }
+
+    .loungeContainerHeader {
         display: flex;
         justify-content: space-between;
         position: static;
@@ -101,6 +186,8 @@
         background: #efefef;
         color: #656565;
     }
+
+    
 
     .loungeItem_regDate {
         display: flex;
@@ -394,7 +481,52 @@
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
 <section class="pt-5 pb-5" style="width: 100%;">
     <div class="container_loungeContainer">
+        <div class="topViewPost-container">
+            <div class="topViewPostHeader-container">
+                <h2 class="topViewPost-header">🔥 이번주 슽디 인기 스터디</h2>
+            </div>
+            <div class="topViewPostList-container">
+                <div class="topViewPost-list">
+                    <a class="topViewPost-item">
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">스터디</div>
+                            <div class="badge_endDate">🚨 마감 3일전</div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
+                        <h1 class="topViewPost-title">제목 테스트용</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
+                    </a>
+                    <a class="topViewPost-item">
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">스터디</div>
+                            <div class="badge_endDate">🚨 마감 3일전</div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
+                        <h1 class="topViewPost-title">제목을 어디까지 길게 할 수 있는지 적어보자</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
+                    </a>
+                    <a class="topViewPost-item">
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">프로젝트</div>
+                            <div class="badge_endDate">🚨 마감 3일전</div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
+                        <h1 class="topViewPost-title">제목 테스트용</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
+                    </a>
+                    <a class="topViewPost-item">
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">프로젝트</div>
+                            <div class="badge_endDate">🚨 마감 3일전</div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
+                        <h1 class="topViewPost-title">제목 테스트용</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
+                    </a>
+                </div>
+            </div>
 
+        </div>
         <main class="loungeContainerMain">
             <header class="loungeContainerHeader">
                 <h1 style="font-size: 16px; font-weight: bolder;">찾고 있는 스터디/프로젝트 있으신가요?</h1>
@@ -405,7 +537,6 @@
                     <div class="category_container">
                         <div class="input-group mb-3 select-container">
                             <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-skill" multiple="multiple">
-                                <!-- <option disabled hidden selected>기술 스택</option> -->
                                 <option value="1">Spring</div>
                                 <option value="2">Python</div>
                                 <option value="3">AWS</div>
@@ -413,7 +544,6 @@
                         </div>
                         <div class="input-group mb-3 select-container">
                             <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-recruit" multiple="multiple">
-                                <!-- <option disabled hidden selected>포지션</option> -->
                                 <option value="1">백엔드</div>
                                 <option value="2">프론트엔드</div>
                                 <option value="3">Manager</div>
@@ -430,7 +560,7 @@
                     </div>
                     <div class="study_searchContainer">
                         <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
-                        <input class="searchInput" placeholder="제목, 내용으로 검색해보세요">
+                        <input class="searchInput" id="searchInput" placeholder="제목, 내용으로 검색해보세요">
                         <i class="fa-solid fa-x seachInputCancelBtn" style="font-size: 10px; cursor: pointer;"></i>
                     </div>
                 </div>
@@ -467,7 +597,8 @@
     let selectedProcess = null;
     let selectedSkillArr = [];
     let selectedRecruitArr = [];
-
+    let keywords = null;
+    let selectedPage = null;
     
     $(document).ready(function (){
 		getStudyList();
@@ -480,7 +611,8 @@
         $("#selected-skill").on("change", function(e){
             selectedSkillArr = $("#selected-skill").val();
             console.log(selectedSkillArr);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess), e
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
         });
         
         // $("#selected-skill").on("select2:select", function(e){
@@ -509,7 +641,8 @@
 
         selectedRecruitArr = $("#selected-recruit").val() || [];
         console.log(selectedRecruitArr);
-        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess), e
+        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
         });
 
         // 모집 분야 끝
@@ -519,17 +652,32 @@
             selectedProcess = $("#process").val() || "";
 
             console.log(selectedProcess);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess)
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
         });
 
         /* process 끝 */
         
         /* 검색 시작 */
+        
+
+        // 엔터키 누르면 검색
+        $("#searchInput").keydown(function(e){
+            if(e.keyCode == 13){
+                keywords = $("#searchInput").val();
+                console.log("keywords = " + keywords);
+
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
+            }
+        });
+
         // 검색 취소 버튼
         $(document).on('click', '.seachInputCancelBtn', function(e){
             console.log('검색 취소 버튼');
-            $('.searchInput').val("");
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess)
+            $("#searchInput").val("");
+            keywords = null;
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
         });
 
 
@@ -630,7 +778,8 @@
                     $('.pagination').empty();
 
                     // 본문 끝
-                    // 페이징
+
+                    /* 페이징 */
                     // paging 
         let pagingHtml = '';
         pagingHtml += `
@@ -656,18 +805,20 @@
             `;
         }
         pagingHtml += `
-            <button class="pagination-btn" data-page="${'${result.realEnd}'}"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg></button>
+            <button class="pagination-btn" data-page="${'${result.realEnd -1}'}"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg></button>
         `;
 
         $('.pagination').append(pagingHtml);
 
         // 페이지 버튼 클릭
         $('.pagination-btn').on('click', function(){
-            let selectedPage = $(this).data('page');
+            selectedPage = $(this).data('page');
+            getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
             // $('.pagination').children.remove();
             // $('.loungeList_container').empty();
             // $('.pagination').empty();
-            getStudyList(selectedPage, pageSize, selectedCategoryIdx);
+            // getStudyList(selectedPage, pageSize, selectedCategoryIdx);
         });
         
         // 페이징 끝

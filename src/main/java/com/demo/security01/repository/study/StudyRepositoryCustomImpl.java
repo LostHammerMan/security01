@@ -19,6 +19,8 @@ import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -31,6 +33,18 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 
+    // 인기 스터디 top4
+    @Override
+	public List<Tuple> getStudyListTop4() {
+    	List<Tuple> entities = queryFactory
+    			.select(Projections.fields(studyEntity.class, studyEntity.title)) 
+    			.from(studyEntity)
+    			.fetch();
+    			
+    	
+		return entities;
+	}
+    
 
 
     // 스터디 목록 + 페이징
@@ -178,5 +192,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .fetch();
         return findStudyList;
     }
+
+	
 
 }
