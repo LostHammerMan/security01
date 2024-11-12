@@ -369,6 +369,11 @@ public class StudyService {
         log.info("\t\tupdateIsFin call");
         studyRepository.updateIsFin();
     }
+    
+    // top4 스터디 조회
+    public List<StudyResponseDto> getStudyListTop4(){
+    	return studyRepository.getStudyListTop4();
+    }
 
 
     // 스터디_ 스킬 태그 삭제 (테스트용)

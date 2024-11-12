@@ -487,7 +487,7 @@
             </div>
             <div class="topViewPostList-container">
                 <div class="topViewPost-list">
-                    <a class="topViewPost-item">
+                    <!-- <a class="topViewPost-item">
                         <div class="topViewPost_categoryWrapper">
                             <div class="badge_category">스터디</div>
                             <div class="badge_endDate">🚨 마감 3일전</div>
@@ -495,34 +495,7 @@
                         <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
                         <h1 class="topViewPost-title">제목 테스트용</h1>
                         <div class="topViewPost-viewCount">👓 조회수 50회</div>
-                    </a>
-                    <a class="topViewPost-item">
-                        <div class="topViewPost_categoryWrapper">
-                            <div class="badge_category">스터디</div>
-                            <div class="badge_endDate">🚨 마감 3일전</div>
-                        </div>
-                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
-                        <h1 class="topViewPost-title">제목을 어디까지 길게 할 수 있는지 적어보자</h1>
-                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
-                    </a>
-                    <a class="topViewPost-item">
-                        <div class="topViewPost_categoryWrapper">
-                            <div class="badge_category">프로젝트</div>
-                            <div class="badge_endDate">🚨 마감 3일전</div>
-                        </div>
-                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
-                        <h1 class="topViewPost-title">제목 테스트용</h1>
-                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
-                    </a>
-                    <a class="topViewPost-item">
-                        <div class="topViewPost_categoryWrapper">
-                            <div class="badge_category">프로젝트</div>
-                            <div class="badge_endDate">🚨 마감 3일전</div>
-                        </div>
-                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
-                        <h1 class="topViewPost-title">제목 테스트용</h1>
-                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
-                    </a>
+                    </a> -->
                 </div>
             </div>
 
@@ -601,6 +574,7 @@
     let selectedPage = null;
     
     $(document).ready(function (){
+        getStudyListTop4();
 		getStudyList();
 
         // 기술 스택 시작
@@ -684,6 +658,58 @@
         /* 검색 끝 */
     });
 
+    /* 스터디 top4 리스트 시작 */
+    function getStudyListTop4(){
+        const today = new Date();
+        let top4Html = '';
+
+        $.ajax({
+            url: '${root}api/study/studyListTop4',
+            method: 'GET',
+            success : function(result){
+                console.log("top4List 불러오기 성공");
+                
+                $('.topViewPost-list').empty();
+
+                console.log("오늘 날짜 : " + today.toLocaleDateString());
+
+                result.forEach(function (item) {
+
+                const dbDate = new Date(item.recruitDeadline);
+                const diff = dbDate - today;
+                const diffInDays =  Math.floor(diff / (1000 * 60 * 60 * 24));
+                console.log("diff = " + diffInDays);
+                
+                // const newDate = new Date('2023-06-12');
+                // let diff = Math.abs(newDate.getTime() - oldDate.getTime());
+                // diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                // console.log(diff);
+
+                    top4Html += `
+                    <a class="topViewPost-item" href='${root}study/${'${item.studyIdx}'}'>
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">${'${item.categoryName}'}</div>
+                            <div class="badge_endDate">🚨 마감 ${'${diffInDays}'}일전</div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | ${'${item.recruitDeadline}'}</div>
+                        <h1 class="topViewPost-title">${'${item.title}'}</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 ${'${item.viewCount}'}회</div>
+                    </a>
+                `;
+                });
+                
+
+                $('.topViewPost-list').append(top4Html);
+            },
+            error : function(xhr){
+                console.log("top4List 불러오기 실패");
+            }
+        })
+    }
+
+    /* 스터디 top4 리스트 끝 */
+
+    /* 스터디 리스트 본문 */
     function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords){  
             $.ajax({
                 url: '${root}api/study/studyList',

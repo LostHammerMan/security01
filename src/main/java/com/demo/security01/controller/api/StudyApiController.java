@@ -36,6 +36,12 @@ public class StudyApiController {
         log.info("Criteria = {}", criteria);
         return ResponseEntity.ok().body(result);
     }
+    
+    @GetMapping("/study/studyListTop4")
+    public ResponseEntity<List<StudyResponseDto>> getStudyListTop4(){
+    	List<StudyResponseDto> top4Result = studyService.getStudyListTop4();
+    	return ResponseEntity.ok().body(top4Result);
+    }
 
     @GetMapping("/study/getListIsFin")
     public List<StudyResponseDto> getResult(StudyCriteria criteria){

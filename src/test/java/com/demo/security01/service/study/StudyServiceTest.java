@@ -122,6 +122,13 @@ class StudyServiceTest {
 
         studyService.studyDelete(1L, "admin");
     }
+    
+    // 스터디 top4 조회
+    @Test
+    @DisplayName("스터디 4건 조회 - 성공")
+    void getStudyListTop4() {
+    	log.info("top4List = {}", studyService.getStudyListTop4());
+    }
 
     // 스터디/프로젝트 단건 조회
     @Test

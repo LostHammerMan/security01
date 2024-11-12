@@ -2,6 +2,8 @@ package com.demo.security01.repository.study;
 
 import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,5 +25,5 @@ public interface StudyRepositoryCustom {
     public List<StudyEntity> getListByIsFin(StudyCriteria criteria);
     
     // 인기 스터디 top4
-    public List<StudyEntity> getStudyListTop4();
+    public List<StudyResponseDto> getStudyListTop4();
 }

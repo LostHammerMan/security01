@@ -1,5 +1,6 @@
 package com.demo.security01.repository.study;
 
+import static com.demo.security01.entity.QCategoryEntity.categoryEntity;
 import static com.demo.security01.entity.study.QRecruitPositions.recruitPositions;
 import static com.demo.security01.entity.study.QStudyEntity.studyEntity;
 import static com.demo.security01.entity.study.QStudy_Positions.study_Positions;
@@ -15,11 +16,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import com.demo.security01.entity.QCategoryEntity;
 import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,15 +35,22 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     // 인기 스터디 top4
+    // 연관된 엔티티의 특정 필드에 접근하려면 join 을 사용해 필요한 필드 매핑
     @Override
-	public List<Tuple> getStudyListTop4() {
-    	List<Tuple> entities = queryFactory
-    			.select(Projections.fields(studyEntity.class, studyEntity.title)) 
-    			.from(studyEntity)
-    			.fetch();
-    			
-    	
-		return entities;
+	public List<StudyResponseDto> getStudyListTop4() {
+		return queryFactory.select(Projections.fields(StudyResponseDto.class, 
+				studyEntity.idx.as("studyIdx"),
+				studyEntity.title,
+				studyEntity.recruitDeadline,
+				studyEntity.viewCount,
+				categoryEntity.categoryName
+				))
+				.from(studyEntity)
+				.join(studyEntity.category, categoryEntity)
+				.where(studyEntity.isFIn.eq(0))
+				.orderBy(studyEntity.viewCount.desc())
+				.limit(4)
+				.fetch();
 	}
     
 
