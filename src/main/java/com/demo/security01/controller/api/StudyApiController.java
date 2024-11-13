@@ -3,6 +3,8 @@ package com.demo.security01.controller.api;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +31,14 @@ public class StudyApiController {
     private final StudyService studyService;
 
     @GetMapping("/study/studyList")
-    public ResponseEntity<?> getStudyList(StudyCriteria criteria,@PageableDefault(size = 12, page = 0)  Pageable pageable){
+    public ResponseEntity<?> getStudyList(StudyCriteria criteria,@PageableDefault(size = 12, page = 0)  Pageable pageable, HttpServletRequest request){
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
-        PageResponseDto<StudyResponseDto> result = studyService.getStudyList(criteria, pageable);
+        if(request.getUserPrincipal().getName() == null) {
+        	log.info("로그인 필요");
+        };
+        
+        PageResponseDto<StudyResponseDto> result = studyService.getStudyList(criteria, pageable, request.getUserPrincipal().getName());
         log.info("Criteria = {}", criteria);
         return ResponseEntity.ok().body(result);
     }

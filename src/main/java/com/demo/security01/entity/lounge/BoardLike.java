@@ -29,14 +29,14 @@ public class BoardLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STUDY_IDX", nullable = true)
-    private StudyEntity study;
+    private StudyEntity studyEntity;
 
     // 라운지 관련
     @Builder
-    public BoardLike(User user, LoungeEntity lounge, StudyEntity study) {
+    public BoardLike(User user, LoungeEntity lounge, StudyEntity studyEntity) {
         this.user = user;
         this.lounge = lounge;
-        this.study = study;
+        this.studyEntity = studyEntity;
         
     }
     

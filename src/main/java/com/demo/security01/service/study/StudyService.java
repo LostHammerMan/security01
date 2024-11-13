@@ -261,12 +261,18 @@ public class StudyService {
     }
 
     // 목록 조회 + 페이징
-    public PageResponseDto<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
+    public PageResponseDto<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable, String username){
 //    	public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
         log.info("======== StudyService ============");
         log.info("\t\t getStudyList called.....");
         
-        Page<StudyEntity> studyList= studyRepository.getStudyPageComplex(criteria, pageable);
+        User loginUser = userRepository.findByUsername(username).orElseThrow(
+        		() -> new EntityNotFoundException("해당 유저는 존재하지 않음")
+        		);
+        
+        Integer loginUserIdx = loginUser.getId();
+        
+        Page<StudyEntity> studyList= studyRepository.getStudyPageComplex(criteria, pageable, loginUserIdx);
 
         List<StudyResponseDto> responseDtoList = new ArrayList<>();
 //        for (StudyEntity findStudy : studyRepository.getStudyList(criteria, pageable)){

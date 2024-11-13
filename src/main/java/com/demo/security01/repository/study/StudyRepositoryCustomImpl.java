@@ -1,6 +1,7 @@
 package com.demo.security01.repository.study;
 
 import static com.demo.security01.entity.QCategoryEntity.categoryEntity;
+import static com.demo.security01.entity.lounge.QBoardLike.boardLike;
 import static com.demo.security01.entity.study.QRecruitPositions.recruitPositions;
 import static com.demo.security01.entity.study.QStudyEntity.studyEntity;
 import static com.demo.security01.entity.study.QStudy_Positions.study_Positions;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.demo.security01.entity.QCategoryEntity;
+import com.demo.security01.entity.lounge.QBoardLike;
 import com.demo.security01.entity.study.StudyEntity;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
@@ -53,11 +55,13 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 				.fetch();
 	}
     
+    // 
+    
 
 
     // 스터디 목록 + 페이징
     @Override
-    public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable){
+    public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable, Integer userIdx){
 //    public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable){
 
         List<StudyEntity> entities = queryFactory
@@ -67,6 +71,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .leftJoin(skillTagEntity).on(studySkillTagEntity.skillTag.eq(skillTagEntity))
                 .leftJoin(study_Positions).on(study_Positions.studyEntity.eq(studyEntity))
                 .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
+                .leftJoin(boardLike).on(boardLike.studyEntity.eq(studyEntity))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
                 		processEq(criteria.getProcess()),
@@ -74,7 +79,8 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
                         isNotFin(criteria.getIsFin()),
-                        searchWithTitleAndContents(criteria.getKeyword())
+                        searchWithTitleAndContents(criteria.getKeyword()),
+                        checkStudyLike(userIdx)
                 )
                 .orderBy(studyEntity.regDate.desc())
                 .offset(pageable.getOffset()) // 페이지 번호
@@ -88,7 +94,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     // count 쿼리 
     // study 개수만 구하면 되는데 왜 left join?
     @Override
-    public Long getStudyListCount(StudyCriteria criteria) {
+    public Long getStudyListCount(StudyCriteria criteria, Integer userIdx) {
         Long count = queryFactory.select(studyEntity.idx.countDistinct())
                 .from(studyEntity)
 //                .leftJoin(studySkillTagEntity).on(studySkillTagEntity.study.eq(studyEntity))
@@ -102,18 +108,19 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                         skillIdxEq(criteria.getSkillIdx()),
                         positionIdxEq(criteria.getPositionIdx()),
                         isNotFin(criteria.getIsFin()),
-                        searchWithTitleAndContents(criteria.getKeyword())
+                        searchWithTitleAndContents(criteria.getKeyword()),
+                        checkStudyLike(userIdx)
                 )
                 .fetchOne();
         return count;
     }
 
     // 페이징 최적화
-    public Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable){
+    public Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable, Integer userIdx){
         log.info("========= StudyRepositoryCustomImpl ============");
         log.info("\t\t getStudyPageComplex called...");
-        List<StudyEntity> contents = getStudyList(criteria, pageable);
-        Long totalCount = getStudyListCount(criteria);
+        List<StudyEntity> contents = getStudyList(criteria, pageable, userIdx);
+        Long totalCount = getStudyListCount(criteria, userIdx);
 
         return new PageImpl<>(contents, pageable, totalCount);
     }
@@ -171,6 +178,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
         return studyEntity.isFIn.eq(isFin);
     }
     
+    // 제목 + 내용 검색
     private BooleanBuilder searchWithTitleAndContents(String keyword) {
     	BooleanBuilder builder = new BooleanBuilder();
     	return builder
@@ -189,6 +197,12 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     	if (!StringUtils.hasText(keyword)) return null;
     	return studyEntity.contents.contains(keyword);
     }
+    
+    // 좋아요한 경우
+    private BooleanExpression checkStudyLike(Integer userIdx) {
+    	if(userIdx == null) return null;
+    	return boardLike.user.id.eq(userIdx);
+    }
 
     // 마감여부 따른 리스트조회(테스트용)
     public List<StudyEntity> getListByIsFin(StudyCriteria criteria){
@@ -200,6 +214,9 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .fetch();
         return findStudyList;
     }
+    
+    
+    
 
 	
 

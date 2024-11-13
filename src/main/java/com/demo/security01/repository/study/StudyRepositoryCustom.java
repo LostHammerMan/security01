@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface StudyRepositoryCustom {
 //    List<StudyEntity> getStudyList(List<Long> skillIdx, List<Long> positionIdx);
-    List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable);
+    List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable, Integer UserIdx);
 
     // studyList count 쿼리
-    Long getStudyListCount(StudyCriteria criteria);
+    Long getStudyListCount(StudyCriteria criteria, Integer userIdx);
 
     // 페이징 최적화 버전
-    Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable);
+    Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable, Integer UserIdx);
     // 스터디가 마감날짜에 도달
     void updateIsFin();
 
