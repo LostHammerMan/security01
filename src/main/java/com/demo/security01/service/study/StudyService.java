@@ -261,18 +261,20 @@ public class StudyService {
     }
 
     // 목록 조회 + 페이징
-    public PageResponseDto<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable, String username){
+    public PageResponseDto<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
 //    	public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
         log.info("======== StudyService ============");
         log.info("\t\t getStudyList called.....");
+        Page<StudyEntity> studyList = null;
+//        User loginUser = userRepository.findByUsername(username).orElseThrow(
+//        		() -> new EntityNotFoundException("해당 유저는 존재하지 않음")
+//        		);
         
-        User loginUser = userRepository.findByUsername(username).orElseThrow(
-        		() -> new EntityNotFoundException("해당 유저는 존재하지 않음")
-        		);
+//        Integer loginUserIdx = loginUser.getId();
         
-        Integer loginUserIdx = loginUser.getId();
+//        Page<StudyEntity> studyList= studyRepository.getStudyPageComplex(criteria, pageable, loginUserIdx);
+    	studyList= studyRepository.getStudyPageComplex(criteria, pageable, null);
         
-        Page<StudyEntity> studyList= studyRepository.getStudyPageComplex(criteria, pageable, loginUserIdx);
 
         List<StudyResponseDto> responseDtoList = new ArrayList<>();
 //        for (StudyEntity findStudy : studyRepository.getStudyList(criteria, pageable)){
@@ -293,7 +295,76 @@ public class StudyService {
             	positionNames.add(study_position.getPostsionName());
             }
             
-            // 
+
+            StudyResponseDto responseDto = StudyResponseDto.builder()
+            		.studyIdx(findStudy.getIdx())
+                    .categoryName(findStudy.getCategory().getCategoryName())
+                    .title(findStudy.getTitle())
+                    .contents(findStudy.getContents())
+                    .contactMethod(findStudy.getContactMethod())
+                    .contactAddress(findStudy.getContactAddress())
+                    .progressPeriod(findStudy.getProgressPeriod())
+                    .process(findStudy.getProgressMethod())
+                    .recruitDeadline(findStudy.getRecruitDeadline())
+                    .recruitedNumber(findStudy.getRecruitedNumber())
+                    .skillTags(skillTagNames)
+                    .recruitPositions(positionNames)
+                    .regDate(findStudy.getRegDate())
+                    .username(findStudy.getUser().getUsername())
+                    .viewCount(findStudy.getViewCount())
+                    .likeCount(findStudy.getLikeCount())
+                    .commentCount(commentRepository.getCommentListCount(findStudy.getIdx(), BoardType.STUDY))
+                    .isFin(findStudy.getIsFIn()).build();
+
+            responseDtoList.add(responseDto);
+        }
+        
+        // 제네릭 클래스로 빌더를 만든경우, builder 앞에 제네릭 타입 들어감 주의!
+        PageResponseDto<StudyResponseDto> result = PageResponseDto.<StudyResponseDto>builder()
+        		.dtoList(responseDtoList)
+        		.pageable(studyList.getPageable())
+        		.totalCount(studyList.getTotalElements())
+        		.build();
+        
+        
+        return result;
+    }
+    
+    // 목록 + 페이징 + 좋아요
+    public PageResponseDto<StudyResponseDto> getStudyListWithLikeCheck(StudyCriteria criteria, Pageable pageable, String username){
+//    	public List<StudyResponseDto> getStudyList(StudyCriteria criteria, Pageable pageable){
+        log.info("======== StudyService ============");
+        log.info("\t\t getStudyList called.....");
+        Page<StudyEntity> studyList = null;
+        
+        User loginUser = userRepository.findByUsername(username).orElseThrow(
+        		() -> new EntityNotFoundException("해당 유저는 존재하지 않음")
+        		);
+        
+//        Integer loginUserIdx = loginUser.getId();
+        
+//        Page<StudyEntity> studyList= studyRepository.getStudyPageComplex(criteria, pageable, loginUserIdx);
+    	studyList= studyRepository.getStudyPageComplex(criteria, pageable, loginUser);
+        
+
+        List<StudyResponseDto> responseDtoList = new ArrayList<>();
+//        for (StudyEntity findStudy : studyRepository.getStudyList(criteria, pageable)){
+//        for (StudyEntity findStudy : studyRepository.getStudyPageComplex(criteria, pageable)){
+    	for (StudyEntity findStudy : studyList){
+            // 스킬 태그
+            List<String> skillTagNames = new ArrayList<String>();
+            for (StudySkillTagEntity skillTag: findStudy.getStudySkillTagEntity()){
+//                skillTagNames.add(skillTag.getStudyImgName());
+                skillTagNames.add(skillTag.getStudyImgName());
+            }
+
+            // 포지션
+//            Set<String> postionNames = new HashSet<>();
+            List<String> positionNames = new ArrayList<String>();
+            for (Study_Positions study_position : findStudy.getStudy_positions()){
+//            	positionNames.add(study_position.getPositions().getPositionName());
+            	positionNames.add(study_position.getPostsionName());
+            }
             
 
             StudyResponseDto responseDto = StudyResponseDto.builder()

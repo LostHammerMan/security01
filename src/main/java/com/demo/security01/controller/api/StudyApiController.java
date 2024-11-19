@@ -30,18 +30,35 @@ public class StudyApiController {
 
     private final StudyService studyService;
 
+    // 목록 + 페이징
     @GetMapping("/study/studyList")
-    public ResponseEntity<?> getStudyList(StudyCriteria criteria,@PageableDefault(size = 12, page = 0)  Pageable pageable, HttpServletRequest request){
+	public ResponseEntity<?> getStudyList(StudyCriteria criteria,@PageableDefault(size = 12, page = 0)  Pageable pageable){
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
-        if(request.getUserPrincipal().getName() == null) {
-        	log.info("로그인 필요");
-        };
         
-        PageResponseDto<StudyResponseDto> result = studyService.getStudyList(criteria, pageable, request.getUserPrincipal().getName());
+        PageResponseDto<StudyResponseDto> result = studyService.getStudyList(criteria, pageable);
         log.info("Criteria = {}", criteria);
         return ResponseEntity.ok().body(result);
     }
+    
+    // 목록 + 페이징 + 좋아요
+    @GetMapping("/study/like")
+	public ResponseEntity<?> getStudyListWithLikeCheck(StudyCriteria criteria,@PageableDefault(size = 12, page = 0)  Pageable pageable,
+														Principal principal){
+        log.info("====== StudyApiController ==========");
+        log.info("\t\t getStudyList called......");
+        if(principal.getName() == null) {
+        	log.info("로그인 필요");
+        	
+        };
+        
+        String loginUsername = principal.getName();
+        
+        PageResponseDto<StudyResponseDto> result = studyService.getStudyListWithLikeCheck(criteria, pageable, loginUsername);
+        log.info("Criteria = {}", criteria);
+        return ResponseEntity.ok().body(result);
+    }
+    
     
     @GetMapping("/study/studyListTop4")
     public ResponseEntity<List<StudyResponseDto>> getStudyListTop4(){

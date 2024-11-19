@@ -22,6 +22,8 @@ public class QLoungeEntity extends EntityPathBase<LoungeEntity> {
 
     public static final QLoungeEntity loungeEntity = new QLoungeEntity("loungeEntity");
 
+    public final ListPath<BoardLike, QBoardLike> boardLikes = this.<BoardLike, QBoardLike>createList("boardLikes", BoardLike.class, QBoardLike.class, PathInits.DIRECT2);
+
     public final com.demo.security01.entity.QCategoryEntity cateCode;
 
     public final ListPath<com.demo.security01.entity.comment.CommentEntity, com.demo.security01.entity.comment.QCommentEntity> commentEntity = this.<com.demo.security01.entity.comment.CommentEntity, com.demo.security01.entity.comment.QCommentEntity>createList("commentEntity", com.demo.security01.entity.comment.CommentEntity.class, com.demo.security01.entity.comment.QCommentEntity.class, PathInits.DIRECT2);

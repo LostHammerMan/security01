@@ -13,8 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.BoardType;
 import com.demo.security01.model.dto.comment.request.CommentRequestDto;
+import com.demo.security01.model.dto.paging.PageResponseDto;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
@@ -22,6 +24,7 @@ import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.repository.study.StudyRepository;
 import com.demo.security01.repository.study.study_positions.Study_PositionsRepository;
 import com.demo.security01.repository.study.study_skill.Study_SkillTagRepository;
+import com.demo.security01.repository.user.UserRepository;
 import com.demo.security01.service.community.CommentService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,9 @@ class StudyServiceTest {
     @Autowired
     private StudyService studyService;
 
+    @Autowired
+    private UserRepository userRepository;
+    
     @Autowired
     private Study_SkillTagRepository study_skillTagRepository;
 
@@ -169,6 +175,23 @@ class StudyServiceTest {
         }
     }
 
+    // 스터디 목록 + 페이징 + 좋아요
+    @Test
+    @DisplayName("좋아요 모아보기 성공")
+    void getStudyListWithLikeCheck() {
+    	
+    	String username = "admin";
+    	
+    	StudyCriteria cri = new StudyCriteria();
+    	 Pageable pageable = PageRequest.of(0, 9);
+    	
+    	PageResponseDto<StudyResponseDto> results =  studyService.getStudyListWithLikeCheck(cri, pageable, username);
+    	
+    	for(StudyResponseDto result : results.getDtoList()) {
+    		log.info("result = {}", result);
+    	}
+    	
+    }
 
     // 스터디_스킬 태그 삭제 test(repository)
     // @Transaction 이 없는 repository 에서 바로 호출시

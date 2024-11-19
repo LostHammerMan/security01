@@ -63,6 +63,9 @@ public class LoungeEntity {
 
     @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntity;
+    
+    @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
+    private List<BoardLike> boardLikes;
 
     public void loungeEdit(LoungeModifyRequest request, CategoryEntity cateCode){
         this.title  = request.getTitle() != null? request.getTitle() : this.getTitle() ;

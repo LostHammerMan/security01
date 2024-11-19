@@ -22,6 +22,8 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
+    public final ListPath<com.demo.security01.entity.lounge.BoardLike, com.demo.security01.entity.lounge.QBoardLike> boardLikes = this.<com.demo.security01.entity.lounge.BoardLike, com.demo.security01.entity.lounge.QBoardLike>createList("boardLikes", com.demo.security01.entity.lounge.BoardLike.class, com.demo.security01.entity.lounge.QBoardLike.class, PathInits.DIRECT2);
+
     public final DateTimePath<java.sql.Timestamp> createDate = createDateTime("createDate", java.sql.Timestamp.class);
 
     public final StringPath email = createString("email");

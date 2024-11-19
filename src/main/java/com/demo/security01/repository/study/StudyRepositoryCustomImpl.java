@@ -17,9 +17,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
-import com.demo.security01.entity.QCategoryEntity;
-import com.demo.security01.entity.lounge.QBoardLike;
 import com.demo.security01.entity.study.StudyEntity;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.querydsl.core.BooleanBuilder;
@@ -61,7 +60,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 
     // 스터디 목록 + 페이징
     @Override
-    public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable, Integer userIdx){
+    public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable, User user){
 //    public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable){
 
         List<StudyEntity> entities = queryFactory
@@ -71,7 +70,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .leftJoin(skillTagEntity).on(studySkillTagEntity.skillTag.eq(skillTagEntity))
                 .leftJoin(study_Positions).on(study_Positions.studyEntity.eq(studyEntity))
                 .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
-                .leftJoin(boardLike).on(boardLike.studyEntity.eq(studyEntity))
+                .leftJoin(boardLike).on(boardLike.study.eq(studyEntity))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
                 		processEq(criteria.getProcess()),
@@ -80,7 +79,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                         positionIdxEq(criteria.getPositionIdx()),
                         isNotFin(criteria.getIsFin()),
                         searchWithTitleAndContents(criteria.getKeyword()),
-                        checkStudyLike(userIdx)
+                        checkStudyLike(user)
                 )
                 .orderBy(studyEntity.regDate.desc())
                 .offset(pageable.getOffset()) // 페이지 번호
@@ -94,13 +93,14 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     // count 쿼리 
     // study 개수만 구하면 되는데 왜 left join?
     @Override
-    public Long getStudyListCount(StudyCriteria criteria, Integer userIdx) {
+    public Long getStudyListCount(StudyCriteria criteria, User user) {
         Long count = queryFactory.select(studyEntity.idx.countDistinct())
                 .from(studyEntity)
 //                .leftJoin(studySkillTagEntity).on(studySkillTagEntity.study.eq(studyEntity))
 //                .leftJoin(skillTagEntity).on(studySkillTagEntity.skillTag.eq(skillTagEntity))
 //                .leftJoin(study_Positions).on(study_Positions.studyEntity.eq(studyEntity))
 //                .leftJoin(recruitPositions).on(study_Positions.positions.eq(recruitPositions))
+                .leftJoin(boardLike).on(boardLike.study.eq(studyEntity))
 //                .where(studyEntity.studySkillTagEntity)
                 .where(
                 		processEq(criteria.getProcess()),
@@ -109,18 +109,18 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                         positionIdxEq(criteria.getPositionIdx()),
                         isNotFin(criteria.getIsFin()),
                         searchWithTitleAndContents(criteria.getKeyword()),
-                        checkStudyLike(userIdx)
+                        checkStudyLike(user)
                 )
                 .fetchOne();
         return count;
     }
 
     // 페이징 최적화
-    public Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable, Integer userIdx){
+    public Page<StudyEntity> getStudyPageComplex(StudyCriteria criteria, Pageable pageable, User user){
         log.info("========= StudyRepositoryCustomImpl ============");
         log.info("\t\t getStudyPageComplex called...");
-        List<StudyEntity> contents = getStudyList(criteria, pageable, userIdx);
-        Long totalCount = getStudyListCount(criteria, userIdx);
+        List<StudyEntity> contents = getStudyList(criteria, pageable, user);
+        Long totalCount = getStudyListCount(criteria, user);
 
         return new PageImpl<>(contents, pageable, totalCount);
     }
@@ -199,9 +199,9 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     }
     
     // 좋아요한 경우
-    private BooleanExpression checkStudyLike(Integer userIdx) {
-    	if(userIdx == null) return null;
-    	return boardLike.user.id.eq(userIdx);
+    private BooleanExpression checkStudyLike(User loginUser) {
+    	if(loginUser == null) return null;
+    	return boardLike.user.eq(loginUser);
     }
 
     // 마감여부 따른 리스트조회(테스트용)

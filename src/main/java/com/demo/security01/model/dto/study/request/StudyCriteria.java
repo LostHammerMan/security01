@@ -13,5 +13,6 @@ public class StudyCriteria {
     private String process;
     private Integer isFin;
     private String keyword;
+    private Boolean likeCheck;
 
 }

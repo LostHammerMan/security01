@@ -1,24 +1,31 @@
 package com.demo.security01.entity.study;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.comment.CommentEntity;
 import com.demo.security01.entity.lounge.BoardLike;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.util.StringUtils;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @Entity

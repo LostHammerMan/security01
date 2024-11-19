@@ -476,6 +476,10 @@
     width: 100%;
     }
 
+    .toggleOn {
+        background-color: #4caf50;
+    }
+
 </style>
 
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
@@ -510,17 +514,17 @@
                     <div class="category_container">
                         <div class="input-group mb-3 select-container">
                             <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-skill" multiple="multiple">
-                                <option value="1">Spring</div>
-                                <option value="2">Python</div>
-                                <option value="3">AWS</div>
+                                <option value="1">Spring</option>
+                                <option value="2">Python</option>
+                                <option value="3">AWS</option>
                             </select>
                         </div>
                         <div class="input-group mb-3 select-container">
                             <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-recruit" multiple="multiple">
-                                <option value="1">백엔드</div>
-                                <option value="2">프론트엔드</div>
-                                <option value="3">Manager</div>
-                                <option value="4">웹디자이너</div>
+                                <option value="1">백엔드</option>
+                                <option value="2">프론트엔드</option>
+                                <option value="3">Manager</option>
+                                <option value="4">웹디자이너</option>
                             </select>
                         </div>
                         <div class="input-group mb-3 select-container">
@@ -529,6 +533,9 @@
                                 <option value="오프라인">오프라인</option>
                                 <option value="">온라인/오프라인</option>
                             </select>
+                        </div>
+                        <div class="select-container">
+                            <button class="likeCheckBtn">좋아요 보기</button>
                         </div>
                     </div>
                     <div class="study_searchContainer">
@@ -541,10 +548,8 @@
             <ul class="loungeList_container">
             </ul>
             <div class="study_paginationWrapper">
-                <div class="pagination">
-                    
-                </div>
-        </div>
+                <div class="pagination"></div>
+            </div>
         </main>
         <!-- <aside class="loungeContainerAside">
             <div>
@@ -572,6 +577,8 @@
     let selectedRecruitArr = [];
     let keywords = null;
     let selectedPage = null;
+    const likeCheckToggleBtn = $('.likeCheckBtn'); 
+    let studyListUrl = '';
     
     $(document).ready(function (){
         getStudyListTop4();
@@ -656,6 +663,21 @@
 
 
         /* 검색 끝 */
+       
+        /* 좋아요 모아보기 시작 */
+        
+        // likeCheckToggleBtn.click(function(){
+            
+
+        //     if(likeCheckToggleBtn.hasClass('toggleOn')){
+        //         getStudyListWithLikeCheck(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
+        //     }else{
+        //         getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+        //     }
+        // });
+        /* 좋아요 모아보기 끝*/
+
     });
 
     /* 스터디 top4 리스트 시작 */
@@ -711,8 +733,28 @@
 
     /* 스터디 리스트 본문 */
     function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords){  
+
+
+        /* 좋아요 보기 토글 */
+        likeCheckToggleBtn.click(function(){
+            console.log('좋아요 보기 클릭');
+            studyListUrl = '';
+            likeCheckToggleBtn.toggleClass('toggleOn');
+            // getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            getStudyList();
+        });
+
+        if(likeCheckToggleBtn.hasClass('toggleOn')){
+                studyListUrl = '${root}api/study/like';
+            }else{
+                studyListUrl = '${root}api/study/studyList';
+            }
+
+        console.log('studyListUrl2 = ' + studyListUrl);
+
+        
             $.ajax({
-                url: '${root}api/study/studyList',
+                url: studyListUrl,
                 method: 'GET',
                 data : {page : pageNum,
                         size : pageSize,
@@ -723,6 +765,7 @@
                         keyword : keywords
                 },
                 success: function(result){
+                    console.log('스터디 리스트 불러오기 성공');
                     $('.loungeList_container').empty();
                     $('.pagination').empty();
                     
@@ -856,6 +899,154 @@
             });
         
     }
+
+    // function getStudyListWithLikeCheck(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords){  
+    //         $.ajax({
+    //             url: '${root}api/study/like',
+    //             method: 'GET',
+    //             data : {page : pageNum,
+    //                     size : pageSize,
+    //                     categoryIdx : selectedCategoryIdx,
+    //                     skillIdx : selectedSkillArr,
+    //                     positionIdx : selectedRecruitArr,
+    //                     process : selectedProcess,
+    //                     keyword : keywords
+    //             },
+    //             success: function(result){
+    //                 console.log('스터디 리스트 불러오기 성공');
+    //                 $('.loungeList_container').empty();
+    //                 $('.pagination').empty();
+                    
+    //                 // 본문
+    //                 result.dtoList.forEach(function(item){
+    //                 let itemHtml = '';
+    //                 let pagingHtml = '';
+    //                 itemHtml += `
+    //             <a class="loungeList_loungeItem" href="${root}study/${'${item.studyIdx}'}">
+    //                     <li class="loungeItem_list">
+    //                         <div class="loungeItem_badgeWrapper">
+    //                             <div class="badge_categoryWrapper">
+    //                                 <div class="badge_category">
+    //                                     ${'${item.categoryName}'}
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                         <div class="loungeItem_regDate">
+    //                             <p class="loungeItem_regDateTitle">마감일 |</p>
+    //                             <p>${'${item.recruitDeadline}'}</p>
+    //                         </div>
+    //                         <h1 class="loungeItem_title">${'${item.title}'}</h1>
+    //                         <ul class="loungeItem_positions">
+
+    //                         `;
+
+    //                         item.recruitPositions.forEach(function (position) {
+    //                             itemHtml += `<li class="loungeItem_tag">${'${position}'}</li>`;
+    //                           });
+
+                            
+    //                         itemHtml += `
+    //                         </ul>
+    //                         <ul class="loungeItem_skill">
+    //                         `;
+                            
+    //                         item.skillTags.forEach(function(imgName){
+    //                             // itemHtml += `<li>${'${imgName}'}</li>`;
+    //                             itemHtml += `<li><img class="skillImg" src="${root}static/img/study/${'${imgName}'}"></li>`;
+    //                             // ${root}static/img/community/42.png
+                              
+    //                         });
+
+    //                         itemHtml += `    
+    //                         </ul> 
+    //                         <div class="loungeItem_boarder"></div>
+    //                         <section class="loungeItem_info">
+    //                             <div class="loungeItem_userInfo">
+    //                                 <div class="userInfo_avatar">
+    //                                     <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
+    //                                 </div>
+                                
+    //                                 <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
+    //                             </div>
+    //                             <div class="loungeItem_viewsAndComments">
+    //                                 <div class="loungeItem_views">
+    //                                     <i class="fa-regular fa-eye" style="color: #999999;"></i>
+    //                                     <p>${'${item.viewCount}'}</p>
+    //                                 </div>
+    //                                 <div class="loungeItem_views">
+    //                                     <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+    //                                     <p>${'${item.likeCount}'}</p>
+    //                                 </div>
+    //                                 <div class="loungeItem_views">
+    //                                     <i class="fa-regular fa-comment" style="color: #999999;"></i>
+    //                                     <p>${'${item.commentCount}'}</p>
+    //                                 </div>
+    //                             </div>
+    //                         </section>
+                           
+    //                     </li>
+    //             </a>
+    //                `;
+                            
+    //                     $('.loungeList_container').append(itemHtml);
+    //                 });
+
+    //                 // 페이징 초기화
+    //                 $('.pagination').empty();
+
+    //                 // 본문 끝
+
+    //                 /* 페이징 */
+    //                 // paging 
+    //     let pagingHtml = '';
+    //     pagingHtml += `
+    //                 <button class="pagination-btn" data-page="0"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/></svg></button>
+    //                 `;
+
+    //     if(result.prev == true){
+    //         pagingHtml += `            
+    //                 <button class="pagination-btn" data-page="${'${result.prevPage}'}"><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></button>
+    //                 `;
+    //     }
+        
+
+    //     result.pageNumList.forEach(function(pageNum){
+    //         pagingHtml += `
+    //         <button class="pagination-btn" data-page="${'${pageNum - 1}'}">${'${pageNum}'}</button> 
+    //         `;
+    //     });
+
+    //     if(result.next == true){
+    //         pagingHtml += `
+    //         <button class="pagination-btn" data-page=${'${result.nextPage}'}><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></button>
+    //         `;
+    //     }
+    //     pagingHtml += `
+    //         <button class="pagination-btn" data-page="${'${result.realEnd -1}'}"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg></button>
+    //     `;
+
+    //     $('.pagination').append(pagingHtml);
+
+    //     // 페이지 버튼 클릭
+    //     $('.pagination-btn').on('click', function(){
+    //         selectedPage = $(this).data('page');
+    //         getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+
+    //         // $('.pagination').children.remove();
+    //         // $('.loungeList_container').empty();
+    //         // $('.pagination').empty();
+    //         // getStudyList(selectedPage, pageSize, selectedCategoryIdx);
+    //     });
+        
+    //     // 페이징 끝
+    //             },
+    //             error: function(err){
+    //                 console.log('스터디 목록 불러오기 실패');
+    //             }
+                
+    //         });
+        
+    // }
     
     // placaHolder 토글
     function togglePlaceHolder(classSelector, itemSelector, holderSelector) { 
