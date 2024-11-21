@@ -420,7 +420,7 @@
     .category_container {
         display: flex;
         gap: 10px;
-        width: 50%;
+        width: 60%;
     }
 
     .selectedItems {
@@ -476,8 +476,23 @@
     width: 100%;
     }
 
+    .likeCheckBtn {
+    background-color: white;
+    border: 1px solid rgb(227, 227, 227);
+    border-radius: 36px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    font-size: 16px;
+    padding-left: 10px;
+    width: 140.328px;
+    height: 38px;
+    background: white;
+    color: #656565;
+    }
+
     .toggleOn {
-        background-color: #4caf50;
+        border: 1px solid rgb(0, 185, 174);
+        color: rgb(0, 185, 174);
     }
 
 </style>
@@ -535,7 +550,9 @@
                             </select>
                         </div>
                         <div class="select-container">
-                            <button class="likeCheckBtn">좋아요 보기</button>
+                                <button class="likeCheckBtn">
+                                <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                                        좋아요 보기</button>
                         </div>
                     </div>
                     <div class="study_searchContainer">
@@ -592,24 +609,10 @@
         $("#selected-skill").on("change", function(e){
             selectedSkillArr = $("#selected-skill").val();
             console.log(selectedSkillArr);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
         });
-        
-        // $("#selected-skill").on("select2:select", function(e){
-        //     selectedSkillArr = $("#selected-skill").val();
-        //     console.log(selectedSkillArr);
-
-        //     getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr), e
-        // });
-
-        // $("#selected-skill").on("select2:unselecting", function(e){
-        //     selectedSkillArr = [];
-        //     console.log(selectedSkillArr);
-
-        //     getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr), e
-        // });
-        // 기술 스택 끝
 
         // 모집 분야 시작
         $("#selected-recruit").select2({
@@ -622,33 +625,33 @@
 
         selectedRecruitArr = $("#selected-recruit").val() || [];
         console.log(selectedRecruitArr);
-        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+        // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
         });
 
         // 모집 분야 끝
-
         /* process 시작 */
         $("#process").on("change", function(e){
             selectedProcess = $("#process").val() || "";
 
             console.log(selectedProcess);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
         });
 
         /* process 끝 */
         
         /* 검색 시작 */
-        
-
         // 엔터키 누르면 검색
         $("#searchInput").keydown(function(e){
             if(e.keyCode == 13){
                 keywords = $("#searchInput").val();
                 console.log("keywords = " + keywords);
 
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
             }
         });
@@ -658,24 +661,33 @@
             console.log('검색 취소 버튼');
             $("#searchInput").val("");
             keywords = null;
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-        });
+            // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
+        });
 
         /* 검색 끝 */
        
         /* 좋아요 모아보기 시작 */
         
-        // likeCheckToggleBtn.click(function(){
-            
+       /* 좋아요 보기 토글 */
+       likeCheckToggleBtn.click(function(){
+            console.log('좋아요 보기 클릭');
+            studyListUrl = '';
+            likeCheckToggleBtn.toggleClass('toggleOn');
 
-        //     if(likeCheckToggleBtn.hasClass('toggleOn')){
-        //         getStudyListWithLikeCheck(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            if(likeCheckToggleBtn.hasClass('toggleOn')){
+                console.log('좋아요 토글 on!!!');
+                studyListUrl = '${root}api/study/like';
+                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
-        //     }else{
-        //         getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-        //     }
-        // });
+            }else{
+                console.log('좋아요 토글 off!!!');
+                studyListUrl = '${root}api/study/studyList';
+                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+            }
+        });
+
         /* 좋아요 모아보기 끝*/
 
     });
@@ -732,28 +744,16 @@
     /* 스터디 top4 리스트 끝 */
 
     /* 스터디 리스트 본문 */
-    function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords){  
-
-
-        /* 좋아요 보기 토글 */
-        likeCheckToggleBtn.click(function(){
-            console.log('좋아요 보기 클릭');
-            studyListUrl = '';
-            likeCheckToggleBtn.toggleClass('toggleOn');
-            // getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-            getStudyList();
-        });
-
-        if(likeCheckToggleBtn.hasClass('toggleOn')){
-                studyListUrl = '${root}api/study/like';
-            }else{
-                studyListUrl = '${root}api/study/studyList';
-            }
-
-        console.log('studyListUrl2 = ' + studyListUrl);
-
+    function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl){  
         
+        console.log('studyListUrl = ' + studyListUrl);
+
+        if(studyListUrl == null){
+            studyListUrl = '${root}api/study/studyList';
+        }
+
             $.ajax({
+                // url: '${root}api/study/studyList',
                 url: studyListUrl,
                 method: 'GET',
                 data : {page : pageNum,
@@ -882,7 +882,7 @@
         // 페이지 버튼 클릭
         $('.pagination-btn').on('click', function(){
             selectedPage = $(this).data('page');
-            getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
+            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
             // $('.pagination').children.remove();
             // $('.loungeList_container').empty();
@@ -894,159 +894,15 @@
                 },
                 error: function(err){
                     console.log('스터디 목록 불러오기 실패');
+                    $('.likeCheckBtn').removeClass('toggleOn');
+                    alert(err.responseJSON.message);
+                    
                 }
                 
             });
         
     }
 
-    // function getStudyListWithLikeCheck(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords){  
-    //         $.ajax({
-    //             url: '${root}api/study/like',
-    //             method: 'GET',
-    //             data : {page : pageNum,
-    //                     size : pageSize,
-    //                     categoryIdx : selectedCategoryIdx,
-    //                     skillIdx : selectedSkillArr,
-    //                     positionIdx : selectedRecruitArr,
-    //                     process : selectedProcess,
-    //                     keyword : keywords
-    //             },
-    //             success: function(result){
-    //                 console.log('스터디 리스트 불러오기 성공');
-    //                 $('.loungeList_container').empty();
-    //                 $('.pagination').empty();
-                    
-    //                 // 본문
-    //                 result.dtoList.forEach(function(item){
-    //                 let itemHtml = '';
-    //                 let pagingHtml = '';
-    //                 itemHtml += `
-    //             <a class="loungeList_loungeItem" href="${root}study/${'${item.studyIdx}'}">
-    //                     <li class="loungeItem_list">
-    //                         <div class="loungeItem_badgeWrapper">
-    //                             <div class="badge_categoryWrapper">
-    //                                 <div class="badge_category">
-    //                                     ${'${item.categoryName}'}
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-    //                         <div class="loungeItem_regDate">
-    //                             <p class="loungeItem_regDateTitle">마감일 |</p>
-    //                             <p>${'${item.recruitDeadline}'}</p>
-    //                         </div>
-    //                         <h1 class="loungeItem_title">${'${item.title}'}</h1>
-    //                         <ul class="loungeItem_positions">
-
-    //                         `;
-
-    //                         item.recruitPositions.forEach(function (position) {
-    //                             itemHtml += `<li class="loungeItem_tag">${'${position}'}</li>`;
-    //                           });
-
-                            
-    //                         itemHtml += `
-    //                         </ul>
-    //                         <ul class="loungeItem_skill">
-    //                         `;
-                            
-    //                         item.skillTags.forEach(function(imgName){
-    //                             // itemHtml += `<li>${'${imgName}'}</li>`;
-    //                             itemHtml += `<li><img class="skillImg" src="${root}static/img/study/${'${imgName}'}"></li>`;
-    //                             // ${root}static/img/community/42.png
-                              
-    //                         });
-
-    //                         itemHtml += `    
-    //                         </ul> 
-    //                         <div class="loungeItem_boarder"></div>
-    //                         <section class="loungeItem_info">
-    //                             <div class="loungeItem_userInfo">
-    //                                 <div class="userInfo_avatar">
-    //                                     <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
-    //                                 </div>
-                                
-    //                                 <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
-    //                             </div>
-    //                             <div class="loungeItem_viewsAndComments">
-    //                                 <div class="loungeItem_views">
-    //                                     <i class="fa-regular fa-eye" style="color: #999999;"></i>
-    //                                     <p>${'${item.viewCount}'}</p>
-    //                                 </div>
-    //                                 <div class="loungeItem_views">
-    //                                     <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
-    //                                     <p>${'${item.likeCount}'}</p>
-    //                                 </div>
-    //                                 <div class="loungeItem_views">
-    //                                     <i class="fa-regular fa-comment" style="color: #999999;"></i>
-    //                                     <p>${'${item.commentCount}'}</p>
-    //                                 </div>
-    //                             </div>
-    //                         </section>
-                           
-    //                     </li>
-    //             </a>
-    //                `;
-                            
-    //                     $('.loungeList_container').append(itemHtml);
-    //                 });
-
-    //                 // 페이징 초기화
-    //                 $('.pagination').empty();
-
-    //                 // 본문 끝
-
-    //                 /* 페이징 */
-    //                 // paging 
-    //     let pagingHtml = '';
-    //     pagingHtml += `
-    //                 <button class="pagination-btn" data-page="0"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/></svg></button>
-    //                 `;
-
-    //     if(result.prev == true){
-    //         pagingHtml += `            
-    //                 <button class="pagination-btn" data-page="${'${result.prevPage}'}"><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></button>
-    //                 `;
-    //     }
-        
-
-    //     result.pageNumList.forEach(function(pageNum){
-    //         pagingHtml += `
-    //         <button class="pagination-btn" data-page="${'${pageNum - 1}'}">${'${pageNum}'}</button> 
-    //         `;
-    //     });
-
-    //     if(result.next == true){
-    //         pagingHtml += `
-    //         <button class="pagination-btn" data-page=${'${result.nextPage}'}><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></button>
-    //         `;
-    //     }
-    //     pagingHtml += `
-    //         <button class="pagination-btn" data-page="${'${result.realEnd -1}'}"><svg width="10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></svg></button>
-    //     `;
-
-    //     $('.pagination').append(pagingHtml);
-
-    //     // 페이지 버튼 클릭
-    //     $('.pagination-btn').on('click', function(){
-    //         selectedPage = $(this).data('page');
-    //         getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-
-    //         // $('.pagination').children.remove();
-    //         // $('.loungeList_container').empty();
-    //         // $('.pagination').empty();
-    //         // getStudyList(selectedPage, pageSize, selectedCategoryIdx);
-    //     });
-        
-    //     // 페이징 끝
-    //             },
-    //             error: function(err){
-    //                 console.log('스터디 목록 불러오기 실패');
-    //             }
-                
-    //         });
-        
-    // }
     
     // placaHolder 토글
     function togglePlaceHolder(classSelector, itemSelector, holderSelector) { 

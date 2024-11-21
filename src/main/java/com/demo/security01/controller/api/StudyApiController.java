@@ -3,6 +3,7 @@ package com.demo.security01.controller.api;
 import java.security.Principal;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Pageable;
@@ -47,10 +48,11 @@ public class StudyApiController {
 														Principal principal){
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
-        if(principal.getName() == null) {
-        	log.info("로그인 필요");
-        	
-        };
+        
+        
+        if(principal == null) {
+        	throw new RuntimeException("로그인이 필요한 기능입니다");
+        }
         
         String loginUsername = principal.getName();
         
