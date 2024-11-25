@@ -3,6 +3,8 @@ package com.demo.security01.loungeServiceTest;
 import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
+import com.demo.security01.model.SortOrder;
+import com.demo.security01.model.dto.community.LoungeCriteria;
 import com.demo.security01.model.dto.community.LoungeListResponseDto;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
@@ -202,5 +204,27 @@ public class LoungeServiceTest {
 
         Assertions.assertEquals(9, list.size());
     }
+    
+    
+    // 라운지 정렬조건 추가
+    @Test
+    @DisplayName("라운지 조회 - 정렬조건 추가 - 성공")
+    public void getLoungeListWithOrder() {
+    	Long maxIdx = loungeRepository.getMaxLoungeIdx();
+    	
+    	LoungeCriteria cri = new LoungeCriteria();
+//    	cri.setOrder(SortOrder.LIKE);
+    	cri.setOrder(SortOrder.LIKE);
+//    	cri.setOrder(SortOrder.VIEW);
+    	
+    	List<LoungeListResponseDto> results = loungeService.getAllLoungeWithPaging(maxIdx, cri);
+    	
+    	for(LoungeListResponseDto result : results) {
+    		System.out.println("result = " + result);
+    	}
+    	
+    }
 }
+
+
 

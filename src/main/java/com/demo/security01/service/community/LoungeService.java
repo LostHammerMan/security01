@@ -15,6 +15,7 @@ import com.demo.security01.entity.CategoryEntity;
 import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.BoardType;
+import com.demo.security01.model.dto.community.LoungeCriteria;
 import com.demo.security01.model.dto.community.LoungeListResponseDto;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
@@ -157,19 +158,21 @@ public class LoungeService {
 
     // 라운지 목록 + 페이징
     @Transactional(readOnly = true)
-    public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx) {
+    public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx, LoungeCriteria cri) {
         log.info("==== loungeServiceCalled.. ====");
         log.info("\t\t getAllLoungeWithPaging called....");
 
         List<LoungeListResponseDto> dtos = new ArrayList<>();
+        
+        // 마지막 인덱스 없는 경우
         if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
-            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9);
+            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri);
             entityToDto(dtos, allLoungeWithPaging);
             return dtos;
         }
 
-        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9);
+        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri);
         entityToDto(dtos, allLoungeWithPaging);
         return dtos;
     }

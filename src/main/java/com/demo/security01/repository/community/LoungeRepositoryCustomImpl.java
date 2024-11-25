@@ -1,33 +1,40 @@
 package com.demo.security01.repository.community;
 
-import com.demo.security01.entity.lounge.LoungeEntity;
-import com.demo.security01.entity.lounge.QLoungeEntity;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.demo.security01.entity.lounge.QLoungeEntity.loungeEntity;
+
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
+import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.model.SortOrder;
+import com.demo.security01.model.dto.community.LoungeCriteria;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import static com.demo.security01.entity.lounge.QLoungeEntity.loungeEntity;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx, int pageSize) {
+    public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx, int pageSize, LoungeCriteria cri) {
         return queryFactory
                 .select(loungeEntity)
                 .from(loungeEntity)
-                .where(ltLoungeIdx(lastIdx))
-                .orderBy(loungeEntity.idx.desc())
+                .where(ltLoungeIdx(lastIdx),
+                		categoryEq(cri.getCateCode()),
+                		searchWithTitleAndContents(cri.getKeyword()))
+                .orderBy(orderCondition(cri.getOrder()),
+                		loungeEntity.idx.desc()
+                		)
                 .limit(pageSize)
                 .fetch();
     }
@@ -71,5 +78,48 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
             return null;
         }
         return loungeEntity.idx.lt(loungeId);
+    }
+    
+    // 카테고리별 검색
+    private BooleanExpression categoryEq(Long categoryIdx) {
+    	if(categoryIdx == null) return null;
+    	return loungeEntity.cateCode.categoryIdx.eq(categoryIdx);
+    }
+    
+    // 제목 + 내용 검색
+    private BooleanBuilder searchWithTitleAndContents(String keyword) {
+    	BooleanBuilder builder = new BooleanBuilder();
+    	return builder
+    			.or(titleLike(keyword))
+    			.or(contentsLike(keyword));
+    }
+    
+    // 제목 검색
+    private BooleanExpression titleLike(String keyword) {
+    	if(!StringUtils.hasText(keyword)) return null;
+    	return loungeEntity.title.contains(keyword);
+    }
+    
+    // 내용 검색
+    private BooleanExpression contentsLike(String keyword) {
+    	if(!StringUtils.hasText(keyword)) return null;
+    	return loungeEntity.content.contains(keyword);
+    }
+    
+    // booleanExpression => where 절의 조건
+    // OrderSpecifier => 정렬 조건
+    
+    // 최신순, 많이 본 순, 좋아요 순
+    private OrderSpecifier<?> orderCondition(SortOrder order) {
+    	if(order == null) return null;
+    	
+    	if(order == SortOrder.RECENT) {
+    		return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
+    	}else if (order == SortOrder.VIEW) {
+			return new OrderSpecifier<>(Order.DESC, loungeEntity.viewCount);
+		}else if(order == SortOrder.LIKE) {
+			return new OrderSpecifier<>(Order.DESC, loungeEntity.likeCount);
+		}
+    	return null;
     }
 }
