@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface LoungeRepositoryCustom {
 
-    public List<LoungeEntity> getAllLoungeWithPaging(Long id, int pageSize, LoungeCriteria cri);
+    public List<LoungeEntity> getAllLoungeWithPaging(Long id, int pageSize, LoungeCriteria cri, User user);
 
     public Slice<LoungeEntity> getAllLoungeWithPaging2(Long id, Pageable pageable);
 

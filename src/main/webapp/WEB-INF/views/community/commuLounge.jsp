@@ -220,10 +220,78 @@
 
     }
 
-    .card_bottom {
-
+    .study_searchContainer {
+        display: flex;
+        width: 300px;
+        height: 38px;
+        padding: 0 20px;
+        align-items: center;
+        grid-gap: 10px;
+        gap: 10px;
+        border-radius: 36px;
+        background: #f5f5f5;
+        position: relative;
     }
 
+    .searchInput {
+        border: none;
+        background: transparent;
+        outline: none;
+        padding: 0;
+        font-weight: 500;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .category_container {
+        display: flex;
+        gap: 10px;
+        width: 60%;
+        margin: 0 25px;
+    }
+
+    .selectedItems {
+        align-items: center;
+        border-radius: 36px;
+        box-shadow: none;
+        cursor: pointer;
+        display: flex;
+        flex-wrap: wrap;
+        -webkit-box-pack: center;
+        justify-content: center;
+        min-height: 38px;
+        position: relative;
+        transition: 100ms;
+        box-sizing: border-box;
+        width: 203.328px;
+        height: 38px;
+        background: white;
+        color: #656565;
+        border: 1px solid rgb(227, 227, 227);
+        outline: 0px !important;
+        font-size: 16px;
+        letter-spacing: 0.03em;
+        padding-left: 10px;
+    }
+
+    .likeCheckBtn {
+        background-color: white;
+        border: 1px solid rgb(227, 227, 227);
+        border-radius: 36px;
+        cursor: pointer;
+        letter-spacing: 0.03em;
+        font-size: 16px;
+        padding-left: 10px;
+        width: 140.328px;
+        height: 38px;
+        background: white;
+        color: #656565;
+    }
+
+    .toggleOn {
+        border: 1px solid rgb(0, 185, 174);
+        color: rgb(0, 185, 174);
+    }
 </style>
 
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
@@ -235,6 +303,22 @@
                 <h1 style="font-size: 16px; font-weight: bolder;">슽디 커뮤니티에서 당신의 이야기를 나눠보세요!</h1>
                 <a class="btn btn-primary ml-auto" href="${root}community/lounge/write">작성하기</a>
             </header>
+            <div class="category_container">
+                <select class="selectedItems">
+                    <option value="recent">최신순</option>
+                    <option value="view">댓글순</option>
+                    <option value="like">좋아요순</option>
+                </select>
+                <button class="likeCheckBtn">
+                    <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                            좋아요 보기
+                </button>
+                <div class="study_searchContainer">
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
+                    <input class="searchInput" id="searchInput" placeholder="제목, 내용으로 검색해보세요">
+                    <i class="fa-solid fa-x seachInputCancelBtn" style="font-size: 10px; cursor: pointer;"></i>
+                </div>
+            </div>
             <ul class="loungeList_container">
             </ul>
 
@@ -259,8 +343,18 @@
 <script>
     $(document).ready(function (){
         let lastIdx = null;
+        let likeCheckToggleBtn = $(".likeCheckBtn");
 
         getLoungeList();
+
+        likeCheckToggleBtn.click(function(){
+            console.log('좋아요 보기 클릭');
+            likeCheckToggleBtn.toggleClass('toggleOn');
+
+            
+
+        });
+
 
         // 페이지 하단에 도달했을 때 추가 데이터 로드
         $(window).scroll(function (){
@@ -344,7 +438,8 @@
 
                 },
                 error : function (err){
-                    console.log("라운지 목록 불러오기 실패")
+                    console.log("라운지 목록 불러오기 실패");
+                    console.log('err = ' + err);
                 }
 
             })

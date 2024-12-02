@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LoungeService {
 
 
@@ -163,20 +164,25 @@ public class LoungeService {
         log.info("\t\t getAllLoungeWithPaging called....");
 
         List<LoungeListResponseDto> dtos = new ArrayList<>();
+        log.info("LoungeCriteria = {}", cri);
         
         // 마지막 인덱스 없는 경우
         if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
-            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri);
+            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri, null);
             entityToDto(dtos, allLoungeWithPaging);
             return dtos;
         }
 
-        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri);
+        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri, null);
         entityToDto(dtos, allLoungeWithPaging);
         return dtos;
     }
-
+    
+    // 라운지 목록 + 좋아요만
+    
+    
+    
     private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {
         for (LoungeEntity entity : list) {
             LoungeListResponseDto response = LoungeListResponseDto.builder()

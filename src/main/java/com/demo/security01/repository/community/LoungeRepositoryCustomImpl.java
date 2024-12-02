@@ -1,5 +1,6 @@
 package com.demo.security01.repository.community;
 
+import static com.demo.security01.entity.lounge.QBoardLike.boardLike;
 import static com.demo.security01.entity.lounge.QLoungeEntity.loungeEntity;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.util.StringUtils;
 
 import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.SortOrder;
 import com.demo.security01.model.dto.community.LoungeCriteria;
 import com.querydsl.core.BooleanBuilder;
@@ -25,16 +27,20 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx, int pageSize, LoungeCriteria cri) {
+    public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx, int pageSize, LoungeCriteria cri, User user) {
         return queryFactory
                 .select(loungeEntity)
                 .from(loungeEntity)
+                .leftJoin(boardLike).on(boardLike.lounge.eq(loungeEntity))
                 .where(ltLoungeIdx(lastIdx),
                 		categoryEq(cri.getCateCode()),
-                		searchWithTitleAndContents(cri.getKeyword()))
-                .orderBy(orderCondition(cri.getOrder()),
-                		loungeEntity.idx.desc()
+                		searchWithTitleAndContents(cri.getKeyword()),
+                		checkLoungeLike(user)
                 		)
+                .orderBy(orderCondition(cri.getOrder()))
+//                .orderBy(orderCondition(cri.getOrder()), 
+//                		loungeEntity.idx.desc()
+//                		)
                 .limit(pageSize)
                 .fetch();
     }
@@ -106,12 +112,28 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
     	return loungeEntity.content.contains(keyword);
     }
     
+    // 좋아요 보기 체크
+    private BooleanExpression checkLoungeLike(User loginUser) {
+    	if(loginUser == null) return null;
+    	return boardLike.user.eq(loginUser);
+    }
+    
     // booleanExpression => where 절의 조건
     // OrderSpecifier => 정렬 조건
     
     // 최신순, 많이 본 순, 좋아요 순
     private OrderSpecifier<?> orderCondition(SortOrder order) {
-    	if(order == null) return null;
+    	
+    	/* order 가 null 인 경우 처리  
+    	 * 1. 기본 정렬값 설정
+    	 * 
+    	 * 2. OrderSpecifier 배열로 처리
+    	 *  - 빈 배열을 전달하면 오류 발생 X, 정렬 조건이 없을 때 빈 배열을 넘길 수 있음
+    	 * 
+    	 * */
+//    	if(order == null) {
+//    		return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
+//    	}
     	
     	if(order == SortOrder.RECENT) {
     		return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
@@ -120,6 +142,8 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
 		}else if(order == SortOrder.LIKE) {
 			return new OrderSpecifier<>(Order.DESC, loungeEntity.likeCount);
 		}
-    	return null;
+    	return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
     }
+    
+    
 }

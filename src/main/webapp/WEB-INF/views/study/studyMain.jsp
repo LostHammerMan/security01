@@ -550,9 +550,7 @@
                             </select>
                         </div>
                         <div class="select-container">
-                                <button class="likeCheckBtn">
-                                <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
-                                        좋아요 보기</button>
+                                
                         </div>
                     </div>
                     <div class="study_searchContainer">

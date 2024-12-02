@@ -1,5 +1,6 @@
 package com.demo.security01.controller.api;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,23 @@ public class LoungeApiController {
     private final LoungeService loungeService;
 
     @GetMapping({"/api/loungeList"})
-    public ResponseEntity<?> communityLoungeWithPaging(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri){
+    public ResponseEntity<?> getLoungeWithPaging(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri){
         log.info("========= controller - communityLoungeWithPaging =========");
-//        log.info("lastIdx = {}", lastIdx);
+        log.info("lastIdx = {}", lastIdx);
         List<LoungeListResponseDto> allLounge = loungeService.getAllLoungeWithPaging(lastIdx, cri);
         return ResponseEntity.ok().body(allLounge);
+    }
+    
+    @GetMapping("/api/loungeList/like")
+    public ResponseEntity<?> getLoungeWithLikeCheck(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri, Principal principal){
+    	if(principal == null) {
+    		new RuntimeException("로그인이 필요한 기능입니다");
+    	}
+    	
+    	String loginUsername = principal.getName();
+    	
+    	List<LoungeListResponseDto> results = loungeService.get
+    	
+    	return ResponseEntity.ok().body(null);
     }
 }
