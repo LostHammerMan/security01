@@ -38,8 +38,8 @@ public class LoungeApiController {
     	
     	String loginUsername = principal.getName();
     	
-    	List<LoungeListResponseDto> results = loungeService.get
+    	List<LoungeListResponseDto> results = loungeService.getAllLoungeWithLikeCheck(lastIdx, cri, loginUsername);
     	
-    	return ResponseEntity.ok().body(null);
+    	return ResponseEntity.ok().body(results);
     }
 }

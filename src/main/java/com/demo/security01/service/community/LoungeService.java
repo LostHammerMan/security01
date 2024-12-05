@@ -3,6 +3,8 @@ package com.demo.security01.service.community;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -152,13 +154,11 @@ public class LoungeService {
 
 
     // 라운지 목록
-    @Transactional(readOnly = true)
     public List<LoungeEntity> findAllLounge() {
         return loungeRepository.findAll();
     }
 
     // 라운지 목록 + 페이징
-    @Transactional(readOnly = true)
     public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx, LoungeCriteria cri) {
         log.info("==== loungeServiceCalled.. ====");
         log.info("\t\t getAllLoungeWithPaging called....");
@@ -179,10 +179,29 @@ public class LoungeService {
         return dtos;
     }
     
-    // 라운지 목록 + 좋아요만
-    
-    
-    
+    // 라운지 목록 + 좋아요
+    public List<LoungeListResponseDto> getAllLoungeWithLikeCheck(Long lastIdx, LoungeCriteria cri, String username){
+    	
+    	User loginUser = userRepository.findByUsername(username)
+    			.orElseThrow(
+    					() -> new UsernameNotFoundException(username)
+    					);
+    			
+    	
+    	List<LoungeListResponseDto> dtos = new ArrayList<>();
+    	
+    	if (lastIdx == null) {
+            Long maxId = loungeRepository.getMaxLoungeIdx();
+            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri, loginUser);
+            entityToDto(dtos, allLoungeWithPaging);
+            return dtos;
+        }
+
+        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri, loginUser);
+        entityToDto(dtos, allLoungeWithPaging);
+        return dtos;
+    }
+    	
     private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {
         for (LoungeEntity entity : list) {
             LoungeListResponseDto response = LoungeListResponseDto.builder()

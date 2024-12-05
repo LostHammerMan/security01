@@ -349,9 +349,19 @@
 
         likeCheckToggleBtn.click(function(){
             console.log('좋아요 보기 클릭');
+            loungeListUrl = '';
             likeCheckToggleBtn.toggleClass('toggleOn');
 
-            
+            if(likeCheckToggleBtn.hasClass('toggleOn')){
+                console.log('좋아요 토글  on!!');
+                loungeListUrl = '${root}api/loungeList';
+                getLoungeList(loungeListUrl);
+
+            }else {
+                console.log('좋아요 토글 off');
+                loungeListUrl = '${root}api/loungeList/like';
+                getLoungeList(loungeListUrl);
+            }
 
         });
 
@@ -364,7 +374,7 @@
 
         });
 
-        function getLoungeList(){
+        function getLoungeList(loungeListUrl){
 
             let requestUrl = '${root}api/loungeList';
 
@@ -372,7 +382,7 @@
                 requestUrl += '?lastIdx=' + lastIdx;
             }
             $.ajax({
-                url: requestUrl,
+                url: loungeListUrl,
                 method: 'GET',
                 success: function (result){
                     // console.log(result);
