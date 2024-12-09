@@ -48,16 +48,11 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 				))
 				.from(studyEntity)
 				.join(studyEntity.category, categoryEntity)
-				.where(studyEntity.isFIn.eq(0))
+//				.where(studyEntity.isFIn.eq(0))
 				.orderBy(studyEntity.viewCount.desc())
 				.limit(4)
 				.fetch();
 	}
-    
-    // 
-    
-
-
     // 스터디 목록 + 페이징
     @Override
     public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable, User user){
@@ -214,10 +209,4 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .fetch();
         return findStudyList;
     }
-    
-    
-    
-
-	
-
 }

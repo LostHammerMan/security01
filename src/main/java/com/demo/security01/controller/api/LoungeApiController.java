@@ -26,12 +26,16 @@ public class LoungeApiController {
     public ResponseEntity<?> getLoungeWithPaging(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri){
         log.info("========= controller - communityLoungeWithPaging =========");
         log.info("lastIdx = {}", lastIdx);
+        log.info("cri = " + cri);
         List<LoungeListResponseDto> allLounge = loungeService.getAllLoungeWithPaging(lastIdx, cri);
         return ResponseEntity.ok().body(allLounge);
     }
     
-    @GetMapping("/api/loungeList/like")
+    @GetMapping({"/api/loungeList/like"})
     public ResponseEntity<?> getLoungeWithLikeCheck(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri, Principal principal){
+    	log.info("========= controller - getLoungeWithLikeCheck =========");
+    	
+    	
     	if(principal == null) {
     		new RuntimeException("로그인이 필요한 기능입니다");
     	}

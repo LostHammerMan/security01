@@ -551,6 +551,7 @@
                 }
             })
         });
+        
      // 댓글 불러오기
      function getCommentList(){
             $.ajax({

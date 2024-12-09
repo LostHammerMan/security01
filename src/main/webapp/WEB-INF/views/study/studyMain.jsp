@@ -8,7 +8,6 @@
 <%--community header--%>
 <c:import url="/WEB-INF/views/layout/studyHeader.jsp"/>
 <style>
-
     section {
         width: 85%;
     }
@@ -26,8 +25,6 @@
         box-sizing: border-box;
         min-height: 100%;
     }
-
-    
 
     .topViewPost-container {
         width: 100%;
@@ -550,7 +547,10 @@
                             </select>
                         </div>
                         <div class="select-container">
-                                
+                            <button class="likeCheckBtn">
+                                <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                                        좋아요 보기
+                            </button>
                         </div>
                     </div>
                     <div class="study_searchContainer">
@@ -593,22 +593,27 @@
     let keywords = null;
     let selectedPage = null;
     const likeCheckToggleBtn = $('.likeCheckBtn'); 
-    let studyListUrl = '';
+    const studyListUrl = "${root}api/study/studyList";
     
     $(document).ready(function (){
         getStudyListTop4();
-		getStudyList();
+        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
         // 기술 스택 시작
         $("#selected-skill").select2({
             placeholder: "기술 스택"
         });
 
+        //console.log("## studyListUrl = %s", studyListUrl);
+
         $("#selected-skill").on("change", function(e){
             selectedSkillArr = $("#selected-skill").val();
             console.log(selectedSkillArr);
+            console.log("## studyListUrl = %s", studyListUrl);
+
+            checkLikeToggle();
             // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+            //getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
         });
 
@@ -617,6 +622,8 @@
             placeholder: "모집 분야",
         });
 
+        //console.log("## studyListUrl = %s", studyListUrl);
+
         $("#selected-recruit").on("change", function(e){
 
         // || 연산자: 왼쪽 값이 null, undefined, 0, false, '' (빈 문자열) 같은 "false" 값일 때, 오른쪽 값을 대신 반환
@@ -624,8 +631,9 @@
         selectedRecruitArr = $("#selected-recruit").val() || [];
         console.log(selectedRecruitArr);
         // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-        getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+        //getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
 
+            checkLikeToggle();
         });
 
         // 모집 분야 끝
@@ -635,8 +643,8 @@
 
             console.log(selectedProcess);
             // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
-
+            // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+            checkLikeToggle();
         });
 
         /* process 끝 */
@@ -649,8 +657,8 @@
                 console.log("keywords = " + keywords);
 
             // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
-
+            //getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+                checkLikeToggle();
             }
         });
 
@@ -660,7 +668,8 @@
             $("#searchInput").val("");
             keywords = null;
             // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords);
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+            //getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+            checkLikeToggle();
 
         });
 
@@ -671,19 +680,17 @@
        /* 좋아요 보기 토글 */
        likeCheckToggleBtn.click(function(){
             console.log('좋아요 보기 클릭');
-            studyListUrl = '';
             likeCheckToggleBtn.toggleClass('toggleOn');
 
-            if(likeCheckToggleBtn.hasClass('toggleOn')){
+            checkLikeToggle();
+            /* if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글 on!!!');
-                studyListUrl = '${root}api/study/like';
-                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, '${root}api/study/like');
 
             }else{
                 console.log('좋아요 토글 off!!!');
-                studyListUrl = '${root}api/study/studyList';
                 getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
-            }
+            } */
         });
 
         /* 좋아요 모아보기 끝*/
@@ -743,12 +750,18 @@
 
     /* 스터디 리스트 본문 */
     function getStudyList(pageNum=0, pageSize=12, categoryNum = selectedCategoryIdx, process, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl){  
-        
+        console.log('=============================')
         console.log('studyListUrl = ' + studyListUrl);
 
-        if(studyListUrl == null){
+        // null 값만 체크
+        // if(studyListUrl == null){
+        //     studyListUrl = '${root}api/study/studyList';
+        // }
+
+        // null, 빈문자열도 처리
+        /* if(!studyListUrl){
             studyListUrl = '${root}api/study/studyList';
-        }
+        } */
 
             $.ajax({
                 // url: '${root}api/study/studyList',
@@ -764,11 +777,14 @@
                 },
                 success: function(result){
                     console.log('스터디 리스트 불러오기 성공');
+                    console.log("requestUrl = " + studyListUrl);
+                    console.log("result = " + result);
                     $('.loungeList_container').empty();
                     $('.pagination').empty();
                     
                     // 본문
                     result.dtoList.forEach(function(item){
+
                     let itemHtml = '';
                     let pagingHtml = '';
                     itemHtml += `
@@ -918,7 +934,18 @@
                 $(targetSelector).toggle();
             }
         });
-       }
+    }
+
+    function checkLikeToggle(){
+        if(likeCheckToggleBtn.hasClass('toggleOn')){
+                console.log('좋아요 토글 on!!!');
+                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, '${root}api/study/like');
+
+            }else{
+                console.log('좋아요 토글 off!!!');
+                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, "${root}api/study/studyList");
+            }
+    }
 
 
 </script>

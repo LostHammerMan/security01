@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.management.RuntimeErrorException;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -60,6 +61,11 @@ public class CommentApiController {
     @PostMapping("/api/comment/add")
     public ResponseEntity<?> addComment(@Valid @RequestBody CommentRequestDto commentRequestDto, BindingResult result, Principal principal){
         log.info("=== addComment =====");
+        
+        if(principal == null) {
+        	throw new RuntimeException("로그인이 필요한 기능입니다.");
+        }
+        
         commentRequestDto.setUsername(principal.getName());
 
         if (result.hasErrors()){

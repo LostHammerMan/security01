@@ -305,9 +305,9 @@
             </header>
             <div class="category_container">
                 <select class="selectedItems">
-                    <option value="recent">최신순</option>
-                    <option value="view">댓글순</option>
-                    <option value="like">좋아요순</option>
+                    <option value="RECENT">최신순</option>
+                    <option value="VIEW">댓글순</option>
+                    <option value="LIKE">좋아요순</option>
                 </select>
                 <button class="likeCheckBtn">
                     <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
@@ -341,27 +341,34 @@
 
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 <script>
-    $(document).ready(function (){
-        let lastIdx = null;
-        let likeCheckToggleBtn = $(".likeCheckBtn");
+    let loungeListUrl = '${root}api/loungeList';
+    let likeCheckToggleBtn = $(".likeCheckBtn");
+    let $orders = '';
+    let lastIdx = null;
 
-        getLoungeList();
+    $(document).ready(function (){
+
+        getLoungeList('${root}api/loungeList', $orders);
+        
+        $('.selectedItems').on('change', function(){
+            $orders = $('.selectedItems').val() || "";
+            console.log("orders = " + $orders);
+            checkLikeToggle();
+            // getLoungeList(loungeListUrl, $orders);
+        });
 
         likeCheckToggleBtn.click(function(){
             console.log('좋아요 보기 클릭');
-            loungeListUrl = '';
             likeCheckToggleBtn.toggleClass('toggleOn');
-
-            if(likeCheckToggleBtn.hasClass('toggleOn')){
+            checkLikeToggle();
+            /* if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글  on!!');
-                loungeListUrl = '${root}api/loungeList';
                 getLoungeList(loungeListUrl);
 
             }else {
                 console.log('좋아요 토글 off');
-                loungeListUrl = '${root}api/loungeList/like';
-                getLoungeList(loungeListUrl);
-            }
+                getLoungeList('${root}api/loungeList/like');
+            } */
 
         });
 
@@ -369,91 +376,115 @@
         // 페이지 하단에 도달했을 때 추가 데이터 로드
         $(window).scroll(function (){
            if ($(window).scrollTop() + $(window).height() >= $(document).height()){
-               getLoungeList();
+            checkLikeToggle();
+            //    getLoungeList(loungeListUrl);
            }
+        });
+    });
 
+function getLoungeList(loungeListUrls, orders){
+
+// let requestUrl = '${root}api/loungeList';
+// null 값만 체크함 -> 빈문자열인 경우도 처리 필요
+/* if(loungeListUrl == null){
+    loungeListUrl = '${root}api/loungeList';
+} */
+
+// if(!loungeListUrl){
+//     loungeListUrl = '${root}api/loungeList';
+// }
+// checkLikeToggle();
+
+if (lastIdx !== null){
+    loungeListUrl += '?lastIdx=' + lastIdx;
+}
+
+console.log('loungeListUrl =' + loungeListUrls);
+$.ajax({
+    url: loungeListUrls,
+    method: 'GET',
+    data: {
+        order : $orders
+    },
+    success: function (result){
+        // console.log(result);
+        console.log("라운지목록 불러오기 성공")
+        result.forEach(function (item){
+            let loungeListHtml = '';
+            let itemHtml = '';
+
+            itemHtml += `
+        <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
+        <%--<a href="${root}community/lounge/${allLounge.idx}">--%>
+            <li>
+                <div class="loungeItem_badgeWrapper">
+                    <div class="badge_categoryWrapper">
+                        <div class="badge_category">
+                            ${'${item.categoryName}'}
+                        </div>
+                    </div>
+                </div>
+                <div class="loungeItem_regDate">
+                    <p class="loungeItem_regDateTitle">등록일 |</p>
+                    <p>${'${item.regDate}'}</p>
+                </div>
+                <h1 class="loungeItem_title">${'${item.title}'}</h1>
+                <div class="loungeItem_boarder"></div>
+                <section class="loungeItem_info">
+                    <div class="loungeItem_userInfo">
+                        <div class="userInfo_avatar">
+                            <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
+                        </div>
+<%--                                    ${root}api/profileImages/${allLounge.user.userProfile.fileName}--%>
+                        <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
+                    </div>
+                    <div class="loungeItem_viewsAndComments">
+                        <div class="loungeItem_views">
+                            <i class="fa-regular fa-eye" style="color: #999999;"></i>
+                            <p>${'${item.viewCount}'}</p>
+                        </div>
+                        <div class="loungeItem_views">
+                            <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                            <p>${'${item.likeCount}'}</p>
+                        </div>
+                        <div class="loungeItem_views">
+                            <i class="fa-regular fa-comment" style="color: #999999;"></i>
+                            <p>${'${item.commentCount}'}</p>
+                        </div>
+                    </div>
+                </section>
+            </li>
+        </a>
+    `;
+
+            $('.loungeList_container').append(itemHtml);
+
+            // 마지막 항목의 id 를 lastId 에 저장
+            if(result.length > 0){
+                lastIdx = result[result.length -1].idx;
+            }
         });
 
-        function getLoungeList(loungeListUrl){
 
-            let requestUrl = '${root}api/loungeList';
+    },
+    error : function (err){
+        console.log("라운지 목록 불러오기 실패");
+        $('.likeCheckBtn').removeClass('toggleOn');
+        console.log('err = ' + err.responseJSON);
+        alert(err.responseJSON.message);
+    }
+})
+}
 
-            if (lastIdx !== null){
-                requestUrl += '?lastIdx=' + lastIdx;
+    function checkLikeToggle(){
+        if(likeCheckToggleBtn.hasClass('toggleOn')){
+                console.log('좋아요 토글  on!!');
+                getLoungeList('${root}api/loungeList/like', $orders);
+
+            }else {
+                console.log('좋아요 토글 off');
+                getLoungeList('${root}api/loungeList', $orders);
             }
-            $.ajax({
-                url: loungeListUrl,
-                method: 'GET',
-                success: function (result){
-                    // console.log(result);
-                    console.log("라운지목록 불러오기 성공")
-                    result.forEach(function (item){
-                        console.log(item.idx);
-                        let loungeListHtml = '';
-                        let itemHtml = '';
-
-                        itemHtml += `
-                    <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
-                    <%--<a href="${root}community/lounge/${allLounge.idx}">--%>
-                        <li>
-                            <div class="loungeItem_badgeWrapper">
-                                <div class="badge_categoryWrapper">
-                                    <div class="badge_category">
-                                        ${'${item.categoryName}'}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="loungeItem_regDate">
-                                <p class="loungeItem_regDateTitle">등록일 |</p>
-                                <p>${'${item.regDate}'}</p>
-                            </div>
-                            <h1 class="loungeItem_title">${'${item.title}'}</h1>
-                            <div class="loungeItem_boarder"></div>
-                            <section class="loungeItem_info">
-                                <div class="loungeItem_userInfo">
-                                    <div class="userInfo_avatar">
-                                        <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
-                                    </div>
-<%--                                    ${root}api/profileImages/${allLounge.user.userProfile.fileName}--%>
-                                    <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
-                                </div>
-                                <div class="loungeItem_viewsAndComments">
-                                    <div class="loungeItem_views">
-                                        <i class="fa-regular fa-eye" style="color: #999999;"></i>
-                                        <p>${'${item.viewCount}'}</p>
-                                    </div>
-                                    <div class="loungeItem_views">
-                                        <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
-                                        <p>${'${item.likeCount}'}</p>
-                                    </div>
-                                    <div class="loungeItem_views">
-                                        <i class="fa-regular fa-comment" style="color: #999999;"></i>
-                                        <p>${'${item.commentCount}'}</p>
-                                    </div>
-                                </div>
-                            </section>
-                        </li>
-                    </a>
-                `;
-
-                        $('.loungeList_container').append(itemHtml);
-
-                        // 마지막 항목의 id 를 lastId 에 저장
-                        if(result.length > 0){
-                            lastIdx = result[result.length -1].idx;
-                            console.log("마지막 인덱스 :" + lastIdx);
-                        }
-                    });
-
-
-                },
-                error : function (err){
-                    console.log("라운지 목록 불러오기 실패");
-                    console.log('err = ' + err);
-                }
-
-            })
         }
-    });
 </script>
 </html>
