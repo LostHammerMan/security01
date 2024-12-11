@@ -3,8 +3,6 @@ package com.demo.security01.service.community;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -170,12 +168,12 @@ public class LoungeService {
         if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
             List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri, null);
-            entityToDto(dtos, allLoungeWithPaging);
+            entityToDto(allLoungeWithPaging, dtos);
             return dtos;
         }
 
         List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri, null);
-        entityToDto(dtos, allLoungeWithPaging);
+        entityToDto(allLoungeWithPaging, dtos);
         return dtos;
     }
     
@@ -193,16 +191,18 @@ public class LoungeService {
     	if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
             List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri, loginUser);
-            entityToDto(dtos, allLoungeWithPaging);
+            entityToDto(allLoungeWithPaging, dtos);
             return dtos;
         }
 
         List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri, loginUser);
-        entityToDto(dtos, allLoungeWithPaging);
+//        entityToDto(dtos, allLoungeWithPaging);
+        entityToDto(allLoungeWithPaging, dtos);
         return dtos;
     }
     	
-    private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {
+//    private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {
+	private void entityToDto(List<LoungeEntity> list, List<LoungeListResponseDto> dtos) {
         for (LoungeEntity entity : list) {
             LoungeListResponseDto response = LoungeListResponseDto.builder()
                     .idx(entity.getIdx())

@@ -306,7 +306,7 @@
             <div class="category_container">
                 <select class="selectedItems">
                     <option value="RECENT">최신순</option>
-                    <option value="VIEW">댓글순</option>
+                    <option value="VIEW">많이본순</option>
                     <option value="LIKE">좋아요순</option>
                 </select>
                 <button class="likeCheckBtn">
@@ -345,22 +345,25 @@
     let likeCheckToggleBtn = $(".likeCheckBtn");
     let $orders = '';
     let lastIdx = null;
+    let isloading = false;
 
     $(document).ready(function (){
 
         getLoungeList('${root}api/loungeList', $orders);
+        console.log("==========================")
+        console.log("처음 불러올 때 lastIdx = " + lastIdx);
         
         $('.selectedItems').on('change', function(){
-            $orders = $('.selectedItems').val() || "";
+            $orders = $('.selectedItems').val();
             console.log("orders = " + $orders);
-            checkLikeToggle();
-            // getLoungeList(loungeListUrl, $orders);
+            // checkLikeToggle();
+            getLoungeList(loungeListUrl, $orders);
         });
 
         likeCheckToggleBtn.click(function(){
             console.log('좋아요 보기 클릭');
             likeCheckToggleBtn.toggleClass('toggleOn');
-            checkLikeToggle();
+            // checkLikeToggle();
             /* if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글  on!!');
                 getLoungeList(loungeListUrl);
@@ -376,13 +379,15 @@
         // 페이지 하단에 도달했을 때 추가 데이터 로드
         $(window).scroll(function (){
            if ($(window).scrollTop() + $(window).height() >= $(document).height()){
-            checkLikeToggle();
-            //    getLoungeList(loungeListUrl);
+            // checkLikeToggle(lastIdx);
+            // console.log("화면 내려갈떄 lasstIdx = " + lastIdx);
+
+               getLoungeList(loungeListUrl, $orders);
            }
         });
     });
 
-function getLoungeList(loungeListUrls, orders){
+function getLoungeList(loungeListUrls, $orders){
 
 // let requestUrl = '${root}api/loungeList';
 // null 값만 체크함 -> 빈문자열인 경우도 처리 필요
@@ -395,21 +400,28 @@ function getLoungeList(loungeListUrls, orders){
 // }
 // checkLikeToggle();
 
-if (lastIdx !== null){
+/* if (lastIdx !== null){
     loungeListUrl += '?lastIdx=' + lastIdx;
-}
+} */
+
+// lastIdx === null ? '' : lastIdx;
 
 console.log('loungeListUrl =' + loungeListUrls);
 $.ajax({
+    // url: loungeListUrls + '?lastIdx=' + lastIdx,
     url: loungeListUrls,
     method: 'GET',
     data: {
+        lastIdx : lastIdx,
         order : $orders
     },
     success: function (result){
         // console.log(result);
         console.log("라운지목록 불러오기 성공")
-        result.forEach(function (item){
+
+        if(result.length > 0){
+            result.forEach(function (item){
+            console.log("idx = " + item.idx);
             let loungeListHtml = '';
             let itemHtml = '';
 
@@ -460,12 +472,19 @@ $.ajax({
             $('.loungeList_container').append(itemHtml);
 
             // 마지막 항목의 id 를 lastId 에 저장
-            if(result.length > 0){
+            
                 lastIdx = result[result.length -1].idx;
-            }
         });
 
-
+        }else {
+            alert('마지막 항목입니다');
+        }
+        
+        // if(result.length > 0){
+        //         lastIdx = result[result.length -1].idx;
+        //         /* console.log("====================================")
+        //         console.log("화면 내려갈 시 lastIdx = " + lastIdx); */
+        // }
     },
     error : function (err){
         console.log("라운지 목록 불러오기 실패");
@@ -479,12 +498,12 @@ $.ajax({
     function checkLikeToggle(){
         if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글  on!!');
-                getLoungeList('${root}api/loungeList/like', $orders);
+                getLoungeList('${root}api/loungeList/like', $orders, lastIdx);
 
             }else {
                 console.log('좋아요 토글 off');
-                getLoungeList('${root}api/loungeList', $orders);
+                getLoungeList('${root}api/loungeList', $orders, lastIdx);
             }
-        }
+    }
 </script>
 </html>

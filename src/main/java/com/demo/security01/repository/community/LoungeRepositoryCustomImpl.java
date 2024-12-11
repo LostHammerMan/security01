@@ -29,7 +29,7 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
     @Override
     public List<LoungeEntity> getAllLoungeWithPaging(Long lastIdx, int pageSize, LoungeCriteria cri, User user) {
         return queryFactory
-                .select(loungeEntity)
+                .selectDistinct(loungeEntity)
                 .from(loungeEntity)
                 .leftJoin(boardLike).on(boardLike.lounge.eq(loungeEntity))
                 .where(ltLoungeIdx(lastIdx),
