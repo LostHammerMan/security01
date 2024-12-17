@@ -14,12 +14,12 @@
     }
     .container_loungeContainer {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
         position: relative;
-        width: 100%;
+        width: 88%;
         height: 100%;
-        gap: 4rem;
+        gap: 1rem;
         margin-left: auto;
         margin-right: auto;
         font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -27,8 +27,80 @@
         min-height: 100%;
     }
 
-    .loungeContainerHeader {
+    .topViewPost-container {
         width: 100%;
+        max-width: 1300px;
+        padding: 0px 15px;
+        margin-bottom: 60px;
+    }
+
+    .topViewPostHeader-container {
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+    }
+
+    .topViewPost-header {
+        color: rgb(0, 0, 0);
+        font-size: 26px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 100%;
+        letter-spacing: -0.78px;
+        margin: 0px 0px 24px;
+    }
+
+    .topViewPost-list {
+        display: flex;
+        gap: 15px;
+    }
+
+    .topViewPost-item {
+        color: black;
+        display: flex;
+        flex-direction: column;
+        width: 340px;
+        padding: 20px 25px;
+        gap: 10px;
+        border-radius: 20px;
+        border: 2px solid rgb(209, 209, 209);
+        background: rgb(255, 255, 255);
+    }
+
+    .topViewPost_categoryWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .topViewPost-title {
+        margin: 10px 0px 0px;
+        color: rgb(0, 0, 0);
+        font-size: 18px;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 140%;
+        letter-spacing: -1px;
+        min-height: 50px;
+        display: -webkit-box;
+        word-break: break-all;
+        overflow: hidden;
+    }
+
+    .topViewPost-viewCount {
+        margin-top: 15px;
+        color: rgb(78, 78, 78);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%;
+        letter-spacing: -0.56px;
+        text-align: end;
+    }
+
+    .loungeContainerHeader {
+        /* width: 100%; */
         display: flex;
         justify-content: space-between;
         position: static;
@@ -47,7 +119,7 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: initial;
-        width: 70%;
+        width: 97%;
         gap: 1.5rem;
     }
 
@@ -286,6 +358,7 @@
         height: 38px;
         background: white;
         color: #656565;
+        box-sizing: content-box;
     }
 
     .toggleOn {
@@ -297,6 +370,45 @@
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
 <section class="pt-5 pb-5">
     <div class="container_loungeContainer">
+        <!-- carousel -->
+        <div class="carousel_container">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement1.png" alt="First slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement2.png" alt="Second slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement3.png" alt="Third slide">
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+
+        </div>
+        <div class="topViewPost-container">
+            <div class="topViewPostHeader-container">
+                <h2 class="topViewPost-header">🔥 이번주 슽디 인기글</h2>
+            </div>
+            <div class="topViewPostList-container">
+                <div class="topViewPost-list">
+                </div>
+            </div>
+        </div>
 
         <main class="loungeContainerMain">
             <header class="loungeContainerHeader">
@@ -323,16 +435,24 @@
             </ul>
 
         </main>
-           <aside class="loungeContainerAside">
+           <!-- <aside class="loungeContainerAside">
                <div>
                    <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
                </div>
                <div class="mt-lg-5">
                    <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
                </div>
-           </aside>
+           </aside> -->
 
     </div>
+    <!-- <aside class="loungeContainerAside">
+        <div>
+            <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
+        </div>
+        <div class="mt-lg-5">
+            <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
+        </div>
+    </aside> -->
 </section>
 
 
@@ -346,23 +466,34 @@
     let $orders = '';
     let lastIdx = null;
     let isloading = false;
+    let $keywords = null;
+    let $selectedCateCode = null;
 
     $(document).ready(function (){
 
-        getLoungeList('${root}api/loungeList', $orders);
-        console.log("==========================")
-        console.log("처음 불러올 때 lastIdx = " + lastIdx);
+        // getLoungeList('${root}api/loungeList', $orders);
+        // console.log("==========================")
+        // console.log("처음 불러올 때 lastIdx = " + lastIdx);
         
+        checkLikeToggle();
+        getLoungeTop4();
+
+        // 정렬 조건 선택시
         $('.selectedItems').on('change', function(){
             $orders = $('.selectedItems').val();
             console.log("orders = " + $orders);
             // checkLikeToggle();
-            getLoungeList(loungeListUrl, $orders);
+            lastIdx = null;
+            $('.loungeList_container').html('');
+            // getLoungeList(loungeListUrl, $orders);
+            checkLikeToggle();
         });
 
         likeCheckToggleBtn.click(function(){
             console.log('좋아요 보기 클릭');
             likeCheckToggleBtn.toggleClass('toggleOn');
+
+            checkLikeToggle();
             // checkLikeToggle();
             /* if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글  on!!');
@@ -382,13 +513,38 @@
             // checkLikeToggle(lastIdx);
             // console.log("화면 내려갈떄 lasstIdx = " + lastIdx);
 
-               getLoungeList(loungeListUrl, $orders);
+               getLoungeList(loungeListUrl, $orders, $selectedCateCode);
            }
         });
+
+        /* 검색 시작 */
+        $('#searchInput').keydown(function(e){
+
+            if(e.keyCode == 13){
+                $keywords = $('#searchInput').val();
+                console.log("keywords = " + $keywords);
+                $('.loungeList_container').html('');
+                lastIdx = null;
+                checkLikeToggle();
+            }
+        });
+
+        // 검색 취소
+        $(document).on('click', '.seachInputCancelBtn', function(e){
+            console.log('검색 취소 버튼 클릭');
+            $("#searchInput").val("");
+            $keywords = null;
+            checkLikeToggle();
+        });
+
+        /* 검색 끝 */
+
     });
 
-function getLoungeList(loungeListUrls, $orders){
-
+function getLoungeList(loungeListUrls, $orders, $selectedCateCode){
+    console.log('loungeListUrl =' + loungeListUrls);
+    console.log('lastIdx = ' + lastIdx);
+    console.log('orders = ' + $orders);
 // let requestUrl = '${root}api/loungeList';
 // null 값만 체크함 -> 빈문자열인 경우도 처리 필요
 /* if(loungeListUrl == null){
@@ -406,22 +562,30 @@ function getLoungeList(loungeListUrls, $orders){
 
 // lastIdx === null ? '' : lastIdx;
 
-console.log('loungeListUrl =' + loungeListUrls);
 $.ajax({
     // url: loungeListUrls + '?lastIdx=' + lastIdx,
     url: loungeListUrls,
     method: 'GET',
     data: {
         lastIdx : lastIdx,
-        order : $orders
+        order : $orders,
+        keyword : $keywords,
+        cateCode : $selectedCateCode
     },
+    cache: false, // get 요청시 캐싱 방지 -> jquery 요청 URL에 고유한 쿼리 파라미터를 자동으로 추가
+                  // 고유값은 난수, 랜덤값을 통해 요청할 때 마다 항상 다른 값이 추가되어 요청
     success: function (result){
         // console.log(result);
         console.log("라운지목록 불러오기 성공")
 
         if(result.length > 0){
+            console.log($orders + " 를 선택함");
             result.forEach(function (item){
-            console.log("idx = " + item.idx);
+            // console.log("idx = " + item.idx);
+            // console.log("title = " + item.title);
+            // console.log("viewCount = " + item.viewCount);
+            // console.log("likeCount = " + item.likeCount);
+            
             let loungeListHtml = '';
             let itemHtml = '';
 
@@ -468,8 +632,11 @@ $.ajax({
             </li>
         </a>
     `;
-
+        
+            // 기존 데이터 지운 후 다시 추가로
+            // $('.loungeList_container').html('');
             $('.loungeList_container').append(itemHtml);
+            // $('.loungeList_container').html(itemHtml);
 
             // 마지막 항목의 id 를 lastId 에 저장
             
@@ -479,6 +646,7 @@ $.ajax({
         }else {
             alert('마지막 항목입니다');
         }
+        console.log("=========================");
         
         // if(result.length > 0){
         //         lastIdx = result[result.length -1].idx;
@@ -489,21 +657,62 @@ $.ajax({
     error : function (err){
         console.log("라운지 목록 불러오기 실패");
         $('.likeCheckBtn').removeClass('toggleOn');
-        console.log('err = ' + err.responseJSON);
+        // console.log('err = ' + err.responseJSON);
         alert(err.responseJSON.message);
+        location.href = '${root}user/loginForm';
+        checkLikeToggle();
     }
-})
+});
 }
 
     function checkLikeToggle(){
         if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글  on!!');
-                getLoungeList('${root}api/loungeList/like', $orders, lastIdx);
+                $('.loungeList_container').html('');
+                lastIdx = null;
+                getLoungeList('${root}api/loungeList/like', $orders, $selectedCateCode);
 
             }else {
                 console.log('좋아요 토글 off');
-                getLoungeList('${root}api/loungeList', $orders, lastIdx);
+                $('.loungeList_container').html('');
+                lastIdx = null;
+                getLoungeList('${root}api/loungeList', $orders, $selectedCateCode);
             }
     }
+
+    /* 게시글 top4 시작*/
+    function getLoungeTop4(){
+        let top4Html = '';
+
+        $.ajax({
+            url: '${root}api/loungeList/loungeTop4',
+            method: 'GET',
+            success: function(result){
+                console.log('라운지 인기글 불러오기 성공');
+                $('.topViewPost-list').empty();
+
+                result.forEach(function(item){
+                    top4Html += `
+                    <a class="topViewPost-item" href='${root}study/${'${item.studyIdx}'}'>
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">${'${item.categoryName}'}</div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">등록일 | ${'${item.regDate}'}</div>
+                        <h1 class="topViewPost-title">${'${item.title}'}</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 ${'${item.viewCount}'}회</div>
+                    </a>
+                `;
+                });
+
+                $('.topViewPost-list').append(top4Html);
+            },
+            error: function(xhr){
+                console.log('라운지 인기글 불러오기 실패');
+                console.log(xhr.responseJSON.message);
+            }
+        });
+    }
+
+    /* 게시글 top4 끝*/
 </script>
 </html>

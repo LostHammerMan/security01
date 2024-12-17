@@ -25,12 +25,12 @@ public class UserProfileUploadService {
 
     // 전체 경로 + 파일
     public String getFullPath(String fileName) throws IOException {
-        log.info("============ getFullPath ================== ");
+//        log.info("============ getFullPath ================== ");
 //        File profileUploadPath = new File(fileDir, getFolder());
         File profileUploadPath = new File(fileDir+ File.separator + getFolder(), fileName);
-        log.info("\t\t{}", fileDir);
-        log.info("\t{}", getFolder());
-        log.info("directory = {}", profileUploadPath);
+//        log.info("\t\t{}", fileDir);
+//        log.info("\t{}", getFolder());
+//        log.info("directory = {}", profileUploadPath);
 
         if (!profileUploadPath.exists()){
             profileUploadPath.mkdirs();
@@ -44,7 +44,7 @@ public class UserProfileUploadService {
 
     public String getFolderPath(){
         File profileUploadPath = new File(fileDir, getFolder());
-        log.info("ProfileFolder = {}", profileUploadPath);
+//        log.info("ProfileFolder = {}", profileUploadPath);
         if (!profileUploadPath.exists()){
             profileUploadPath.mkdirs();
         }
@@ -83,7 +83,7 @@ public class UserProfileUploadService {
     // 업로드 한 파일 삭제
     public void deleteProfileImg(String fileName) throws IOException {
         org.springframework.core.io.Resource resource = new UrlResource("file:" + getFullPath(fileName));
-        log.info("resource = {}", resource);
+//        log.info("resource = {}", resource);
         File file = new File(resource.getFile().toURI());
         file.delete();
     }

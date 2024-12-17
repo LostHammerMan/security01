@@ -1,5 +1,6 @@
 package com.demo.security01.repository.community;
 
+import static com.demo.security01.entity.QCategoryEntity.categoryEntity;
 import static com.demo.security01.entity.lounge.QBoardLike.boardLike;
 import static com.demo.security01.entity.lounge.QLoungeEntity.loungeEntity;
 
@@ -14,9 +15,11 @@ import com.demo.security01.entity.lounge.LoungeEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.SortOrder;
 import com.demo.security01.model.dto.community.LoungeCriteria;
+import com.demo.security01.model.dto.community.LoungeListResponseDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -37,13 +40,33 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
                 		searchWithTitleAndContents(cri.getKeyword()),
                 		checkLoungeLike(user)
                 		)
-                .orderBy(orderCondition(cri.getOrder()))
+                .orderBy(orderCondition(cri.getOrder()),
+                		new OrderSpecifier<>(Order.DESC, loungeEntity.idx))
 //                .orderBy(orderCondition(cri.getOrder()), 
 //                		loungeEntity.idx.desc()
 //                		)
                 .limit(pageSize)
                 .fetch();
     }
+    
+    @Override
+	public List<LoungeListResponseDto> getLoungeTop4() {
+		// TODO Auto-generated method stub
+		return queryFactory.select(Projections.fields(LoungeListResponseDto.class, 
+				loungeEntity.idx,
+				loungeEntity.title,
+				loungeEntity.regDate,
+				loungeEntity.viewCount,
+				categoryEntity.categoryName
+				))
+				.from(loungeEntity)
+				.join(loungeEntity.cateCode, categoryEntity)
+				.orderBy(loungeEntity.viewCount.desc())
+				.limit(4)
+				.fetch();
+				
+				
+	}
 
     @Override
     public Slice<LoungeEntity> getAllLoungeWithPaging2(Long lastIdx, Pageable pageable) {
@@ -124,6 +147,24 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
     // 최신순, 많이 본 순, 좋아요 순
     private OrderSpecifier<?> orderCondition(SortOrder order) {
     	
+    	if(order == null) {
+    		return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
+    	}
+    	
+    	switch (order) {
+		case RECENT:
+			return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
+
+		case VIEW:
+			return new OrderSpecifier<>(Order.DESC, loungeEntity.viewCount); 
+			
+		case LIKE:
+			return new OrderSpecifier<>(Order.DESC, loungeEntity.likeCount);
+			
+		default:
+			return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
+		}
+    	
     	/* order 가 null 인 경우 처리  
     	 * 1. 기본 정렬값 설정
     	 * 
@@ -135,15 +176,19 @@ public class LoungeRepositoryCustomImpl implements LoungeRepositoryCustom{
 //    		return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
 //    	}
     	
-    	if(order == SortOrder.RECENT) {
-    		return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
-    	}else if (order == SortOrder.VIEW) {
-			return new OrderSpecifier<>(Order.DESC, loungeEntity.viewCount);
-		}else if(order == SortOrder.LIKE) {
-			return new OrderSpecifier<>(Order.DESC, loungeEntity.likeCount);
-		}
-    	return new OrderSpecifier<>(Order.DESC, loungeEntity.regDate);
+		/*
+		 * if(order == SortOrder.RECENT) { return new OrderSpecifier<>(Order.DESC,
+		 * loungeEntity.regDate); }else if (order == SortOrder.VIEW) { return new
+		 * OrderSpecifier<>(Order.DESC, loungeEntity.viewCount); }else if(order ==
+		 * SortOrder.LIKE) { return new OrderSpecifier<>(Order.DESC,
+		 * loungeEntity.likeCount); } return new OrderSpecifier<>(Order.DESC,
+		 * loungeEntity.regDate);
+		 */
     }
+
+
+
+	
     
     
 }

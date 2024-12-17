@@ -1,16 +1,20 @@
 package com.demo.security01.model.dto.community;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class LoungeListResponseDto {

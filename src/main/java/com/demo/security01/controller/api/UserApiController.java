@@ -215,11 +215,11 @@ public class UserApiController {
     @ResponseBody
    @PostMapping("/updateProfileImg")
     public ResponseEntity<Object> updateProfileImg(@RequestParam("profileImg") MultipartFile profileImg, Model model) throws IOException {
-        log.info("============= updateProfileImg ===============");
-        log.info("\t profileImg = {}", profileImg);
+//        log.info("============= updateProfileImg ===============");
+//        log.info("\t profileImg = {}", profileImg);
 
         InputStream inputStream = profileImg.getInputStream();
-        log.info("inputStream = {}", inputStream);
+//        log.info("inputStream = {}", inputStream);
 
         boolean isValid = tickParserTest.validImgFile(inputStream);
 
@@ -237,7 +237,7 @@ public class UserApiController {
         }else {
             log.info("티카 통과");
             UploadFile uploadFile = profileService.uploadProfileImg(profileImg);
-            log.info("\t uploadFile = {}", uploadFile);
+//            log.info("\t uploadFile = {}", uploadFile);
             inputStream.close();
 //        model.addAttribute()
 
@@ -266,11 +266,12 @@ public class UserApiController {
         org.springframework.core.io.Resource resource = null;
 //   file:  http: 이런식의 Prefix로 프로토콜을 명시해주고 해당 리소스의 위치를 알려주는 URL방식을 통해서 리소스의 위치를 알려주는 방식
         resource = new UrlResource("file:" + profileService.getFullPath(fileName));
-        log.info("======== showImage ============");
-        log.info("{}", resource.getURL());
-        log.info("{}", resource.getURI());
-        log.info("\t fileName = {}", fileName);
-        log.info("\t fullPath = {}", "file:///" + profileService.getFullPath(fileName));
+		/*
+		 * log.info("======== showImage ============"); log.info("{}",
+		 * resource.getURL()); log.info("{}", resource.getURI());
+		 * log.info("\t fileName = {}", fileName); log.info("\t fullPath = {}",
+		 * "file:///" + profileService.getFullPath(fileName));
+		 */
 //        String resultFile = URLEncoder.encode(resource, StandardCharsets.UTF_8);
 
 //        return ResponseEntity.ok(resource);
@@ -283,8 +284,10 @@ public class UserApiController {
     // 이미지 파일 삭제
     @GetMapping(value = {"/deleteProfileImg","/deleteProfileImg/{fileName}" })
     public ResponseEntity<Object> deleteImg(@PathVariable String fileName) throws IOException {
-        log.info("========= deleteImg ===========");
-        log.info("deleteFileName = {}", fileName);
+		/*
+		 * log.info("========= deleteImg ==========="); log.info("deleteFileName = {}",
+		 * fileName);
+		 */
         profileService.deleteProfileImg(fileName);
         /*org.springframework.core.io.Resource resource = new UrlResource("file:" + profileService.getFullPath(fileName));
         log.info("resource = {}", resource);

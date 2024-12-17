@@ -135,10 +135,10 @@
 
     .loungeList_container {
         display: flex;
-        grid-gap: 27px;
         gap: 27px;
         flex-wrap: wrap;
         padding: 0 20px;
+        align-items: center;
     }
 
     .loungeList_loungeItem {
@@ -499,19 +499,10 @@
     <div class="container_loungeContainer">
         <div class="topViewPost-container">
             <div class="topViewPostHeader-container">
-                <h2 class="topViewPost-header">🔥 이번주 슽디 인기 스터디</h2>
+                <h2 class="topViewPost-header">🔥 이번주 인기 스터디</h2>
             </div>
             <div class="topViewPostList-container">
                 <div class="topViewPost-list">
-                    <!-- <a class="topViewPost-item">
-                        <div class="topViewPost_categoryWrapper">
-                            <div class="badge_category">스터디</div>
-                            <div class="badge_endDate">🚨 마감 3일전</div>
-                        </div>
-                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | 2024.11.25</div>
-                        <h1 class="topViewPost-title">제목 테스트용</h1>
-                        <div class="topViewPost-viewCount">👓 조회수 50회</div>
-                    </a> -->
                 </div>
             </div>
 
@@ -717,13 +708,26 @@
                 const dbDate = new Date(item.recruitDeadline);
                 const diff = dbDate - today;
                 const diffInDays =  Math.floor(diff / (1000 * 60 * 60 * 24));
-                console.log("diff = " + diffInDays);
+                // console.log("diff = " + diffInDays);
                 
                 // const newDate = new Date('2023-06-12');
                 // let diff = Math.abs(newDate.getTime() - oldDate.getTime());
                 // diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
                 // console.log(diff);
 
+                if(diff < 0){
+                    top4Html += `
+                    <a class="topViewPost-item" href='${root}study/${'${item.studyIdx}'}'>
+                        <div class="topViewPost_categoryWrapper">
+                            <div class="badge_category">${'${item.categoryName}'}</div>
+                            <div class="badge_endDate"> 마감 </div>
+                        </div>
+                        <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | ${'${item.recruitDeadline}'}</div>
+                        <h1 class="topViewPost-title">${'${item.title}'}</h1>
+                        <div class="topViewPost-viewCount">👓 조회수 ${'${item.viewCount}'}회</div>
+                    </a>
+                `;
+                }else{
                     top4Html += `
                     <a class="topViewPost-item" href='${root}study/${'${item.studyIdx}'}'>
                         <div class="topViewPost_categoryWrapper">
@@ -735,6 +739,9 @@
                         <div class="topViewPost-viewCount">👓 조회수 ${'${item.viewCount}'}회</div>
                     </a>
                 `;
+                }
+
+                    
                 });
                 
 

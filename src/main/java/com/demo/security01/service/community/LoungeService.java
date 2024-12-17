@@ -184,7 +184,6 @@ public class LoungeService {
     			.orElseThrow(
     					() -> new UsernameNotFoundException(username)
     					);
-    			
     	
     	List<LoungeListResponseDto> dtos = new ArrayList<>();
     	
@@ -199,6 +198,10 @@ public class LoungeService {
 //        entityToDto(dtos, allLoungeWithPaging);
         entityToDto(allLoungeWithPaging, dtos);
         return dtos;
+    }
+    
+    public List<LoungeListResponseDto> getLoungeTop4(){
+    	return loungeRepository.getLoungeTop4();
     }
     	
 //    private void entityToDto(List<LoungeListResponseDto> dtos, List<LoungeEntity> list) {

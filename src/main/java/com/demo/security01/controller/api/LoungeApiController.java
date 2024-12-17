@@ -24,9 +24,9 @@ public class LoungeApiController {
 
     @GetMapping({"/api/loungeList"})
     public ResponseEntity<?> getLoungeWithPaging(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri){
-        log.info("========= controller - communityLoungeWithPaging =========");
-        log.info("lastIdx = {}", lastIdx);
-        log.info("cri = " + cri);
+//        log.info("========= controller - communityLoungeWithPaging =========");
+//        log.info("lastIdx = {}", lastIdx);
+//        log.info("cri = " + cri);
         List<LoungeListResponseDto> allLounge = loungeService.getAllLoungeWithPaging(lastIdx, cri);
         return ResponseEntity.ok().body(allLounge);
     }
@@ -34,16 +34,19 @@ public class LoungeApiController {
     @GetMapping({"/api/loungeList/like"})
     public ResponseEntity<?> getLoungeWithLikeCheck(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri, Principal principal){
     	log.info("========= controller - getLoungeWithLikeCheck =========");
-    	
-    	
     	if(principal == null) {
-    		new RuntimeException("로그인이 필요한 기능입니다");
+    		throw new RuntimeException("로그인이 필요한 기능입니다");
     	}
-    	
     	String loginUsername = principal.getName();
-    	
     	List<LoungeListResponseDto> results = loungeService.getAllLoungeWithLikeCheck(lastIdx, cri, loginUsername);
-    	
     	return ResponseEntity.ok().body(results);
     }
+    
+    @GetMapping("/api/loungeList/loungeTop4")
+    public ResponseEntity<List<LoungeListResponseDto>> getLoungeTop4(){
+    	List<LoungeListResponseDto> results = loungeService.getLoungeTop4();
+    	return ResponseEntity.ok().body(results);
+    }
+    	
+    
 }
