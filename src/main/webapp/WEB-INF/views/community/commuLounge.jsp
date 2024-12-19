@@ -361,6 +361,17 @@
         box-sizing: content-box;
     }
 
+    .carousel-inner {
+        border-radius: 3rem;
+        height: 450px;
+        object-fit: cover; /* 이미지 크기 비율 유지 */
+    }
+
+    /* .carousel-item img {
+        height: 100%;
+        object-fit: contain;
+    } */
+
     .toggleOn {
         border: 1px solid rgb(0, 185, 174);
         color: rgb(0, 185, 174);
@@ -371,7 +382,7 @@
 <section class="pt-5 pb-5">
     <div class="container_loungeContainer">
         <!-- carousel -->
-        <div class="carousel_container">
+        <div class="carousel_container" style="margin-bottom: 20px;">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                   <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -380,13 +391,13 @@
                 </ol>
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img class="d-block w-100" src="${root}static/ad_img/advertisement1.png" alt="First slide">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement4.png" alt="First slide">
                   </div>
                   <div class="carousel-item">
-                    <img class="d-block w-100" src="${root}static/ad_img/advertisement2.png" alt="Second slide">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement7.png" alt="Second slide">
                   </div>
                   <div class="carousel-item">
-                    <img class="d-block w-100" src="${root}static/ad_img/advertisement3.png" alt="Third slide">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement6.png" alt="Third slide">
                   </div>
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -398,7 +409,6 @@
                   <span class="sr-only">Next</span>
                 </a>
               </div>
-
         </div>
         <div class="topViewPost-container">
             <div class="topViewPostHeader-container">

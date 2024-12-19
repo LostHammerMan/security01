@@ -487,6 +487,12 @@
     color: #656565;
     }
 
+    .carousel-inner {
+        border-radius: 3rem;
+        height: 450px;
+        object-fit: cover; /* 이미지 크기 비율 유지 */
+    }
+
     .toggleOn {
         border: 1px solid rgb(0, 185, 174);
         color: rgb(0, 185, 174);
@@ -497,6 +503,35 @@
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
 <section class="pt-5 pb-5" style="width: 100%;">
     <div class="container_loungeContainer">
+         <!-- carousel -->
+         <div class="carousel_container" style="margin-bottom: 20px;">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement4.png" alt="First slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement7.png" alt="Second slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-block w-100" src="${root}static/ad_img/advertisement6.png" alt="Third slide">
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
         <div class="topViewPost-container">
             <div class="topViewPostHeader-container">
                 <h2 class="topViewPost-header">🔥 이번주 인기 스터디</h2>
