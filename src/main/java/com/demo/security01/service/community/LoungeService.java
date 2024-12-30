@@ -148,15 +148,12 @@ public class LoungeService {
         }
     }
 
-    ;
-
-
     // 라운지 목록
     public List<LoungeEntity> findAllLounge() {
         return loungeRepository.findAll();
     }
 
-    // 라운지 목록 + 페이징
+    // 라운지 목록 + 페이징(라운지)
     public List<LoungeListResponseDto> getAllLoungeWithPaging(Long lastIdx, LoungeCriteria cri) {
         log.info("==== loungeServiceCalled.. ====");
         log.info("\t\t getAllLoungeWithPaging called....");
@@ -176,6 +173,7 @@ public class LoungeService {
         entityToDto(allLoungeWithPaging, dtos);
         return dtos;
     }
+    
     
     // 라운지 목록 + 좋아요
     public List<LoungeListResponseDto> getAllLoungeWithLikeCheck(Long lastIdx, LoungeCriteria cri, String username){

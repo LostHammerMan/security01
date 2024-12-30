@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.security01.model.StudySite;
 import com.demo.security01.model.dto.crawling.StudyCrawlingResponeDto;
+import com.demo.security01.model.dto.error.ErrorResponseDto;
 import com.demo.security01.service.study.StudyCrawlingService;
 
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,11 @@ public class StudyCrawlingController {
 			results = studyCrawlingService.getScrapSoup();
 		}else {
 			log.info("존재하지 않는 요청입니다");
+//			ErrorResponseDto
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다");
 		}
 		
 		return ResponseEntity.ok(results);
-//		Map<Enum<StudySite>, List<StudyCrawlingResponeDto>> results = studyCrawlingService.getScrapInflearn();
-		
-//		Map<Enum<StudySite>, List<StudyCrawlingResponeDto>> results2 = studyCrawlingService.getScrapLetspl();
-//		Map<Enum<StudySite>, List<StudyCrawlingResponeDto>> results2 = studyCrawlingService.getScrapHola11();
-//		return results;
-//		return ResponseEntity.ok(results);
 //		
 		
 	}

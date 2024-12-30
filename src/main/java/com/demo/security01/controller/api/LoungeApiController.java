@@ -48,5 +48,14 @@ public class LoungeApiController {
     	return ResponseEntity.ok().body(results);
     }
     	
-    
+    // 메인 페이지
+    @GetMapping("/api/getLoungeListForMain")
+    public ResponseEntity<?> getLoungeListForMain(@RequestParam(name = "lastIdx", required = false) Long lastIdx, LoungeCriteria cri){
+//    	log.info("\t\t getLoungeListForMain")
+      log.info("========= controller - getLoungeListForMain =========");
+//      log.info("lastIdx = {}", lastIdx);
+//      log.info("cri = " + cri);
+      List<LoungeListResponseDto> allLounge = loungeService.getAllLoungeWithPaging(lastIdx, cri);
+      return ResponseEntity.ok().body(allLounge);
+  } 
 }
