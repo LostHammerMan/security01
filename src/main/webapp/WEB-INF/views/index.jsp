@@ -16,6 +16,8 @@
     }
 
     .scrap_link {
+        display: flex;
+        gap: 12px;
         color: inherit;
     }
 
@@ -55,7 +57,7 @@
 
     .index_bottom {
         display: flex;
-        justify-content: space-between;
+        gap: 80px;
         background-color: #F8F9FA;
     }
 
@@ -76,16 +78,15 @@
         border-bottom: 1px solid #dee2e6;
         height: 110px;
         overflow: hidden;
-        margin-left: 25px;
     }
 
     .scrap_title {
         display: flex;
-        align-items: center;
-        gap: 10px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-family: Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        /* align-items: center; */
+        /* gap: 10px; */
+        /* overflow: hidden; */
+        /* text-overflow: ellipsis; */
+        /* font-family: Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
     }
 
     .scrap_title h5 {
@@ -122,6 +123,18 @@
         border-bottom-width: 0px;
         border-left-width: 0px;
         border-top: 1px solid white;
+    }
+
+    .lounge_list {
+        width: auto;
+        border-radius: 8px;
+        display: flex;
+        padding: 12px 12px;
+        flex-direction: column;
+        border: 1px solid #DADCE0;
+        padding: 16px 12px;
+        gap: 10px;
+        background-color: #FFFFFF;
     }
 
 </style>
@@ -190,8 +203,11 @@
     $(document).ready(function(){
         // let $site_value = '';
         let $site_value = 'INFLEARN';
+        let lastIdx = null;
 
         getSCrapStudyList();
+        getLoungeList();
+
 
         $('.site_ex').on('click', function(){
             console.log('사이트 클릭');
@@ -203,7 +219,13 @@
             $site_value = $(this).data('value');
 
             getSCrapStudyList();
-            getLoungeList();
+        });
+
+        // 페이지 하단 도달시 추가 데이터 로드
+        $(window).scroll(function(){
+            if($(window).scrollTop() + $(window).height() >= $(document).height()){
+                getLoungeList();
+            }
         });
         
         /* 크롤링한 사이트 불러오기 */
@@ -226,16 +248,24 @@
                                 <div class="scrap_item">
                                     <a class="scrap_link">
                                             <div class="scrap_title">
-                                                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                                    <!-- 원 -->
-                                                    <circle cx="16" cy="16" r="15" fill="hsl(51, 100%, 90%)" />
-                                                    <text x="16" y="18" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="600" fill="black">
-                                                        ${'${grade}'}
-                                                    </text>
-                                                </svg>
-                                                <h5 style="margin: 0; font-weight: bold;">${'${item.title}'}</h5>
+                                                <div class="scrap_badge">
+                                                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                                        <!-- 원 -->
+                                                        <circle cx="16" cy="16" r="15" fill="hsl(51, 100%, 90%)" />
+                                                        <text x="16" y="18" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="600" fill="black">
+                                                            ${'${grade}'}
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                             </div>
-                                            <p class="scrap_content" style="color: gray;">${'${item.content}'}</p>
+                                            <div class="scrap_titleAndContent">
+                                                <div class="scrap_titleAndContent_title">
+                                                    <p style="margin: 0; font-weight: bold; font-size:16px;">${'${item.title}'}</p>
+                                                </div>
+                                                <div class="scrap_titleAndContent_content">
+                                                    <p class="scrap_content" style="color: gray;">${'${item.content}'}</p>
+                                                </div>
+                                            </div>
                                     </a>
                                     <hr class="scrapItem_border">
                                 </div>
@@ -243,6 +273,7 @@
                             grade++;
                             });
                         }
+
                         $('.scrap_list').append(itemHtml);
                     },
                     error: function(xhr){
@@ -254,37 +285,55 @@
 
         /* 라운지 리스트 불러오기 */
         function getLoungeList(){
+
             $.ajax({
                 url: '${root}api/getLoungeListForMain',
                 method: 'GET',
+                data: {
+                    lastIdx : lastIdx
+                },
                 success: function(result){
                     let loungeHtml = '';
+                    let userFirstName = '';
                     console.log('라운지 리스트 불러오기 성공');
 
-                    result.forEach(function(item){
+                    // result.forEach(function(loungeItem){
+                    result.forEach((loungeItem) => {
+                        // let isLastItem = loungeItem.idx === result[result.length - 1].idx;
+
+                        userFirstName = loungeItem.username.substr(0,1);
                         loungeHtml += `
                                 <div class="scrap_item">
-                                    <a class="scrap_link" href=${'${item.link}'}>
+                                    <a class="scrap_link" href="${root}community/lounge/${'${loungeItem.idx}'}">
                                             <div class="scrap_title">
-                                                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                                    <!-- 원 -->
-                                                    <circle cx="16" cy="16" r="15" fill="hsl(51, 100%, 90%)" />
-                                                    <text x="16" y="18" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="600" fill="black">
-                                                        ${'${item.username}'}
-                                                    </text>
-                                                </svg>
-                                                <h5 style="margin: 0; font-weight: bold;">${'${item.title}'}</h5>
+                                                <div class="scrap_badge">
+                                                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                                        <!-- 원 -->
+                                                        <circle cx="16" cy="16" r="15" fill="hsl(51, 100%, 90%)" />
+                                                        <text x="16" y="18" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="600" fill="black">
+                                                            ${'${userFirstName}'}
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                             </div>
-                                           
+                                            <div class="titleAndContent">
+                                                <div class="lounge_title">
+                                                    <p style="margin: 0; font-weight: bold; font-size: 14px;">${'${loungeItem.title}'}</p>
+                                                </div>
+                                                <div class="lounge_content">
+                                                    <span class="scrap_content" style="color: gray;">${'${loungeItem.content}'}</p>
+                                                </div>
+                                            </div>
                                     </a>
-                                    <hr class="scrapItem_border">
+                                        <hr class="scrapItem_border">
                                 </div>
 
                         `;
+                        console.log("isLastItem = " + isLastItem);
                     });
-
+                    lastIdx = result[result.length -1].idx;
+                    console.log(lastIdx);
                     $('.lounge_list').append(loungeHtml);
-                    
                 },
                 error: function(xhr){
                     console.log('라운지 리스트 불러오기 실패');

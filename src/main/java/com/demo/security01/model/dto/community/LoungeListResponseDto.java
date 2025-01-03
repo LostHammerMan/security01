@@ -21,6 +21,7 @@ public class LoungeListResponseDto {
 
     private Long idx;
     private String title;
+    private String content;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
@@ -32,9 +33,10 @@ public class LoungeListResponseDto {
     private int likeCount;
 
     @Builder
-    public LoungeListResponseDto(Long idx, String title, LocalDateTime regDate, String username, String categoryName, String profileFilename, int viewCount, int commentCount, int likeCount) {
+    public LoungeListResponseDto(Long idx, String title, String content, LocalDateTime regDate, String username, String categoryName, String profileFilename, int viewCount, int commentCount, int likeCount) {
         this.idx = idx;
         this.title = title;
+        this.content = content;
         this.regDate = regDate;
         this.username = username;
         this.categoryName = categoryName;

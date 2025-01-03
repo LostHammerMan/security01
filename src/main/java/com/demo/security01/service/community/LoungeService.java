@@ -3,6 +3,8 @@ package com.demo.security01.service.community;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.AbstractDocument.Content;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -208,6 +210,7 @@ public class LoungeService {
             LoungeListResponseDto response = LoungeListResponseDto.builder()
                     .idx(entity.getIdx())
                     .title(entity.getTitle())
+                    .content(entity.getContent())
                     .username(entity.getUser().getUsername())
                     .categoryName(entity.getCateCode().getCategoryName())
                     .profileFilename(entity.getUser().getUserProfile().getFileName())
