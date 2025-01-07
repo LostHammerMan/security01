@@ -19,6 +19,14 @@
         display: flex;
         gap: 12px;
         color: inherit;
+        height: 100px;
+    }
+
+    .scrap_link_lounge {
+        display: flex;
+        gap: 12px;
+        color: inherit;
+        height: 85px;
     }
 
     .index_container {
@@ -75,9 +83,15 @@
     }
 
     .scrap_item {
-        border-bottom: 1px solid #dee2e6;
+        /* border-bottom: 1px solid #dee2e6; */
         height: 110px;
         overflow: hidden;
+    }
+
+    .scrap_item_lounge {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     .scrap_title {
@@ -90,6 +104,14 @@
     }
 
     .scrap_title h5 {
+        margin: 0; /* 불필요한 여백 제거 */
+        white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+        overflow: hidden; /* 넘치는 텍스트 숨김 */
+        text-overflow: ellipsis; /* 넘치는 텍스트는 '...'으로 표시 */
+        font-size: 18px;
+    }
+
+    .scrap_titleAndContent_title {
         margin: 0; /* 불필요한 여백 제거 */
         white-space: nowrap; /* 텍스트를 한 줄로 표시 */
         overflow: hidden; /* 넘치는 텍스트 숨김 */
@@ -118,12 +140,19 @@
         color: black;
     }
 
-    .scrapItem_border {
+    /* .scrapItem_border {
         border-right-width: 0px;
         border-bottom-width: 0px;
         border-left-width: 0px;
-        border-top: 1px solid white;
-    }
+        border-top: 1px solid #dee2e6;
+    } */
+
+    hr.scrapItem_border {
+    border: none; /* 기본 브라우저 스타일 초기화 */
+    border-top: 1px solid #dee2e6; /* 보이도록 명시적으로 설정 */
+    margin: 1px; /* 여백 추가 */
+    height: 0; /* 높이 초기화 */
+}
 
     .lounge_list {
         width: auto;
@@ -243,7 +272,8 @@
                         let itemHtml = '';
                         let grade = 1;
                         for(const [key, items] of Object.entries(result)){
-                            items.forEach(function(item){
+                            items.forEach(function(item, index){
+                                let isScrapLastItem = index === items.length -1;
                                 itemHtml += `
                                 <div class="scrap_item">
                                     <a class="scrap_link">
@@ -267,9 +297,14 @@
                                                 </div>
                                             </div>
                                     </a>
-                                    <hr class="scrapItem_border">
-                                </div>
-                            `;
+                                    `;
+                                    
+                                    if(!isScrapLastItem){
+                                        itemHtml += '<hr class="scrapItem_border">';
+                                    }
+
+                                    itemHtml += `</div>`;
+                                
                             grade++;
                             });
                         }
@@ -298,13 +333,12 @@
                     console.log('라운지 리스트 불러오기 성공');
 
                     // result.forEach(function(loungeItem){
-                    result.forEach((loungeItem) => {
-                        // let isLastItem = loungeItem.idx === result[result.length - 1].idx;
-
+                    result.forEach((loungeItem, index) => {
+                        // let isLastItem = index === result.length -1;
                         userFirstName = loungeItem.username.substr(0,1);
                         loungeHtml += `
-                                <div class="scrap_item">
-                                    <a class="scrap_link" href="${root}community/lounge/${'${loungeItem.idx}'}">
+                                <div class="scrap_item_lounge">
+                                    <a class="scrap_link_lounge" href="${root}community/lounge/${'${loungeItem.idx}'}">
                                             <div class="scrap_title">
                                                 <div class="scrap_badge">
                                                     <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -324,15 +358,13 @@
                                                     <span class="scrap_content" style="color: gray;">${'${loungeItem.content}'}</p>
                                                 </div>
                                             </div>
-                                    </a>
-                                        <hr class="scrapItem_border">
+                                            </a>
+                                            <hr class="scrapItem_border">
                                 </div>
+                                    `;
 
-                        `;
-                        console.log("isLastItem = " + isLastItem);
                     });
                     lastIdx = result[result.length -1].idx;
-                    console.log(lastIdx);
                     $('.lounge_list').append(loungeHtml);
                 },
                 error: function(xhr){

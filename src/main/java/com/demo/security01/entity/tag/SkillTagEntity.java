@@ -23,6 +23,9 @@ public class SkillTagEntity {
 
     @OneToMany(mappedBy = "skillTag", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySkillTagEntity> studySkillTagEntity;
+    
+    @OneToMany(mappedBy = "skillTag", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User_Skilltag> user_skillTag;
 
     public String getTagName() {
         return tagName;

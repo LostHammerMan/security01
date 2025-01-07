@@ -3,6 +3,8 @@ package com.demo.security01.model.dto.user;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -17,6 +19,7 @@ public class JoinUserDto {
     private String email_addr;
     private String auth_code;
 //    private boolean email_authenticated;
+    private List<Long> skillTagIdx;
 
 
 }

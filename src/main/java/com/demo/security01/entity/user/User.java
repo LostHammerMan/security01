@@ -2,6 +2,7 @@ package com.demo.security01.entity.user;
 
 import com.demo.security01.entity.lounge.BoardLike;
 import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.entity.tag.User_Skilltag;
 import com.demo.security01.model.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
@@ -71,6 +72,9 @@ public class User {
     @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Timestamp createDate;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User_Skilltag> user_skillTag;
 
 
     /*public void setCreateDate(LocalDateTime createDate) {

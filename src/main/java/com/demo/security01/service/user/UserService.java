@@ -1,6 +1,8 @@
 package com.demo.security01.service.user;
 
 import com.demo.security01.config.exception.UserNotMatchException;
+import com.demo.security01.entity.tag.SkillTagEntity;
+import com.demo.security01.entity.tag.User_Skilltag;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.entity.user.UserAddr;
 import com.demo.security01.entity.user.UserProfile;
@@ -11,10 +13,13 @@ import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
+import com.demo.security01.repository.study.study_skill.SkillTagRepository;
 import com.demo.security01.repository.user.UserAddrRepository;
 import com.demo.security01.repository.user.UserProfileRepository;
 import com.demo.security01.repository.user.UserRepository;
 import com.demo.security01.repository.user.UserRepositoryCustom;
+import com.demo.security01.repository.user.user_skill.User_skillTagRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @Service
@@ -41,6 +49,9 @@ public class UserService {
     private final UserAddrRepository addrRepository;
     private final PasswordEncoder encoder;
     private final ResourceLoader resourceLoader;
+    private final SkillTagRepository skillTagRepository;
+    private final User_skillTagRepository user_skillTagRepository;
+    
 
     @Value("${file.dir}")
     String filePath;
@@ -78,6 +89,22 @@ public class UserService {
         defaultProfile.setLocalDateTime(LocalDateTime.now());
 
         profileRepository.save(defaultProfile);
+        
+        if(joinUserDto.getSkillTagIdx() != null) {
+        	for(Long skillTagIdx : joinUserDto.getSkillTagIdx()) {
+        		SkillTagEntity skillTag = skillTagRepository.findById(skillTagIdx)
+        				.orElseThrow(
+        						() -> new EntityNotFoundException("해당 스킬은 존재하지 않습니다")
+						);
+    		
+        	User_Skilltag user_Skilltag = User_Skilltag.builder()
+        			.user(user)
+        			.skillTag(skillTag)
+        			.build();
+        	
+        	user_skillTagRepository.save(user_Skilltag);
+        	}
+        }
     }
 
     public Resource getDefaultProfileImg(){
@@ -210,6 +237,51 @@ public class UserService {
             profileRepository.save(findUserProfile);
         }
 
+    }
+    
+    // 회원 수정 - 관심 스킬
+    @Transactional
+    public void skillTagModify(List<Long> skillIdxes, String username) {
+    	log.info("===== userService ========");
+    	log.info(" \t ===== skillTagModify ========");
+    	User findUser = userRepositoryCustom.findUserByUsername(username);
+    	log.info("findUser = " + findUser.getId());
+    	
+    	List<User_Skilltag> findUserSkilltags = findUser.getUser_skillTag();
+    	for(User_Skilltag findUserSkilltag : findUserSkilltags) {
+    		log.info("findUserSkilltag = " + findUserSkilltag);
+    	}
+
+    	// 스킬태그 등록안한 경우
+    	if(findUserSkilltags == null) {
+    		log.info("\t\t ======= skillTagModify insert ======");
+    		for(Long skillIdx : skillIdxes) {
+    			SkillTagEntity findSkillTag = skillTagRepository.findById(skillIdx).orElseThrow(
+    						() -> new EntityNotFoundException("해당 스킬은 존재하지 않습니다")
+    					);
+    			
+    			User_Skilltag user_Skilltag = User_Skilltag.builder()
+        				.user(findUser)
+        				.skillTag(findSkillTag)
+        				.build();
+    			
+    			user_skillTagRepository.save(user_Skilltag);
+    		}
+    	}else {
+    		log.info("\t\t ======= skillTagModify modify ======");
+    		
+    		for(Long skillIdx : skillIdxes) {
+    			SkillTagEntity findSkillTag = skillTagRepository.findById(skillIdx).orElseThrow(
+    						() -> new EntityNotFoundException("해당 스킬은 존재하지 않습니다")
+    					);
+    			
+    			for(User_Skilltag findUser_skillTag : findUserSkilltags) {
+    				findUser_skillTag.modifySkill(findSkillTag);
+    				user_skillTagRepository.save(findUser_skillTag);
+    			}
+    		}
+    	}
+    	
     }
 
     // 디렉토리만 추출
