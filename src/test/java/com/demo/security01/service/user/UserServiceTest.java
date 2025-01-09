@@ -37,13 +37,15 @@ public class UserServiceTest {
 	@DisplayName("회원 수정 - 스킬")
 	void userSkillModiFyTest() {
 		
-		
 		List<Long> skillIdx = new ArrayList<>();
 		skillIdx.add(1L);
 		skillIdx.add(2L);
+		skillIdx.add(3L);
 		
 		log.info("skillIdx = " + skillIdx);
 		userService.skillTagModify(skillIdx, "admin");
 	}
+	
+	// 회원 관심 스킬 추천 test
 
 }

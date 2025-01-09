@@ -9,7 +9,7 @@ import com.demo.security01.entity.tag.User_Skilltag;
 import com.demo.security01.entity.user.User;
 
 @Repository
-public interface User_skillTagRepository extends JpaRepository<User_Skilltag, Long>{
+public interface User_skillTagRepository extends JpaRepository<User_Skilltag, Long>, User_skillTagRepositoryCustom{
 	
 	Optional<User_Skilltag> findByUser(User user);
 

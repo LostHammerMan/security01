@@ -7,6 +7,7 @@ import com.demo.security01.entity.user.User;
 import com.demo.security01.entity.user.UserAddr;
 import com.demo.security01.entity.user.UserProfile;
 import com.demo.security01.model.Role;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.model.dto.user.UserProfileDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
@@ -90,7 +91,9 @@ public class UserService {
 
         profileRepository.save(defaultProfile);
         
-        if(joinUserDto.getSkillTagIdx() != null) {
+        
+        // 회원가입시 관심 스킬 입력한 경우
+        if(joinUserDto.getSkillTagIdx() != null && !joinUserDto.getSkillTagIdx().isEmpty()) {
         	for(Long skillTagIdx : joinUserDto.getSkillTagIdx()) {
         		SkillTagEntity skillTag = skillTagRepository.findById(skillTagIdx)
         				.orElseThrow(
@@ -105,6 +108,7 @@ public class UserService {
         	user_skillTagRepository.save(user_Skilltag);
         	}
         }
+        
     }
 
     public Resource getDefaultProfileImg(){
@@ -248,12 +252,11 @@ public class UserService {
     	log.info("findUser = " + findUser.getId());
     	
     	List<User_Skilltag> findUserSkilltags = findUser.getUser_skillTag();
-    	for(User_Skilltag findUserSkilltag : findUserSkilltags) {
-    		log.info("findUserSkilltag = " + findUserSkilltag);
-    	}
+    	log.info("findUserSkilltags = " + findUserSkilltags);
 
+    	// 빈 배열은 배열 자체 객체는 존재하는것, null 이 아님에 유의
     	// 스킬태그 등록안한 경우
-    	if(findUserSkilltags == null) {
+    	if(findUserSkilltags == null || findUserSkilltags.isEmpty()) {
     		log.info("\t\t ======= skillTagModify insert ======");
     		for(Long skillIdx : skillIdxes) {
     			SkillTagEntity findSkillTag = skillTagRepository.findById(skillIdx).orElseThrow(
@@ -267,21 +270,32 @@ public class UserService {
     			
     			user_skillTagRepository.save(user_Skilltag);
     		}
-    	}else {
+    	}else if(findUserSkilltags != null && !findUserSkilltags.isEmpty()){
     		log.info("\t\t ======= skillTagModify modify ======");
+    		
+    		user_skillTagRepository.user_skillTagDeleteByUserIdx(findUser);
+    		
     		
     		for(Long skillIdx : skillIdxes) {
     			SkillTagEntity findSkillTag = skillTagRepository.findById(skillIdx).orElseThrow(
     						() -> new EntityNotFoundException("해당 스킬은 존재하지 않습니다")
     					);
     			
-    			for(User_Skilltag findUser_skillTag : findUserSkilltags) {
-    				findUser_skillTag.modifySkill(findSkillTag);
-    				user_skillTagRepository.save(findUser_skillTag);
-    			}
+    			User_Skilltag user_Skilltag = User_Skilltag.builder()
+        				.user(findUser)
+        				.skillTag(findSkillTag)
+        				.build();
+    			
+    			user_skillTagRepository.save(user_Skilltag);
     		}
     	}
     	
+    }
+    
+    // 회원 관심 스킬 추천 조회
+    @Transactional(readOnly = true)
+    public List<StudyResponseDto> recommendStudy(){
+    	return null;
     }
 
     // 디렉토리만 추출
