@@ -51,6 +51,12 @@ class StudyServiceTest {
     @Autowired
     private CommentService commentService;
 
+    
+    @Test
+    @DisplayName("전체 삭제")
+    void deleteAllStudy() {
+    	studyRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("스터디 저장 성공")
@@ -60,27 +66,25 @@ class StudyServiceTest {
 
 
         Set<Long> positionIdx = new HashSet<>();
-        positionIdx.add(1L);
+//        positionIdx.add(1L);
         positionIdx.add(2L);
 
         List<Long> tagIdx = new ArrayList<>();
-//        tagIdx.add(3L);
-//        tagIdx.add(4L);
-        tagIdx.add(1L);
+//        tagIdx.add(1L);
         tagIdx.add(2L);
         tagIdx.add(3L);
 
         // category code : 7 - 프로젝트, 8 - 스터디
-        for (int i=0; i < 200; i++){
+        for (int i=0; i < 5; i++){
             StudyRequestDto studyRequestDto = StudyRequestDto.builder()
                     .cateCode(5L)
-                    .title(i +"번째 스터디 모집합니다.")
+                    .title(i +"번째 3번 태그.")
                     .contents("열심히 하실분")
                     .contactMethod("핸드폰")
                     .contactAddress("010-000-0000")
                     .progressMethod("온라인")
                     .progressPeriod("6개월")
-                    .recruitDeadline("2024-10-09")
+                    .recruitDeadline("2025-03-09")
                     .recruitedNumber(6)
                     .recruitPositions(positionIdx)
                     .skillTagIdx(tagIdx)
@@ -152,7 +156,7 @@ class StudyServiceTest {
     void getStudyList(){
         Pageable pageable = PageRequest.of(0, 9);
 
-        StudyCriteria criteria = new StudyCriteria();
+//        StudyCriteria criteria = new StudyCriteria();
 
 //        List<Long> skillIndexes = new ArrayList<>();
 //        skillIndexes.add(5L);
@@ -170,9 +174,9 @@ class StudyServiceTest {
 //            log.info("studyList = {}", study);
 //        }
 
-        for (StudyResponseDto study : studyService.getStudyList(criteria, pageable)){
-            log.info("studyList = {}", study);
-        }
+//        for (StudyResponseDto study : studyService.getStudyList(criteria, pageable)){
+//            log.info("studyList = {}", study);
+//        }
     }
 
     // 스터디 목록 + 페이징 + 좋아요
@@ -232,6 +236,19 @@ class StudyServiceTest {
     	request.setUsername("admin");
     	
     	commentService.addComment(request);
+    }
+    
+    // 추천 스터디 목록
+    @Test
+    @DisplayName("추천 스터디 조회 - 성공")
+//    List<StudyResponseDto> getRecommendStudyList(){
+	void getRecommendStudyList(){
+    	String username = "admin";
+    	
+    	List<StudyResponseDto> results = studyService.getRecommendStudy(username);
+    	log.info("results = " + results);
+    	
+//    	return results;
     }
 
 }

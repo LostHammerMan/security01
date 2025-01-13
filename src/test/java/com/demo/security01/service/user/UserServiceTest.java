@@ -39,8 +39,8 @@ public class UserServiceTest {
 		
 		List<Long> skillIdx = new ArrayList<>();
 		skillIdx.add(1L);
-		skillIdx.add(2L);
-		skillIdx.add(3L);
+//		skillIdx.add(2L);
+//		skillIdx.add(3L);
 		
 		log.info("skillIdx = " + skillIdx);
 		userService.skillTagModify(skillIdx, "admin");

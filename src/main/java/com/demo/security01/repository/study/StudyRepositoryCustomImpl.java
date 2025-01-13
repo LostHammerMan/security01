@@ -7,6 +7,7 @@ import static com.demo.security01.entity.study.QStudyEntity.studyEntity;
 import static com.demo.security01.entity.study.QStudy_Positions.study_Positions;
 import static com.demo.security01.entity.tag.QSkillTagEntity.skillTagEntity;
 import static com.demo.security01.entity.tag.QStudySkillTagEntity.studySkillTagEntity;
+import static com.demo.security01.entity.tag.QUser_Skilltag.user_Skilltag;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.demo.security01.entity.study.StudyEntity;
+import com.demo.security01.entity.tag.QSkillTagEntity;
+import com.demo.security01.entity.tag.User_Skilltag;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
@@ -53,6 +56,32 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 				.limit(4)
 				.fetch();
 	}
+    
+    // 추천 스터디
+    @Override
+	public List<StudyResponseDto> getRecommendStudy(User user) {
+    	return queryFactory
+    	.selectDistinct(Projections.fields(StudyResponseDto.class, 
+    			studyEntity.idx.as("studyIdx"),
+				studyEntity.title,
+				studyEntity.recruitDeadline,
+				studyEntity.likeCount,
+				studyEntity.viewCount,
+				studyEntity.regDate,
+				categoryEntity.categoryName
+    			))
+    	.from(studyEntity)
+    	.join(studySkillTagEntity).on(studyEntity.eq(studySkillTagEntity.study))
+    	.join(skillTagEntity).on(studySkillTagEntity.skillTag.eq(skillTagEntity))
+    	.join(user_Skilltag).on(skillTagEntity.eq(user_Skilltag.skillTag))
+//    	.join(studyEntity.category, categoryEntity)
+    	.join(categoryEntity).on(studyEntity.category.eq(categoryEntity))
+    	.where(user_Skilltag.user.eq(user))
+    	.orderBy(studyEntity.likeCount.desc(), studyEntity.viewCount.desc(), studyEntity.regDate.desc())
+    	.limit(8)
+    	.fetch();
+	}
+    
     // 스터디 목록 + 페이징
     @Override
     public List<StudyEntity> getStudyList(StudyCriteria criteria, Pageable pageable, User user){
@@ -209,4 +238,6 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
                 .fetch();
         return findStudyList;
     }
+
+	
 }

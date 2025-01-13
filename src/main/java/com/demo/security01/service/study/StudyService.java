@@ -437,7 +437,16 @@ public class StudyService {
         }
         return dtos;
     }
-
+    
+    // 스터디 추천
+   public List<StudyResponseDto> getRecommendStudy(String loginUsername) {
+	   
+	   User findUser = userRepository.findByUsername(loginUsername).orElseThrow(
+			   	() -> new UsernameNotFoundException(loginUsername)
+			   );
+	
+	   return studyRepository.getRecommendStudy(findUser);
+}
 
     // 현재날짜가 마감일자를 넘긴 경우 -> isFin = 1
     @Transactional

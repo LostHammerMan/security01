@@ -28,22 +28,22 @@ public class User_skillTagRepositoryCustomImpl implements User_skillTagRepositor
 			.execute();
 	}
 
-	// 추천 스터디 조회
+	// 추천 스터디 조회 -> 스터디 쪽으로 옮기는 게 맞을듯?
 	@Override
 	public List<StudyResponseDto> getRecommendStudy(User loginUser) {
-		// TODO Auto-generated method stub
-		qf.selectDistinct(Projections.fields(StudyResponseDto.class, 
-				studyEntity.idx.as("studyIdx"),
-				studyEntity.title,
-				studyEntity.recruitDeadline,
-				studyEntity.viewCount,
-				categoryEntity.categoryName
-				))
-		.from(studyEntity)
-		.join(studyEntity.category, QCategoryEntity.categoryEntity)
-		.join(user_Skilltag.skillTag).on(studyEntity.studySkillTagEntity)
-		
-		.fetch();
+//		// TODO Auto-generated method stub
+//		qf.selectDistinct(Projections.fields(StudyResponseDto.class, 
+//				studyEntity.idx.as("studyIdx"),
+//				studyEntity.title,
+//				studyEntity.recruitDeadline,
+//				studyEntity.viewCount,
+//				categoryEntity.categoryName
+//				))
+//		.from(studyEntity)
+//		.join(studyEntity.category, QCategoryEntity.categoryEntity)
+//		.join(user_Skilltag.skillTag).on(studyEntity.studySkillTagEntity)
+//		
+//		.fetch();
 		
 		return null;
 	}

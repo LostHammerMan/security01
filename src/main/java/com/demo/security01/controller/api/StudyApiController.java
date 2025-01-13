@@ -67,6 +67,15 @@ public class StudyApiController {
     	List<StudyResponseDto> top4Result = studyService.getStudyListTop4();
     	return ResponseEntity.ok().body(top4Result);
     }
+    
+    @GetMapping("/study/recommend")
+    public ResponseEntity<List<StudyResponseDto>> getRecommendStudy(){
+    	List<StudyResponseDto> results = studyService.getRecommendStudy("admin");
+    	log.info("result = " + results);
+    	
+    	return ResponseEntity.ok(results);
+    	
+    }
 
     @GetMapping("/study/getListIsFin")
     public List<StudyResponseDto> getResult(StudyCriteria criteria){

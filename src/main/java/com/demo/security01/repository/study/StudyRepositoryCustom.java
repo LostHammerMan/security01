@@ -29,4 +29,7 @@ public interface StudyRepositoryCustom {
     
     // 인기 스터디 top4
     public List<StudyResponseDto> getStudyListTop4();
+    
+    // 추천 스터디 
+    public List<StudyResponseDto> getRecommendStudy(User user);
 }
