@@ -40,6 +40,12 @@ public class TestController {
 
     @Autowired
     private ItemRepository itemRepository;
+    
+    // 캐러셀 테스트용
+    @GetMapping("/carouselTest")
+    public String carouselTest() {
+    	return "test/carouselTest";
+    }
 
     @GetMapping("/divTest")
     public String divTest(){
