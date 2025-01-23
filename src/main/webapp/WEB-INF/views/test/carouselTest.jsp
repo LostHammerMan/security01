@@ -15,19 +15,45 @@
     display: flex;
     flex-direction: column; /* 슬라이드를 위로 두고, Pagination을 아래로 */
     align-items: center; /* 중앙 정렬 */
+    width: 400px;
+    height: 350px;
 }
 
 .swiper {
-    width: 400px;
-    height: 350px;
+    width: 300px;
     position: relative;
     margin-top: 50px;
     overflow: visible;
 }
 
+.pagination-container {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-badge {
+    display: flex;
+    width: 36px;
+    height: 18px;
+    border-radius: 9px;
+    background-color: lightgray;
+    border: 1px solid;
+    color: black;
+    font-size: 10px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    line-height: initial;
+}
+
 .swiper-pagination {
-    position: relative;
-    margin-top: 20px; /* 슬라이드와 Pagination 사이의 간격 조정 */
+    position: relative !important;
+    margin-top: 10px; /* 슬라이드와 Pagination 사이의 간격 조정 */
     text-align: center; /* 가운데 정렬 */
     width: 100%; /* 부모 요소 너비에 맞게 설정 */
     z-index: 10;
@@ -72,6 +98,11 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <body>
 <div class="swiper-container">
+  <div class="pagination-container">
+    <div class="swiper-pagination"></div>
+    <div class="pagination-badge"></div>
+  </div>
+
   <div class="swiper">
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper">
@@ -86,12 +117,11 @@
       <div class="swiper-slide">Slide 8</div>
     </div>
   </div>
-  <div class="swiper-pagination"></div>
 </div>
 </body>
 <script>
   $(document).ready(function(){
-      const swiper = new Swiper('.swiper', {
+    const swiper = new Swiper('.swiper', {
       // Optional parameters
       direction: 'horizontal',
       loop: true,
@@ -103,25 +133,68 @@
       // If we need pagination
       pagination: {
         el: '.swiper-pagination',
+        type: 'bullets',
+        
         clickable : true
       },
       autoplay: {
         delay: 2000,
         disableOnInteraction: false,
-      }
+      },
     
-
-      // Navigation arrows
-      /* navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      }, */
-
-      // And if we need scrollbar
-      // scrollbar: {
-      //   el: '.swiper-scrollbar',
-      // },
     });
+
+    // 스와이퍼 이벤트 핸들러 사용
+    swiper.on('slideChange', function(){
+      let badgeHtml = '';
+      // const current = swiper.realIndex + 1;
+      const current = (swiper.realIndex / 2) +1;
+      const total = swiper.slides.length -4;
+      const badgeElement = $('.pagination-badge');
+      badgeHtml = `<div class="pagination-badge">${'${current}'} / ${'${total}'}</div>`;
+
+      badgeElement.html(badgeHtml);
+    });
+    swiper.emit('slideChange');
+
+    // const pagingBadge = new Swiper(".swiper", {
+    //   pagination : {
+    //     el: ".pagination-badge",
+    //     type: "custom",
+    //     renderCustom(pagingBadge, current, total){
+    //       console.log(current + '/' + total);
+    //       return `<div class="fraction">${'${current}'} / ${'${total}'}</div>`;
+    //     }
+    //   },
+
+    // });
+
+    // swiper.controller.control = pagingBadge;
+
+    // const pagingBullet = new Swiper(".swiper", {
+    //   pagination: {
+    //     el: ".swiper-pagination"
+    //     renderCustom: function(swiper, current, total){
+    //       console.log("current = " + current);
+    //       console.log("total = " + total);
+
+    //       // Array.from(arrayLike, mapFn, thisArg).join(''): 유사 배열, 반복 가능한 객체를 배열로 변환
+    //       // - arrayLike : 유사배열, 반복가능객체
+    //       // - mapFn : 배열 생성하면서 각 요소 변경 위한 매핑 함수
+    //       // - thisArg : mapFn 에서 사용할 this 값
+    //       // - join(''): separator가 빈문자인 경우 배열 요소를 구분자 없이 연결
+
+    //       // ( _, i ) : 
+    //       // - '_' : 배열요소의 값 전달됨, 값에 관심 없음을 나타내기 위해 사용하는 관용적 이름
+    //       // - 'i' : 현재 배열의 인덱스
+    //       return `
+    //         <div class="fraction">${'${current}'} / ${'${total}'}</div>
+    //       `;
+    //     },
+    //   },
+    // });
+
+    // swiper.controller.control = pagingBullet;
   });
 
 </script>
