@@ -21,14 +21,16 @@
 
 .swiper {
     width: 300px;
+    height: 400px;
     position: relative;
-    margin-top: 50px;
+    margin-top: 10px;
     overflow: visible;
 }
 
 .pagination-container {
   display: flex;
   align-items: center;
+  margin-left: 188px;
 }
 
 .pagination-badge {
@@ -97,6 +99,7 @@
 />
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <body>
+  
 <div class="swiper-container">
   <div class="pagination-container">
     <div class="swiper-pagination"></div>

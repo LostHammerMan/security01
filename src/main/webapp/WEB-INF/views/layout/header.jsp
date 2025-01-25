@@ -24,8 +24,11 @@
     <link rel="stylesheet" href="${root}static/css/bootstrap-datepicker.min.css"/>
     <link rel="stylesheet" href="${root}static/css/bootstrap-multiselect.css"/>
     <link rel="stylesheet" href="${root}static/css/select2.css"/>
-    <!-- <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"> -->
     <link rel="icon" type="image/ico" href="${root}static/img/favicon.ico"/>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+    />
 
     <!-- JS Files -->
     <script src="${root}static/js/jquery-3.6.4.min.js"></script>
@@ -40,7 +43,7 @@
     <script src="${root}static/js/commonToast.js"></script>
     <script src="${root}static/js/mustache.js" type="module"></script>
     <script src="https://kit.fontawesome.com/5d8a0a5e4b.js" crossorigin="anonymous"></script>
-    <!-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <title>Title</title>
     <style>
         footer {

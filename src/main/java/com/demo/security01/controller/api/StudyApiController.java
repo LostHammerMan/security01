@@ -69,8 +69,9 @@ public class StudyApiController {
     }
     
     @GetMapping("/study/recommend")
-    public ResponseEntity<List<StudyResponseDto>> getRecommendStudy(){
-    	List<StudyResponseDto> results = studyService.getRecommendStudy("admin");
+    public ResponseEntity<List<StudyResponseDto>> getRecommendStudy(Principal principal){
+    	String loginUsername = principal.getName();
+    	List<StudyResponseDto> results = studyService.getRecommendStudy(loginUsername);
     	log.info("result = " + results);
     	
     	return ResponseEntity.ok(results);
