@@ -41,7 +41,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     // 인기 스터디 top4
     // 연관된 엔티티의 특정 필드에 접근하려면 join 을 사용해 필요한 필드 매핑
     @Override
-	public List<StudyResponseDto> getStudyListTop4() {
+	public List<StudyResponseDto> getStudyListTop4(int limitNum) {
 		return queryFactory.select(Projections.fields(StudyResponseDto.class, 
 				studyEntity.idx.as("studyIdx"),
 				studyEntity.title,
@@ -53,7 +53,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 				.join(studyEntity.category, categoryEntity)
 //				.where(studyEntity.isFIn.eq(0))
 				.orderBy(studyEntity.viewCount.desc())
-				.limit(4)
+				.limit(limitNum)
 				.fetch();
 	}
     

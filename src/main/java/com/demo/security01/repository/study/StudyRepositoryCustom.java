@@ -28,7 +28,7 @@ public interface StudyRepositoryCustom {
     public List<StudyEntity> getListByIsFin(StudyCriteria criteria);
     
     // 인기 스터디 top4
-    public List<StudyResponseDto> getStudyListTop4();
+    public List<StudyResponseDto> getStudyListTop4(int limitNum);
     
     // 추천 스터디 
     public List<StudyResponseDto> getRecommendStudy(User user);

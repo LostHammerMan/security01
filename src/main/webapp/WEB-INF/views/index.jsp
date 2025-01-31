@@ -4,7 +4,11 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="root" value="${pageContext.request.contextPath}/" />
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
-
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <style>
 
     a {
@@ -14,20 +18,6 @@
     a:hover {
         color: inherit;
         text-decoration: none;
-    }
-
-    .scrap_link {
-        display: flex;
-        gap: 12px;
-        color: inherit;
-        height: 100px;
-    }
-
-    .scrap_link_lounge {
-        display: flex;
-        gap: 12px;
-        color: inherit;
-        height: 85px;
     }
 
     .index_container {
@@ -44,6 +34,106 @@
         box-sizing: border-box;
         min-height: 100%;
     }
+
+    .index_top {
+        display: flex;
+        width: 1129px;
+        height: 319px;
+    }
+
+    .recommend_container {
+        width: 590px;
+    }
+
+    .swiper-container {
+    display: flex;
+    flex-direction: column; /* 슬라이드를 위로 두고, Pagination을 아래로 */
+    align-items: center; /* 중앙 정렬 */
+    width: 400px;
+    height: 350px;
+}
+
+    .swiper {
+        width: 300px;
+        height: 400px;
+        position: relative;
+        margin-top: 10px;
+        overflow: visible;
+    }
+
+    .pagination-container {
+    display: flex;
+    align-items: center;
+    margin-left: 188px;
+    }
+
+    .pagination-badge {
+        display: flex;
+        width: 36px;
+        height: 18px;
+        border-radius: 9px;
+        background-color: lightgray;
+        border: 1px solid;
+        color: black;
+        font-size: 10px;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        line-height: initial;
+    }
+
+    .swiper-pagination {
+        position: relative !important;
+        margin-top: 10px; /* 슬라이드와 Pagination 사이의 간격 조정 */
+        text-align: center; /* 가운데 정렬 */
+        width: 100%; /* 부모 요소 너비에 맞게 설정 */
+        z-index: 10;
+    }
+
+    .topViewPost-item {
+        color: black;
+        display: flex;
+        flex-direction: column;
+        width: 340px;
+        padding: 20px 25px;
+        gap: 10px;
+        border-radius: 20px;
+        border: 2px solid rgb(209, 209, 209);
+        background: rgb(255, 255, 255);
+    }
+
+    /* .swiper-slide {
+        color: black;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        padding: 20px 25px;
+        gap: 10px;
+        border-radius: 20px;
+        border: 2px solid rgb(209, 209, 209);
+        background: rgb(255, 255, 255);
+    }    */
+
+    .scrap_link {
+        display: flex;
+        gap: 12px;
+        color: inherit;
+        height: 100px;
+    }
+
+    .scrap_link_lounge {
+        display: flex;
+        gap: 12px;
+        color: inherit;
+        height: 85px;
+    }
+
+    
 
     .bannerWrapper {
         width: 100%;
@@ -153,7 +243,7 @@
     border-top: 1px solid #dee2e6; /* 보이도록 명시적으로 설정 */
     margin: 1px; /* 여백 추가 */
     height: 0; /* 높이 초기화 */
-}
+    }
 
     .lounge_list {
         width: auto;
@@ -217,13 +307,33 @@
                             <div class="pagination-bullets"></div>
                             <div class="pagination-fraction"></div>
                          </div> 
-                        
-                         <div class="swiper-list">
-                            
-                         </div>
+                         <div class="swiper">
+                            <div class="swiper-wrapper">
+                                <c:forEach var="item" items="${recommendResults}">
+                                    <div class="swiper-slide">
+                                        <a class="topViewPost-item" href='${root}study/${item.studyIdx}'>
+                                            <div class="topViewPost_categoryWrapper">
+                                                <div class="badge_category">${item.categoryName}</div>
+                                                <!-- <div class="badge_endDate">🚨 마감 ${'${diffInDays}'}일전</div> -->
+                                            </div>
+                                            <!-- <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | ${'${item.recruitDeadline}'}</div> -->
+                                            <h1 class="topViewPost-title">${item.title}</h1>
+                                            <div class="topViewPost-viewCount">👓 조회수 ${item.viewCount}회</div>
+                                        </a>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- new study-->
+             <div class="newStudy-container">
+                <div class="newStudy-header">
+                    <span>new 스터디/프로젝트</span>
+                </div>
+             </div>
         </div>
 
           
@@ -262,7 +372,7 @@
 
         getSCrapStudyList();
         getLoungeList();
-
+        initSwiper();
 
         $('.site_ex').on('click', function(){
             console.log('사이트 클릭');
@@ -406,13 +516,51 @@
         function getRecommedStudyList(){
             $.ajax({
                 url: '${root}api/study/recommend',
+                method: 'GET',
+                success: function(result){
+                    console.log('추천 목록 불러오기 성공');
+                    let recommendHtml = '';
+
+                    result.forEach(function(item){
+                        recommendHtml += `
+                        <div class="swiper-slide">${'${item.title}'}</div>
+
+                        `;
+                    });
+                    $('.swiper-slide').html(recommendHtml);
+                    setTimeout(initSwiper, 200);
+                },
+                error: function (xhr) { 
+                    console.log('추천 목록 불러오기 실패');
+                 }
             });
         }
 
         /* 추천 스터디 목록  끝 */
+        function initSwiper(){
 
-        /* swiper 시작 */ 
+            /* swiper 시작 */ 
+            const swiper = new Swiper(".swiper", {
+            direction: 'horizontal',
+            loop: true,
+            speed: 1400,
+            slidesPerView: 2,
+            spaceBetween: 5,
+            slidesPerGroup: 2,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+                
+                clickable : true
+            },
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false,
+            },
 
+             });
+        }
+        
     });
 
 </script>

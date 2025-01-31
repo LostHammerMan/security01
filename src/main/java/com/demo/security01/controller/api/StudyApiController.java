@@ -49,13 +49,11 @@ public class StudyApiController {
         log.info("====== StudyApiController ==========");
         log.info("\t\t getStudyList called......");
         
-        
         if(principal == null) {
         	throw new RuntimeException("로그인이 필요한 기능입니다");
         }
         
         String loginUsername = principal.getName();
-        
         PageResponseDto<StudyResponseDto> result = studyService.getStudyListWithLikeCheck(criteria, pageable, loginUsername);
         log.info("Criteria = {}", criteria);
         return ResponseEntity.ok().body(result);
@@ -68,12 +66,25 @@ public class StudyApiController {
     	return ResponseEntity.ok().body(top4Result);
     }
     
+    // 추천 스터디
     @GetMapping("/study/recommend")
     public ResponseEntity<List<StudyResponseDto>> getRecommendStudy(Principal principal){
-    	String loginUsername = principal.getName();
-    	List<StudyResponseDto> results = studyService.getRecommendStudy(loginUsername);
-    	log.info("result = " + results);
     	
+    	List<StudyResponseDto> results = null;
+    	//로그인을 안한 경우 보여줄 기본 목록 추가 해야
+    	if(principal == null) {
+//    		List<StudyResponseDto> results = studyService.getRecommendStudyNotLogIn();
+    		results = studyService.getRecommendStudyNotLogIn();
+    		log.info("results.size() = " + results.size());
+//    		return ResponseEntity.ok(results);
+    		return ResponseEntity.ok(results);
+    	}else {
+    		String loginUsername = principal.getName();
+//        	List<StudyResponseDto> results = studyService.getRecommendStudy(loginUsername);
+        	results = studyService.getRecommendStudy(loginUsername);
+        	log.info("results.size() = " + results.size());
+//        	return ResponseEntity.ok(results);
+    	}
     	return ResponseEntity.ok(results);
     	
     }

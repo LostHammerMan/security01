@@ -1,7 +1,10 @@
 package com.demo.security01.controller;
 
-import com.demo.security01.model.dto.category.CategoryDto;
+import com.demo.security01.model.dto.category.CategoryDto;import com.demo.security01.model.dto.crawling.StudyCrawlingResponeDto;
+import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.service.category.CategoryService;
+import com.demo.security01.service.study.StudyService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -17,21 +22,22 @@ import java.util.List;
 public class IndexController {
 
     private final CategoryService categoryService;
+    private final StudyService studyService;
+    
     @GetMapping({"","/"})
-    public String index(Model model) {
+    public String index(Model model, Principal principal) {
         log.info("========== index Controller ===============");
-        log.info("categoryResult = {}", categoryService.getCategoryList());
 
-//        List<CategoryDto> categoryDtos = categoryService.getCategoryList();
-//        model.addAttribute("categoryDtos", categoryService.getCategoryList());
-        /*for (CategoryDto cateResults : categoryService.getCategoryList()){
-            model.addAttribute("cateResults", cateResults);
+        List<StudyResponseDto> recommendResults = new ArrayList<>();
+        if(principal == null) {
+        	recommendResults = studyService.getRecommendStudyNotLogIn();
+        	
+        }else {
+        	String username = principal.getName();
+        	recommendResults = studyService.getRecommendStudy(username);
         }
-*/
-        /*for (CategoryDto results : categoryService.getCategoryList()){
-            String categoryName = results.getCategoryName();
-            model.addAttribute("categoryName", categoryName);
-        }*/
+        log.info("recommendResults.size() = " + recommendResults.size());
+        model.addAttribute("recommendResults", recommendResults);
         return "index";
     }
 

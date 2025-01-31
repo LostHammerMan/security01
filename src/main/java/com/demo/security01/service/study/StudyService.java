@@ -22,6 +22,7 @@ import com.demo.security01.entity.tag.SkillTagEntity;
 import com.demo.security01.entity.tag.StudySkillTagEntity;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.BoardType;
+import com.demo.security01.model.dto.crawling.StudyCrawlingResponeDto;
 import com.demo.security01.model.dto.paging.PageResponseDto;
 import com.demo.security01.model.dto.study.request.StudyCriteria;
 import com.demo.security01.model.dto.study.request.StudyModifyRequestDto;
@@ -458,7 +459,12 @@ public class StudyService {
     
     // top4 스터디 조회
     public List<StudyResponseDto> getStudyListTop4(){
-    	return studyRepository.getStudyListTop4();
+    	return studyRepository.getStudyListTop4(4);
+    }
+    
+    // 로그인 안했을 때 추천 스터디 목록용
+    public List<StudyResponseDto> getRecommendStudyNotLogIn(){
+    	return studyRepository.getStudyListTop4(8);
     }
 
 
