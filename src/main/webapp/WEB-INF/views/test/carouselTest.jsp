@@ -102,8 +102,8 @@
   
 <div class="swiper-container">
   <div class="pagination-container">
-    <div class="swiper-pagination"></div>
-    <div class="pagination-badge"></div>
+    <div class="swiper-pagination"></div> <!-- pagination-bullets -->
+    <div class="pagination-badge"></div>  <!-- pagination-fraction -->
   </div>
 
   <div class="swiper">

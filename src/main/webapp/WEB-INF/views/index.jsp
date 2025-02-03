@@ -10,9 +10,13 @@
 />
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <style>
+    * {
+        box-sizing: border-box;
+    }
 
     a {
         text-decoration: none;
+        color: black;
     }
 
     a:hover {
@@ -25,7 +29,7 @@
         flex-direction: column;
         justify-content: space-between;
         position: relative;
-        width: 88%;
+        width: 80%;
         height: 100%;
         gap: 1rem;
         margin-left: auto;
@@ -37,43 +41,75 @@
 
     .index_top {
         display: flex;
-        width: 1129px;
-        height: 319px;
+        width: 100%;
+        height: auto;
+        gap: 80px;
+        justify-content: flex-start;
     }
 
-    .recommend_container {
-        width: 590px;
+    /* .swiper-container {
+        width: 50% !important;
+        min-width: 600px;
+        overflow: hidden;
+        margin-left: 20px;
+        margin-right: 20px;
+    } */
+
+    .recommend_header {
+        display: flex;
+        justify-content: space-between;
     }
+
 
     .swiper-container {
-    display: flex;
-    flex-direction: column; /* 슬라이드를 위로 두고, Pagination을 아래로 */
-    align-items: center; /* 중앙 정렬 */
-    width: 400px;
-    height: 350px;
-}
+        display: flex;
+        flex-direction: column; 
+        align-items: center; 
+        width: 52% !important;
+        height: 350px;
+        overflow: hidden;
+    }
 
     .swiper {
-        width: 300px;
+        /* width: 300px; */
+        display: flex;
+        /* width: 100%; */
         height: 400px;
         position: relative;
         margin-top: 10px;
-        overflow: visible;
+        overflow: hidden;
+    }
+
+    .swiper-slide {
+        color: black;
+        display: flex;
+        flex-direction: column;
+        /* flex: 0 0 calc(50% -20px); */
+        /* width: 50% !important; */
+        width: calc(50% -20px);
+        max-width: 340px;
+        height: 350px;
+        padding: 20px 25px;
+        /* gap: 10px; */
+        border-radius: 20px;
+        border: 2px solid rgb(209, 209, 209);
+        background: rgb(255, 255, 255);
     }
 
     .pagination-container {
-    display: flex;
-    align-items: center;
-    margin-left: 188px;
+        display: flex;
+        align-items: center;
+        margin-left: 188px;
+        gap: 5px;
     }
 
-    .pagination-badge {
+    .pagination-fraction {
         display: flex;
         width: 36px;
         height: 18px;
         border-radius: 9px;
         background-color: lightgray;
-        border: 1px solid;
+        /* border: 1px solid; */
         color: black;
         font-size: 10px;
         -webkit-box-pack: center;
@@ -87,7 +123,7 @@
         line-height: initial;
     }
 
-    .swiper-pagination {
+    .pagination-bullets {
         position: relative !important;
         margin-top: 10px; /* 슬라이드와 Pagination 사이의 간격 조정 */
         text-align: center; /* 가운데 정렬 */
@@ -95,29 +131,28 @@
         z-index: 10;
     }
 
-    .topViewPost-item {
-        color: black;
-        display: flex;
-        flex-direction: column;
-        width: 340px;
-        padding: 20px 25px;
-        gap: 10px;
-        border-radius: 20px;
-        border: 2px solid rgb(209, 209, 209);
-        background: rgb(255, 255, 255);
+    .swiper-pagination-bullet-active {
+        background-color: #586672 !important;
     }
 
-    /* .swiper-slide {
-        color: black;
-        display: flex;
-        flex-direction: column;
-        width: 50%;
-        padding: 20px 25px;
-        gap: 10px;
-        border-radius: 20px;
-        border: 2px solid rgb(209, 209, 209);
-        background: rgb(255, 255, 255);
-    }    */
+    a.topViewPost-item {
+        text-decoration-color: black;
+    }
+
+       
+
+    .newStudy-container {
+    /* flex: 1;  전체 너비 1/3 */
+    width: 40%;
+    min-width: 300px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border: 2px solid #ddd; /* 확인용 */
+    background-color: #fff;
+    }
 
     .scrap_link {
         display: flex;
@@ -132,8 +167,6 @@
         color: inherit;
         height: 85px;
     }
-
-    
 
     .bannerWrapper {
         width: 100%;
@@ -239,23 +272,24 @@
     } */
 
     hr.scrapItem_border {
-    border: none; /* 기본 브라우저 스타일 초기화 */
-    border-top: 1px solid #dee2e6; /* 보이도록 명시적으로 설정 */
-    margin: 1px; /* 여백 추가 */
-    height: 0; /* 높이 초기화 */
+        border: none; 
+        border-top: 1px solid #dee2e6; 
+        margin: 1px; 
+        height: 0; 
     }
 
     .lounge_list {
-        width: auto;
-        border-radius: 8px;
+        color: black;
         display: flex;
-        padding: 12px 12px;
         flex-direction: column;
-        border: 1px solid #DADCE0;
-        padding: 16px 12px;
+        width: 100%;
+        padding: 20px 25px;
         gap: 10px;
-        background-color: #FFFFFF;
+        border-radius: 20px;
+        border: 2px solid rgb(209, 209, 209);
+        background: rgb(255, 255, 255);
     }
+    
 
 </style>
 <link
@@ -296,17 +330,16 @@
         </div>
         <!--  -->
         <div class="index_top">
-            <div class="recommend_container">
-                <div>
+            <div class="swiper-container">
                     <div class="recommend_header">
                         <span>추천 스터디</span>
-                    </div>
-                    <!-- swiper -->
-                    <div class="swiper-container">
-                         <div class="pagination-container">
+                        <div class="pagination-container">
                             <div class="pagination-bullets"></div>
                             <div class="pagination-fraction"></div>
                          </div> 
+                    </div>
+                    <!-- swiper -->
+                    <!-- <div class="recommend_header"> -->
                          <div class="swiper">
                             <div class="swiper-wrapper">
                                 <c:forEach var="item" items="${recommendResults}">
@@ -324,8 +357,7 @@
                                 </c:forEach>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    <!-- </div> -->
             </div>
 
             <!-- new study-->
@@ -374,6 +406,7 @@
         getLoungeList();
         initSwiper();
 
+        
         $('.site_ex').on('click', function(){
             console.log('사이트 클릭');
             $('.site_ex').removeClass('site_selected');
@@ -542,23 +575,41 @@
             /* swiper 시작 */ 
             const swiper = new Swiper(".swiper", {
             direction: 'horizontal',
-            loop: true,
+            loop: false,
             speed: 1400,
             slidesPerView: 2,
-            spaceBetween: 5,
+            spaceBetween: 20,
             slidesPerGroup: 2,
             pagination: {
-                el: '.swiper-pagination',
+                el: '.pagination-bullets',
                 type: 'bullets',
-                
                 clickable : true
             },
             autoplay: {
                 delay: 2000,
-                disableOnInteraction: false,
+                disableOnInteraction: true,
             },
 
              });
+
+
+             // 스와이퍼 이벤트 핸들러
+        swiper.on('slideChange', function(){
+            let badgeHtml = '';
+            const current = (swiper.realIndex /2) +1;
+            const total = swiper.slides.length -4;
+            const $badgeElement = $('.pagination-fraction');
+            badgeHtml = `
+                <div class="pagination-fraction">${'${current}'} / ${'${total}'}</div>
+            `;
+            $badgeElement.html(badgeHtml);
+
+        });
+
+            swiper.emit('slideChange');
+
+        // 화면 크기 변경시 swiper 업데이트
+        swiper.update();
         }
         
     });
