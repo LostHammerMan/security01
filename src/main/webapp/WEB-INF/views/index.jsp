@@ -58,6 +58,7 @@
     .recommend_header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
     }
 
 
@@ -67,30 +68,33 @@
         align-items: center; 
         width: 52% !important;
         height: 350px;
-        overflow: hidden;
+        /* overflow: visible; */
+    }
+
+    .swiper-wrapper {
+        display: flex;
+        width: 100%;
+        /* overflow: visible; */
     }
 
     .swiper {
-        /* width: 300px; */
-        display: flex;
-        /* width: 100%; */
+        display: flex !important;
+        width: 100% !important;
         height: 400px;
         position: relative;
         margin-top: 10px;
-        overflow: hidden;
+        /* overflow: visible; */
     }
 
     .swiper-slide {
+        margin-left: auto;
         color: black;
         display: flex;
         flex-direction: column;
-        /* flex: 0 0 calc(50% -20px); */
-        /* width: 50% !important; */
-        width: calc(50% -20px);
-        max-width: 340px;
+        /* width: calc(50% - 15px) !important; */ /* 여기서 문제발생, width 값을 주지 않았을 때 슬라이드 크기 적당함 */
+        box-sizing: border-box;
         height: 350px;
         padding: 20px 25px;
-        /* gap: 10px; */
         border-radius: 20px;
         border: 2px solid rgb(209, 209, 209);
         background: rgb(255, 255, 255);
@@ -125,9 +129,9 @@
 
     .pagination-bullets {
         position: relative !important;
-        margin-top: 10px; /* 슬라이드와 Pagination 사이의 간격 조정 */
-        text-align: center; /* 가운데 정렬 */
-        width: 100%; /* 부모 요소 너비에 맞게 설정 */
+        margin-top: 10px; 
+        text-align: center; 
+        width: 100%; 
         z-index: 10;
     }
 
@@ -405,7 +409,6 @@
         getSCrapStudyList();
         getLoungeList();
         initSwiper();
-
         
         $('.site_ex').on('click', function(){
             console.log('사이트 클릭');
@@ -546,7 +549,7 @@
         /* 라운지 리스트 끝 */
 
         /* 추천 스터디 목록 시작 */
-        function getRecommedStudyList(){
+        /* function getRecommedStudyList(){
             $.ajax({
                 url: '${root}api/study/recommend',
                 method: 'GET',
@@ -567,7 +570,7 @@
                     console.log('추천 목록 불러오기 실패');
                  }
             });
-        }
+        } */
 
         /* 추천 스터디 목록  끝 */
         function initSwiper(){
@@ -575,11 +578,12 @@
             /* swiper 시작 */ 
             const swiper = new Swiper(".swiper", {
             direction: 'horizontal',
-            loop: false,
+            loop: true,
             speed: 1400,
             slidesPerView: 2,
-            spaceBetween: 20,
+            spaceBetween: 15,
             slidesPerGroup: 2,
+            centeredSlides: false,
             pagination: {
                 el: '.pagination-bullets',
                 type: 'bullets',
@@ -591,6 +595,9 @@
             },
 
              });
+
+              // 화면 크기 변경시 swiper 업데이트
+         swiper.update();
 
 
              // 스와이퍼 이벤트 핸들러
@@ -607,9 +614,6 @@
         });
 
             swiper.emit('slideChange');
-
-        // 화면 크기 변경시 swiper 업데이트
-        swiper.update();
         }
         
     });
