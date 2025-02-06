@@ -464,7 +464,7 @@ public class StudyService {
     
     // 로그인 안했을 때 추천 스터디 목록용
     public List<StudyResponseDto> getRecommendStudyNotLogIn(){
-    	return studyRepository.getStudyListTop4(8);
+    	return studyRepository.getStudyListTop4(16);
     }
 
 

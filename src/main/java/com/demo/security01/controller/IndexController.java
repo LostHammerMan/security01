@@ -32,6 +32,10 @@ public class IndexController {
         if(principal == null) {
         	recommendResults = studyService.getRecommendStudyNotLogIn();
         	
+        	for(StudyResponseDto result : recommendResults) {
+        		log.info("result.getDiffIndays() = " + result.getDiffInDays());
+        	}
+        	
         }else {
         	String username = principal.getName();
         	recommendResults = studyService.getRecommendStudy(username);

@@ -3,6 +3,7 @@ package com.demo.security01.model.dto.study.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -46,6 +47,7 @@ public class StudyResponseDto {
     private Integer viewCount;
     private Integer commentCount;
     private String skillImgName;
+//    private String diffInDays;
 
     @Builder
     public StudyResponseDto(Long studyIdx, String categoryName, String title, String contents, Integer recruitedNumber, String progressPeriod, LocalDate recruitDeadline, List<String> recruitPositions, String contactMethod, 
@@ -72,6 +74,7 @@ public class StudyResponseDto {
         this.skillImgName = skillImgName;
         this.formattedRegDate = toformattedDate(this.regDate);
         this.formattedRecruitDeadline = toformattedDate(this.recruitDeadline.atStartOfDay());
+//        this.diffInDays = calDeadLine();
     }
     
     
@@ -95,6 +98,11 @@ public class StudyResponseDto {
 				+ contactAddress + ", skillTags=" + skillTags + ", regDate=" + regDate + ", formattedRegDate="
 				+ formattedRegDate + ", isFin=" + isFin + ", username=" + username + ", likeCount=" + likeCount
 				+ ", viewCount=" + viewCount + ", skillImgName=" + skillImgName + "]";
+	}
+	
+	// 마감 날짜 계산
+	public String getDiffInDays() {
+		return String.valueOf(ChronoUnit.DAYS.between(LocalDate.now(), this.getRecruitDeadline()));
 	}
 
 	

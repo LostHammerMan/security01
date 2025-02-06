@@ -47,18 +47,26 @@
         justify-content: flex-start;
     }
 
-    /* .swiper-container {
-        width: 50% !important;
-        min-width: 600px;
-        overflow: hidden;
-        margin-left: 20px;
-        margin-right: 20px;
-    } */
-
     .recommend_header {
         display: flex;
         justify-content: space-between;
         width: 100%;
+    }
+    
+    .badge_category {
+        border-radius: 20px;
+        padding: 4px 12px;
+        background: #efefef;
+        color: #656565;
+    }
+
+    .loungeItem_regDate {
+        display: flex;
+        font-size: 14px;
+        gap: 8px;
+        color: #999;
+        font-weight: 500;
+        margin-top: 20px;
     }
 
 
@@ -66,7 +74,7 @@
         display: flex;
         flex-direction: column; 
         align-items: center; 
-        width: 52% !important;
+        width: 100% !important;
         height: 350px;
         /* overflow: visible; */
     }
@@ -141,6 +149,63 @@
 
     a.topViewPost-item {
         text-decoration-color: black;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .topViewPost_categoryWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .badge_endDate {
+        padding: 2px 8px;
+        border-radius: 20px;
+        border: 1px solid rgb(234, 114, 111);
+        color: rgb(234, 114, 111);
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: -0.56px;
+    }
+    
+    .topViewPost-title {
+        margin: 10px 0px 0px;
+        color: rgb(0, 0, 0);
+        font-size: 18px;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 140%;
+        letter-spacing: -1px;
+        min-height: 50px;
+        display: -webkit-box;
+        word-break: break-all;
+        overflow: hidden;
+    }
+
+    .topViewPost-contents {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 13px;
+    }
+
+    .topViewPost-viewCount {
+        margin-top: 45px;
+        color: rgb(78, 78, 78);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%;
+        letter-spacing: -0.56px;
+        text-align: end;
     }
 
        
@@ -336,7 +401,7 @@
         <div class="index_top">
             <div class="swiper-container">
                     <div class="recommend_header">
-                        <span>추천 스터디</span>
+                        <span style="font-size: 1.6rem; font-weight: bold;"> ✨ 당신만을 위한 추천 스터디 ✨</span>
                         <div class="pagination-container">
                             <div class="pagination-bullets"></div>
                             <div class="pagination-fraction"></div>
@@ -351,10 +416,21 @@
                                         <a class="topViewPost-item" href='${root}study/${item.studyIdx}'>
                                             <div class="topViewPost_categoryWrapper">
                                                 <div class="badge_category">${item.categoryName}</div>
-                                                <!-- <div class="badge_endDate">🚨 마감 ${'${diffInDays}'}일전</div> -->
+												
+												<c:choose>
+													<c:when test="${item.diffInDays le 0}">
+														<div class="topViewPost_categoryWrapper">
+	                                                        <div class="badge_endDate"> 마감 </div>
+	                                                    </div>
+													</c:when>
+													<c:otherwise>
+														<div class="badge_endDate">🚨 마감 ${item.diffInDays} 일전</div>
+													</c:otherwise>
+												</c:choose>
                                             </div>
-                                            <!-- <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | ${'${item.recruitDeadline}'}</div> -->
+                                            <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | ${item.recruitDeadline}</div>
                                             <h1 class="topViewPost-title">${item.title}</h1>
+                                            <span class="topViewPost-contents">${item.contents}</span>
                                             <div class="topViewPost-viewCount">👓 조회수 ${item.viewCount}회</div>
                                         </a>
                                     </div>
@@ -365,11 +441,11 @@
             </div>
 
             <!-- new study-->
-             <div class="newStudy-container">
+             <!-- <div class="newStudy-container">
                 <div class="newStudy-header">
                     <span>new 스터디/프로젝트</span>
                 </div>
-             </div>
+             </div> -->
         </div>
 
           
@@ -448,24 +524,24 @@
                                 let isScrapLastItem = index === items.length -1;
                                 itemHtml += `
                                 <div class="scrap_item">
-                                    <a class="scrap_link">
+                                    <a class="scrap_link" href="\${item.link}">
                                             <div class="scrap_title">
                                                 <div class="scrap_badge">
                                                     <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                                                         <!-- 원 -->
                                                         <circle cx="16" cy="16" r="15" fill="hsl(51, 100%, 90%)" />
                                                         <text x="16" y="18" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="600" fill="black">
-                                                            ${'${grade}'}
+                                                            \${grade}
                                                         </text>
                                                     </svg>
                                                 </div>
                                             </div>
                                             <div class="scrap_titleAndContent">
                                                 <div class="scrap_titleAndContent_title">
-                                                    <p style="margin: 0; font-weight: bold; font-size:16px;">${'${item.title}'}</p>
+                                                    <p style="margin: 0; font-weight: bold; font-size:16px;">\${item.title}</p>
                                                 </div>
                                                 <div class="scrap_titleAndContent_content">
-                                                    <p class="scrap_content" style="color: gray;">${'${item.content}'}</p>
+                                                    <p class="scrap_content" style="color: gray;">\${item.content}</p>
                                                 </div>
                                             </div>
                                     </a>
@@ -580,9 +656,9 @@
             direction: 'horizontal',
             loop: true,
             speed: 1400,
-            slidesPerView: 2,
+            slidesPerView: 4,
             spaceBetween: 15,
-            slidesPerGroup: 2,
+            slidesPerGroup: 4,
             centeredSlides: false,
             pagination: {
                 el: '.pagination-bullets',
@@ -603,8 +679,8 @@
              // 스와이퍼 이벤트 핸들러
         swiper.on('slideChange', function(){
             let badgeHtml = '';
-            const current = (swiper.realIndex /2) +1;
-            const total = swiper.slides.length -4;
+            const current = (swiper.realIndex /4) +1;
+            const total = swiper.slides.length -12;
             const $badgeElement = $('.pagination-fraction');
             badgeHtml = `
                 <div class="pagination-fraction">${'${current}'} / ${'${total}'}</div>

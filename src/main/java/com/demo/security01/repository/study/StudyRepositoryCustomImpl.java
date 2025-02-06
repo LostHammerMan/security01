@@ -45,6 +45,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 		return queryFactory.select(Projections.fields(StudyResponseDto.class, 
 				studyEntity.idx.as("studyIdx"),
 				studyEntity.title,
+				studyEntity.contents,
 				studyEntity.recruitDeadline,
 				studyEntity.viewCount,
 				categoryEntity.categoryName
@@ -52,7 +53,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
 				.from(studyEntity)
 				.join(studyEntity.category, categoryEntity)
 //				.where(studyEntity.isFIn.eq(0))
-				.orderBy(studyEntity.viewCount.desc())
+				.orderBy(studyEntity.likeCount.desc(), studyEntity.viewCount.desc(), studyEntity.regDate.desc())
 				.limit(limitNum)
 				.fetch();
 	}
@@ -64,6 +65,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     	.selectDistinct(Projections.fields(StudyResponseDto.class, 
     			studyEntity.idx.as("studyIdx"),
 				studyEntity.title,
+				studyEntity.contents,
 				studyEntity.recruitDeadline,
 				studyEntity.likeCount,
 				studyEntity.viewCount,
@@ -78,7 +80,7 @@ public class StudyRepositoryCustomImpl implements StudyRepositoryCustom{
     	.join(categoryEntity).on(studyEntity.category.eq(categoryEntity))
     	.where(user_Skilltag.user.eq(user))
     	.orderBy(studyEntity.likeCount.desc(), studyEntity.viewCount.desc(), studyEntity.regDate.desc())
-    	.limit(8)
+    	.limit(16)
     	.fetch();
 	}
     

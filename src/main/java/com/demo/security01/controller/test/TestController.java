@@ -1,5 +1,6 @@
 package com.demo.security01.controller.test;
 
+import com.demo.security01.entity.test.User_redis;
 import com.demo.security01.model.dto.TestDto;
 import com.demo.security01.model.dto.test.TestValidatorDto;
 import com.demo.security01.model.test.MultipartFileTest.FileStore;
@@ -40,6 +41,13 @@ public class TestController {
 
     @Autowired
     private ItemRepository itemRepository;
+    
+    // 레디스 테스트용
+    @ResponseBody
+    @PostMapping
+    public User_redis addUserByRedis(@RequestBody User_redis user_redis) {
+    	return null;
+    }
     
     // 캐러셀 테스트용
     @GetMapping("/carouselTest")

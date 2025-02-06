@@ -75,7 +75,7 @@ public class StudyApiController {
     	if(principal == null) {
 //    		List<StudyResponseDto> results = studyService.getRecommendStudyNotLogIn();
     		results = studyService.getRecommendStudyNotLogIn();
-    		log.info("results.size() = " + results.size());
+    		
 //    		return ResponseEntity.ok(results);
     		return ResponseEntity.ok(results);
     	}else {
