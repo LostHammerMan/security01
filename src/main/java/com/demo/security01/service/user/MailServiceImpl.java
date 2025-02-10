@@ -3,6 +3,9 @@ package com.demo.security01.service.user;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,12 +18,13 @@ import java.io.StringWriter;
 import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class MailServiceImpl {
 
-    @Autowired
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
 
     private String ePw;
+    
     // 메일 내용 작성
     public MimeMessage createMessage(String to) throws Exception{
 
@@ -105,5 +109,7 @@ public class MailServiceImpl {
         return ePw; // 메일로 보냈던 인증코드를 서버로 반환
 
     }
+    
+    //
 
 }

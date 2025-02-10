@@ -8,6 +8,7 @@ import com.demo.security01.model.test.MultipartFileTest.Item;
 import com.demo.security01.model.test.MultipartFileTest.ItemForm;
 import com.demo.security01.model.test.MultipartFileTest.UploadFile;
 import com.demo.security01.repository.test.MultipartFileTest.ItemRepository;
+import com.demo.security01.service.test.RedisTestService;
 import com.demo.security01.validator.test.TestEmailAddrValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,32 @@ public class TestController {
     @Autowired
     private ItemRepository itemRepository;
     
-    // 레디스 테스트용
+    @Autowired
+    private RedisTestService redisTestService;
+    
+    // 레디스 테스트용 - 회원 가입
     @ResponseBody
-    @PostMapping
+    @PostMapping("/addUserByRedis")
     public User_redis addUserByRedis(@RequestBody User_redis user_redis) {
-    	return null;
+    	User_redis user = redisTestService.addUser(user_redis);
+    	
+    	return user;
+    }
+    
+    @ResponseBody
+    @GetMapping("/getUserByRedis")
+    public User_redis getUserByRedis(@RequestParam String userId) {
+    	User_redis findUser = redisTestService.getUserFindById(userId);
+    	
+    	return findUser;
+    }
+    
+    @ResponseBody
+    @GetMapping("/getAllUserByRedis")
+    public List<User_redis> getAllUserByRedis() {
+    	List<User_redis> results = redisTestService.getAllUser();
+    	
+    	return results;
     }
     
     // 캐러셀 테스트용

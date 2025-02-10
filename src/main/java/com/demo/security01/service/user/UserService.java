@@ -23,6 +23,8 @@ import com.demo.security01.repository.user.user_skill.User_skillTagRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -34,12 +36,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserProfileRepository userProfileRepository;
@@ -52,6 +56,7 @@ public class UserService {
     private final ResourceLoader resourceLoader;
     private final SkillTagRepository skillTagRepository;
     private final User_skillTagRepository user_skillTagRepository;
+    private final MailServiceImpl mailServiceImpl;
     
 
     @Value("${file.dir}")
@@ -130,19 +135,16 @@ public class UserService {
     }
 
     // 회원 조회 - idx 로 조회
-    @Transactional
     public User userDetails(User user){
         return userRepositoryCustom.findUser(user.getId());
     }
 
     // 회원조회 - 이름으로 조회
-    @Transactional
     public User userDetailsByUsername(String username){
         return userRepositoryCustom.findUserByUsername(username);
     }
 
     // 비밀번호 조회
-    @Transactional
     public boolean isMyPassword(String nowPwd, String username){
         return encoder.matches(nowPwd, userRepositoryCustom.findPasswordByUsername(username));
     }
@@ -316,6 +318,34 @@ public class UserService {
         response.setFileName(loginUser.getUserProfile().getFileName());
 
         return response;
+    }
+    
+    // 임시 비밀번호 발급 및 전송
+    @Transactional
+    public void sendTempPw(String username, String email) {
+    	
+    	// 유저 확인
+    	User findUser = userRepository.findByUsername(username).orElseThrow(
+    				() -> new EntityNotFoundException(username + " 님은 존재하지 않음")
+    			);
+    	
+    	// 이메일 일치하는지
+    	if(findUser.getEmail().equals(email)) {
+    		throw new RuntimeException("이메일 다시 확인해주세요");
+    	}
+    	
+    	// 임시 비번 생성
+    	
+    	
+    	
+    	// 임시 비번 저장(redis)
+    	
+    	// 임시 비번 저장(db)
+    	
+    	// 이메일 전송
+    	
+    	
+    	
     }
 }
 

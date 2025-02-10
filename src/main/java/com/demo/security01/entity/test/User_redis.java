@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@RedisHash(value = "user_redis", timeToLive = 10)
+@RedisHash(value = "user_redis", timeToLive = 300)
 @Setter @Getter
 @ToString
 @NoArgsConstructor @AllArgsConstructor
