@@ -2,12 +2,14 @@ package com.demo.security01.service.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,15 @@ public class UserServiceTest {
 		
 		log.info("skillIdx = " + skillIdx);
 		userService.skillTagModify(skillIdx, "admin");
+	}
+	
+	// 회원 조회
+	@Test
+	@DisplayName("회원조회 - 이메일")
+	void getUserByEmail() {
+		String email = "seong7577@naver.com";
+		User user =  userService.getUserByEmail(email);
+		log.info("user = " + user.getUsername());
 	}
 	
 	// 회원 관심 스킬 추천 test

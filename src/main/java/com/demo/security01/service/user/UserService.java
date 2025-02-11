@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -320,33 +321,54 @@ public class UserService {
         return response;
     }
     
-    // 임시 비밀번호 발급 및 전송
-    @Transactional
-    public void sendTempPw(String username, String email) {
+    // 유저조회 - 이메일
+    public User getUserByEmail(String email) {
+    	User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("해당 유저 없음"));
+    	return user;
+    }
+    
+    // 비밀번호 찾기 
+    
+    // 방안 2. 비밀번호 재설정 링크 전송
+    public void resetPwByEmail(String email) {
     	
-    	// 유저 확인
-    	User findUser = userRepository.findByUsername(username).orElseThrow(
-    				() -> new EntityNotFoundException(username + " 님은 존재하지 않음")
-    			);
+    	// 유저확인
+    	User findUser = userRepository.findByEmail(email).orElseThrow(
+    			 () -> new EntityNotFoundException(email + " 님은 존재하지 않음") );
     	
-    	// 이메일 일치하는지
-    	if(findUser.getEmail().equals(email)) {
-    		throw new RuntimeException("이메일 다시 확인해주세요");
-    	}
-    	
-    	// 임시 비번 생성
-    	
-    	
-    	
-    	// 임시 비번 저장(redis)
-    	
-    	// 임시 비번 저장(db)
-    	
-    	// 이메일 전송
-    	
+    	// 이메일 
+    	String email = findUser.getEmail();
     	
     	
     }
+    	
+    
+    
+    
+    
+    // 방안 1. 임시 비밀번호 발급 및 전송
+	/*
+	 * @Transactional public void sendTempPw(String username, String email) {
+	 * 
+	 * // 유저 확인 User findUser = userRepository.findByUsername(username).orElseThrow(
+	 * () -> new EntityNotFoundException(username + " 님은 존재하지 않음") );
+	 * 
+	 * // 이메일 일치하는지 if(findUser.getEmail().equals(email)) { throw new
+	 * RuntimeException("이메일 다시 확인해주세요"); }
+	 * 
+	 * // 임시 비번 생성 // 
+	 * 
+	 * 
+	 * // 임시 비번 저장(redis)
+	 * 
+	 * // 임시 비번 저장(db)
+	 * 
+	 * // 이메일 전송
+	 * 
+	 * 
+	 * 
+	 * }
+	 */
 }
 
 

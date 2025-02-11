@@ -14,7 +14,7 @@ import lombok.Setter;
 public class TempPw {
 	
 	@Id
+	private String tempToken;
 	private String email;
-	private String tempPassword;
 	
 }
