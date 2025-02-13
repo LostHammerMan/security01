@@ -21,6 +21,28 @@ public class UserServiceTest {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private MailServiceImpl mailServiceImpl;
+	
+	// 비밀번호 재설정 링크 메일 테스트
+	@Test
+	void sendResetPwLinkTest() throws Exception {
+		userService.sendResetPwLink("seong9385@gmail.com");
+		
+	}
+	
+	// 메일 전송 테스트용
+	@Test
+	void sendEmail() throws Exception {
+		mailServiceImpl.createMessage("seong9385@gmail.com");
+	}
+	
+	// 레디스 조회
+	@Test
+	void getRedisData() {
+		userService.getRedisData("d6fed295-801e-4e41-86c2-40f0b5cc6152");
+	}
+	
 	// 회원가입
 	@Test
 	@DisplayName("유저 저장 성공")

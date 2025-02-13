@@ -215,6 +215,12 @@ public class UserController {
     public @ResponseBody String info() {
         return "개인정보";
     }
+    
+    // 비밀번호 재설정 링크
+    @GetMapping("/resetPw")
+    public String resetPwForm(@RequestParam String tempToken, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto) {
+    	return "user/resetPwForm";
+    }
 
     /*@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // data() 가 실행되기 전에 실행, 권한 여러 개 설정 가능
 //    @PostAuthorize() // data() 실행 이후 실행

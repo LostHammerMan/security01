@@ -1,6 +1,7 @@
 package com.demo.security01.service.user;
 
 import com.demo.security01.config.exception.UserNotMatchException;
+import com.demo.security01.entity.redis.TempPw;
 import com.demo.security01.entity.tag.SkillTagEntity;
 import com.demo.security01.entity.tag.User_Skilltag;
 import com.demo.security01.entity.user.User;
@@ -14,6 +15,7 @@ import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
+import com.demo.security01.repository.redis.RedisRepository;
 import com.demo.security01.repository.study.study_skill.SkillTagRepository;
 import com.demo.security01.repository.user.UserAddrRepository;
 import com.demo.security01.repository.user.UserProfileRepository;
@@ -28,6 +30,8 @@ import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
 
 @Slf4j
@@ -58,6 +63,9 @@ public class UserService {
     private final SkillTagRepository skillTagRepository;
     private final User_skillTagRepository user_skillTagRepository;
     private final MailServiceImpl mailServiceImpl;
+//    private final RedisTemplate<String, TempPw> redisTemplate;
+    private final RedisRepository redisRepository;
+    private final JavaMailSender emailSender;
     
 
     @Value("${file.dir}")
@@ -329,21 +337,42 @@ public class UserService {
     
     // 비밀번호 찾기 
     
-    // 방안 2. 비밀번호 재설정 링크 전송
-    public void resetPwByEmail(String email) {
+    // 방안 2. 비밀번호 재설정 링크 전송(일단은 test)
+    @Transactional
+    public void sendResetPwLink(String userEmail) throws Exception {
     	
     	// 유저확인
-    	User findUser = userRepository.findByEmail(email).orElseThrow(
-    			 () -> new EntityNotFoundException(email + " 님은 존재하지 않음") );
+    	User findUser = userRepository.findByEmail(userEmail).orElseThrow(
+    			 () -> new EntityNotFoundException("메일을 다시 확인해주세요"));
     	
-    	// 이메일 
+    	// 이메일(이미 유저확인에서 매개변수로 들어온 이메일로 유저를 찾았는데 그 유저의 이메일을 찾는게 맞는것인가)
     	String email = findUser.getEmail();
     	
+    	log.info("email = " + email);
+    	
+    	// 랜덤 토큰 생성
+    	String resetPwToken = UUID.randomUUID().toString();
+    	log.info("resetPwToken = " + resetPwToken);
+    	
+    	// redis 에 저장
+    	TempPw tempPw = new TempPw(resetPwToken, email);
+    	log.info("tempPw = " + tempPw);
+    	redisRepository.save(tempPw);
+    	
+    	// 이메일 전송
+    	String pwResetLink = "http://localhost:8060/user/resetPw?tempToken=" + resetPwToken;
+//    	MimeMessage resetLink = mailServiceImpl.createResetPwEmail(email, pwResetLink);
+    	
+    	mailServiceImpl.sendResetPwLink(email, pwResetLink);
     	
     }
     	
     
-    
+    // 레디스 조회
+    public TempPw getRedisData(String token) {
+    	TempPw findTemp = redisRepository.findById(token).orElseThrow(() -> new EntityNotFoundException("해다아 토큰 존재안함"));
+    	return findTemp;
+    }
     
     
     // 방안 1. 임시 비밀번호 발급 및 전송

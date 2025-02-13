@@ -12,9 +12,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 @Service
@@ -25,7 +27,7 @@ public class MailServiceImpl {
 
     private String ePw;
     
-    // 메일 내용 작성
+    // 메일 내용 작성(회원가입시 이메일 인증)
     public MimeMessage createMessage(String to) throws Exception{
 
         /*MustacheFactory mf = new DefaultMustacheFactory();
@@ -51,12 +53,13 @@ public class MailServiceImpl {
         msg += "Code : <strong>";
         msg += ePw + "</strong>";
         message.setText(msg, "utf-8", "html");
-        message.setFrom(new InternetAddress("seong7577@naver.com", "LostHammerMan"));
+        message.setFrom(new InternetAddress("seong7577@naver.com", "슽디 운영자입니다."));
 
         return message;
 
     }
 
+    
 
     // 랜덤 인증 코드
     public String createAuthKey() {
@@ -102,14 +105,49 @@ public class MailServiceImpl {
         try {
          emailSender.send(message);
         } catch (MailException me){
-            me.printStackTrace();
-            throw new IllegalArgumentException();
+        	 me.printStackTrace();
+             throw new IllegalArgumentException();
         }
 
         return ePw; // 메일로 보냈던 인증코드를 서버로 반환
 
     }
     
-    //
+ // 메일 발송(비밀번호 찾기시 재설정 링크 발송)
+    public MimeMessage createResetPwEmail(String to, String pwResetLink) throws Exception {
+    	MimeMessage message = emailSender.createMimeMessage();
+    	message.addRecipients(Message.RecipientType.TO, to);
+    	message.setSubject("슽디 비밀번호 재설정 링크 입니다");
+    	String msgHtml = "";
+    	
+    	msgHtml += "<div style='margin:100px'>";
+    	msgHtml += "<h1> 슽디 비밀번호 재설정 링크입니다. </h1>";
+    	msgHtml += "<br>";
+    	msgHtml += "<p>비밀번호를 변경하시려면 아래의 링크를 눌러주세요</p>";
+    	msgHtml += "<br>";
+    	msgHtml += "<h3>[ 비밀번호 재설정 ]</h3>";
+    	msgHtml += "<strong>";
+    	msgHtml += pwResetLink + "</strong>";
+    	
+    	message.setText(msgHtml, "utf-8", "html");
+    	message.setFrom(new InternetAddress("seong7577@naver.com", "슽디 운영자입니다."));
+    	return message;
+    	
+    }
+    
+    // 비밀번호 재설정 링크 발송
+    public String sendResetPwLink(String to, String resetLink) throws Exception {
+    	MimeMessage message = createResetPwEmail(to, resetLink);
+    	
+    	try {
+    		emailSender.send(message);
+    	} catch (Exception e) {
+			// TODO: handle exception
+    		 e.printStackTrace();
+             throw new IllegalArgumentException();
+		}
+    	
+    	return resetLink;
+    }
 
 }
