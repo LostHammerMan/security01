@@ -17,28 +17,12 @@
         max-width: 550px;
     }
 
-    .has-error label,
-    .has-error input,
-    .has-error textarea {
-        color: red;
-        border-color: red;
-    }
-
-    .list-unstyled li {
-        font-size: 13px;
-        padding: 4px 0 0;
-        color: red;
-    }
-
     span {
         font-size: 11px;
         vertical-align: middle;
         line-height: 20px;
     }
 
-    .captcha {
-
-    }
 </style>
 
 <body>
@@ -72,7 +56,7 @@
 
                 <div class="form-group">
                     <p>아래 이미지를 보이는 대로 입력해주세요</p>
-                    <div class="captcha d-flex justify-content-between">
+                    <div class="captcha d-flex justify-content-between" style="gap: 5px;">
                         <div class="d-flex mr-2" >
                             <img title="캡차이미지" src="${root}api/getCaptchaImg" alt="캡차이미지" id="captchaImg"/>
                         </div>

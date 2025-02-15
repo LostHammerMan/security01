@@ -216,9 +216,26 @@ public class UserController {
         return "개인정보";
     }
     
-    // 비밀번호 재설정 링크
+    // 비밀번호 찾기 클릭
+    @GetMapping("/findPw")
+    public String findPwForm() {
+    	return "user/findPwForm"; 
+    }
+    
+    // 비밀번호 전송
+    @GetMapping("/findPwProc")
+    public String findPwProc(@RequestParam String email) throws Exception {
+    	log.info("email = " + email);
+    	userService.sendResetPwLink(email);
+    	
+    	return null;
+    	
+    }
+    
+    // 비밀번호 재설정 링크 클릭
     @GetMapping("/resetPw")
     public String resetPwForm(@RequestParam String tempToken, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto) {
+    	log.info("tempToken = " + tempToken);
     	return "user/resetPwForm";
     }
 

@@ -368,7 +368,7 @@ public class UserService {
     }
     	
     
-    // 레디스 조회
+    // 토큰 확인
     public TempPw getRedisData(String token) {
     	TempPw findTemp = redisRepository.findById(token).orElseThrow(() -> new EntityNotFoundException("해다아 토큰 존재안함"));
     	return findTemp;

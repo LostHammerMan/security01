@@ -296,6 +296,16 @@ public class UserApiController {
 
         return ResponseEntity.ok("success");
     }
+    
+    // 비밀번호 재설정 링크 메일 발송
+    @GetMapping("/sendPwEmail")
+    public ResponseEntity<?> sendPwEmail(@RequestParam String email) throws Exception{
+    	log.info("email = " + email);
+    	userService.sendResetPwLink(email);
+    	
+    	return ResponseEntity.ok("이메일 전송 성공");
+    	
+    }
 
 
 

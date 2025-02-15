@@ -69,7 +69,7 @@
                                 Remember me
                             </label>
                         </div>
-                        <a href="#!" class="text-body">비밀번호 찾기</a>
+                        <a href="${root}user/findPw" class="text-body">비밀번호 찾기</a>
                     </div>
 
                     <div class="text-center text-lg-start mt-4 pt-2">
@@ -92,7 +92,7 @@
     $(function () {
         let $loginBtn = $("#loginBtn");
         // let $toast = $("#toast");
-        <%--let message = ${errorMsg};--%>
+        // <%--let message = ${errorMsg};--%>
         // "" 사용 이유 :  자체가 getAttribute() 로 가져오는 것 ->
         let msg = "${errorMsg}";
         console.log(msg);
