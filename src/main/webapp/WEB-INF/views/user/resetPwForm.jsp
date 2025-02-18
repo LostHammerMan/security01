@@ -54,94 +54,59 @@
                     </div>
                 </div>
 
+                
                 <div class="form-group">
-                    <p>아래 이미지를 보이는 대로 입력해주세요</p>
-                    <div class="captcha d-flex justify-content-between" style="gap: 5px;">
-                        <div class="d-flex mr-2" >
-                            <img title="캡차이미지" src="${root}api/getCaptchaImg" alt="캡차이미지" id="captchaImg"/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between" style="width: 58%">
-                            <div class="d-flex justify-content-between">
-                                <button id="reload" class="btn btn-outline-info" type="button" onclick="getImage()" style="width: 48%">새로고침</button>
-                                <button id="soundOn" class="btn btn-outline-secondary" type="button" onclick="getAudio()" style="width: 48%">음성듣기</button>
-                            </div>
-                            <div class="mt-2">
-                                <input path="captchaCode" id="answer" type="text" value="" class="form-control" placeholder="자동 입력 방지문자"/>
-                                <errors path="captchaCode" cssStyle="color: red" />
-                            </div>
-                        </div>
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="submitBtn">확인</form:button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">확인</form:button>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-danger btn-block">취소</button>
+                    <button type="button" class="btn btn-danger btn-block" id="cancelBtn">취소</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+$(document).ready(function(){
 
+    // URLSearchParams : url 뒤 파라미터 값 가져오기 가능
+    const urlParams = new URLSearchParams(window.location.search);
+    const tempToken = urlParams.get('tempToken');
+    console.log('tempToken =' + tempToken);
 
-</script>
+    $('#submitBtn').on('click', function(e){
+        e.preventDefault();
+        let newPassword = $('#newPw').val();
+        let confirmPassword = $('#confPw').val();
 
+        console.log('newPassword = ' + newPassword);
+        console.log('confirmPassword = ' + confirmPassword);
 
-<script type="text/javascript">
-
-    window.onload = function () {
-        getImage();	// 이미지 가져오기
-
-       /* document.querySelector('#check').addEventListener('click', function () {
-            var params = {answer: document.querySelector('#answer').getAttribute('value')};
-
-
-            AF.ajax('${root}api/chkCaptchaAnswer', params, function (returnData) {
-                if (returnData == 200) {
-                    alert('입력값이 일치합니다.');
-                    // 성공 코드
-                } else {
-                    alert('입력값이 일치하지 않습니다.');
-                    getImage();
-                    document.querySelector('#answer').setAttribute('value', '');
-                }
-            }, 'json');
-        });*/
-    }
-
-    /*매번 랜덤값을 파라미터로 전달하는 이유 : IE의 경우 매번 다른 임의 값을 전달하지 않으면 '새로고침' 클릭해도 정상 호출되지 않아 이미지가 변경되지 않는 문제가 발생된다*/
-    function getAudio() {
-        var rand = Math.random();
-        var uAgent = navigator.userAgent;
-        var soundUrl = '${root}api/getCaptchaAudio?rand=' + rand;
-
-        if (uAgent.indexOf('Trident') > -1 || uAgent.indexOf('MISE') > -1) {	/*IE 경우 */
-            audioPlayer(soundUrl);
-        } else if (!!document.createElement('audio').canPlayType) { /*Chrome 경우 */
-            try {
-                new Audio(soundUrl).play();
-            } catch (e) {
-                audioPlayer(soundUrl);
-            }
-        } else {
-            window.open(soundUrl, '', 'width=1,height=1');
+        if(newPassword !== confirmPassword){
+            alert('비밀번호가 일치하지 않습니다.'); 
+            // 제이 쿼리 이벤트 핸들러에서는 return false; 가 더 안전
+            return false;
         }
-    }
-
-    /** captcha 이미지 가져오는 함수 */
-    function getImage() {
-        let rand = Math.random();
-        let url = '${root}api/getCaptchaImg?rand=' + rand;
-        console.log(url);
-        $("#captchaImg").attr('src', url);
-
-        // document.querySelector('img').setAttribute('src', url);
-    }
-
-    function audioPlayer(objUrl) {
-        document.querySelector('#ccaudio').innerHTML = '<bgsoun src="' + objUrl + '">';
-    }
+        $.ajax({
+            url: '${root}api/updatePw',
+            type: 'POST',
+            contentType : 'application/json',
+            data: JSON.stringify({
+                tempToken: tempToken,
+                newPw : newPassword,
+                confPw : confirmPassword
+            }),
+            success: function (result) {
+                console.log('비밀번호 변경 성공');
+            },
+            error: function (xhr) {
+                console.log('비밀번호 변경 실패');
+                console.log(xhr);
+            }
+        });
+    });
+    
+});
+   
 </script>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 

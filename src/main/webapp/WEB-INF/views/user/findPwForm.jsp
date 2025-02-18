@@ -70,13 +70,14 @@ $(document).ready(function(){
             },
             success : function(result){
                 console.log(result);
+                alert(result);
             },
             error : function(xhr){
                 console.log('이메일 전송 실패');
                 console.log(xhr);
                 
                 
-                alert(xhr);
+                alert(xhr.responseJSON.message);
             }
         });
     });

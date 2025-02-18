@@ -21,6 +21,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.EntityNotFoundException;
+
 // 400 Bad Request      잘못된 문법
 // 401 Unauthorized     비인증
 // 403 Forbidden        접근할 권리X
@@ -173,6 +175,16 @@ public class HandlerExample {
                 .localDateTime(LocalDateTime.now()).build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+    
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handlerEntityNotFoundException(EntityNotFoundException e){
+    	ErrorResponseDto error = ErrorResponseDto.builder()
+    			.status(HttpStatus.BAD_REQUEST.value())
+    			.message(e.getMessage())
+    			.localDateTime(LocalDateTime.now()).build();
+    	
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
 

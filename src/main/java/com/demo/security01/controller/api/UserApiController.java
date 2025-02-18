@@ -7,11 +7,14 @@ import com.demo.security01.model.dto.reponseDto.ResponseEntityDto;
 import com.demo.security01.model.dto.user.EmailDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserEmailDto;
+import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
 import com.demo.security01.model.test.MultipartFileTest.UploadFile;
 import com.demo.security01.service.user.MailServiceImpl;
 import com.demo.security01.service.user.UserProfileUploadService;
 import com.demo.security01.service.user.UserService;
 import com.demo.security01.model.utils.TickParser_ProfileImg;
+import com.demo.security01.repository.redis.RedisRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import nl.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -303,8 +306,29 @@ public class UserApiController {
     	log.info("email = " + email);
     	userService.sendResetPwLink(email);
     	
-    	return ResponseEntity.ok("이메일 전송 성공");
+    	return ResponseEntity.ok("이메일로 보낸 비밀번호 재설정 링크 확인해주세요");
+    }
+    
+    // 	비밀번호 변경
+    @PostMapping("/updatePw")
+    public ResponseEntity<?> updatePw(
+									  @RequestBody ModifyUserPwdDto modifyUserPwdDto) {
+    	boolean isValid = userService.validateToken(modifyUserPwdDto.getTempToken());
     	
+    	// 토큰 검증 부터 - 만료되었을 경우까지 생각
+    	if(!isValid) {
+    		return ResponseEntity.badRequest().body("유효하지 않은 링크가 확인되었습니다. 비밀번호 재설정을 다시 한번 클릭해주세요");
+    	}
+    	
+    	// 비밀번호 일치여부 확인
+    	if(!modifyUserPwdDto.getNewPw().equals(modifyUserPwdDto.getConfPw())) {
+    		return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+    	}
+    	
+    	// 비밀번호 업데이트
+    	userService.changePw(modifyUserPwdDto.getTempToken(), modifyUserPwdDto);
+    	
+    	return ResponseEntity.ok("비밀번호 변경 성공하였습니다.");
     }
 
 

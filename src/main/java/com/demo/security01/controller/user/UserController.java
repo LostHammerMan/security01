@@ -233,9 +233,20 @@ public class UserController {
     }
     
     // 비밀번호 재설정 링크 클릭
+    
     @GetMapping("/resetPw")
-    public String resetPwForm(@RequestParam String tempToken, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto) {
+    public String resetPwForm(@RequestParam String tempToken, Model model) {
     	log.info("tempToken = " + tempToken);
+    	
+    	// redis 에 저장된 token 과 일치 여부
+    	boolean isvalid = userService.validateToken(tempToken);
+    	
+    	if(!isvalid) {
+    		model.addAttribute("msg", "유효하지 않은 링크가 확인되었습니다. 비밀번호 재설정을 다시 한번 클릭해주세요");
+    		model.addAttribute("url", "${root}user/loginForm");
+    		return "error/invalidTokenError";
+    	}
+    	
     	return "user/resetPwForm";
     }
 

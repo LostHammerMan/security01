@@ -17,6 +17,7 @@ import com.demo.security01.model.dto.user.modifyUser.ModifyUserProfileDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserPwdDto;
 import com.demo.security01.repository.redis.RedisRepository;
 import com.demo.security01.repository.study.study_skill.SkillTagRepository;
+import com.demo.security01.repository.test.MultipartFileTest.RedisTestRepository;
 import com.demo.security01.repository.user.UserAddrRepository;
 import com.demo.security01.repository.user.UserProfileRepository;
 import com.demo.security01.repository.user.UserRepository;
@@ -369,9 +370,23 @@ public class UserService {
     	
     
     // 토큰 확인
-    public TempPw getRedisData(String token) {
-    	TempPw findTemp = redisRepository.findById(token).orElseThrow(() -> new EntityNotFoundException("해다아 토큰 존재안함"));
-    	return findTemp;
+    public boolean validateToken(String tempToken) {
+//    	TempPw findTemp = redisRepository.findById(token).orElseThrow(() -> new EntityNotFoundException("해다아 토큰 존재안함"));
+    	
+    	return redisRepository.findById(tempToken).isPresent();
+    }
+    
+    // 비밀번호 재설정시 비밀번호 변경
+    @Transactional
+    public void changePw(String tempToken, ModifyUserPwdDto pwdDto) {
+    	
+    	// 유저 확인
+    	TempPw redis = redisRepository.findById(tempToken).get();
+    	String email = redis.getEmail();
+    	
+    	User findUser = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("이메일을 다시 확인해주세요"));
+    	
+    	updatePwd(pwdDto, findUser.getUsername());
     }
     
     

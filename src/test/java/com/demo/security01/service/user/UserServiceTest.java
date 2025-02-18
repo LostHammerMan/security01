@@ -40,7 +40,7 @@ public class UserServiceTest {
 	// 레디스 조회
 	@Test
 	void getRedisData() {
-		userService.getRedisData("d6fed295-801e-4e41-86c2-40f0b5cc6152");
+		userService.validateToken("d6fed295-801e-4e41-86c2-40f0b5cc6152");
 	}
 	
 	// 회원가입
