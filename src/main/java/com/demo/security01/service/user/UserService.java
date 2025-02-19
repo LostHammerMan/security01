@@ -386,7 +386,30 @@ public class UserService {
     	
     	User findUser = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("이메일을 다시 확인해주세요"));
     	
+    	// 비밀번호 업데이트
     	updatePwd(pwdDto, findUser.getUsername());
+    	
+    	// 토큰 삭제
+    	redisRepository.deleteById(tempToken);
+    }
+    
+    // 아이디 찾기 메일 발송
+    @Transactional
+    public void sendIdEmail(String userEmail) throws Exception {
+    	
+    	// 유저확인
+    	User findUser = userRepository.findByEmail(userEmail).orElseThrow(
+    			 () -> new EntityNotFoundException("메일을 다시 확인해주세요"));
+    	
+    	// 이메일(이미 유저확인에서 매개변수로 들어온 이메일로 유저를 찾았는데 그 유저의 이메일을 찾는게 맞는것인가)
+    	String email = findUser.getEmail();
+    	String username = findUser.getUsername();
+    	
+    	log.info("email = " + email);
+    	
+    	// 이메일 전송
+    	mailServiceImpl.sendIdEmail(email, username);
+    	
     }
     
     

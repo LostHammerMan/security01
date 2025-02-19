@@ -23,6 +23,44 @@
         line-height: 20px;
     }
 
+    .modal-header {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .modal-content {
+        width: 25.5rem;
+    }
+
+    .modal-title {
+        line-height: 1;
+        padding: 0px;
+        margin: 0px;
+        width: 100%;
+        font-size: 18px;
+        font-weight: 700;
+        color: rgb(33, 37, 41);
+    }
+
+    .modal-body {
+        display: flex;
+        flex: 1 1 0%;
+        min-height: 0px;
+        flex-direction: column;
+        padding: 0px;
+        overflow: auto;
+        padding: 1rem 1rem;
+    }
+
+    .modal-body-text {
+        color: rgb(73, 80, 87);
+        font-size: 1rem;
+        text-decoration: none;
+        text-align: start;
+        line-height: 1.5;
+        text-underline-position: under; /* underline 의 위치 설정*/
+    }
+
 </style>
 
 <body>
@@ -36,21 +74,16 @@
         </div>
 
         <div class="card-body">
-            <form>
-                <div class="form-group">
-                </div>
                 <div class="form-group">
                     <div class="form-group">
                         <input type="password" data-minlength="4" class="form-control" id="newPw" name="newPw"
                                data-error="Have atleast 4 characters" placeholder="새 비밀번호"/>
-                        <!-- Error -->
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-group">
                         <input type="password" class="form-control" id="confPw" name="confPw"
                                placeholder="새 비밀번호 확인"/>
-                        <!-- Error -->
                     </div>
                 </div>
 
@@ -58,10 +91,6 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block" id="submitBtn">확인</form:button>
                 </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-danger btn-block" id="cancelBtn">취소</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
@@ -97,6 +126,37 @@ $(document).ready(function(){
             }),
             success: function (result) {
                 console.log('비밀번호 변경 성공');
+                const modalHtml = `
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">비밀번호 변경 완료</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="modal-body-text">
+                                    비밀번호가 변경되었습니다.<br>
+                                    변경된 비밀번호로 로그인 후, 이용해주세요.<br>
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="toMainPage">메인 페이지로</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                `;
+
+                    $('body').append(modalHtml);
+                    $('#exampleModalCenter').modal('show');
+
+                    $('#toMainPage').on('click', function(){
+                        console.log('메인페이지 클릭');
+                        location.href = '${root}';
+                    });
             },
             error: function (xhr) {
                 console.log('비밀번호 변경 실패');

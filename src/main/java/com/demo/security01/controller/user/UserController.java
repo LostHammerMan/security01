@@ -216,6 +216,12 @@ public class UserController {
         return "개인정보";
     }
     
+    // username 찾기
+    @GetMapping("/findId")
+    public String findIdForm() {
+    	return "user/findIdForm";
+    }
+    
     // 비밀번호 찾기 클릭
     @GetMapping("/findPw")
     public String findPwForm() {

@@ -58,6 +58,26 @@ public class MailServiceImpl {
         return message;
 
     }
+    
+    // 아이디 찾기 메일
+    public MimeMessage createIdEmail(String to, String username) throws Exception {
+    	MimeMessage message = emailSender.createMimeMessage();
+    	message.addRecipients(Message.RecipientType.TO, to);
+    	message.setSubject("아이디를 알려드립니다");
+    	String msgHtml = "";
+    	
+    	msgHtml += "<div style='margin:100px'>";
+    	msgHtml += "<h1> 슽디 아이디 찾기 </h1>";
+    	msgHtml += "<br>";
+    	msgHtml += "<h3>";
+    	msgHtml += to + " 님의 아이디는</h3>";
+    	msgHtml += "<strong>";
+    	msgHtml += username + " 입니다.</strong>";
+    	
+    	message.setText(msgHtml, "utf-8", "html");
+    	message.setFrom(new InternetAddress("seong7577@naver.com", "슽디 운영자입니다."));
+    	return message;
+    }
 
     
 
@@ -149,5 +169,18 @@ public class MailServiceImpl {
     	
     	return resetLink;
     }
-
+    
+    // 아이디 찾기 링크 발송
+    public void sendIdEmail(String to, String username) throws Exception {
+    	MimeMessage message = createIdEmail(to, username);
+    	
+    	try {
+    		emailSender.send(message);
+    	} catch (Exception e) {
+			// TODO: handle exception
+    		 e.printStackTrace();
+             throw new IllegalArgumentException();
+		}
+    	
+    }
 }

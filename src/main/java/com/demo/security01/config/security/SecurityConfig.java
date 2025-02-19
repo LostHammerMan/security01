@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .ignoringAntMatchers("/loginForm")
                 .disable();
         http.authorizeRequests()
-                .antMatchers("/user/loginForm", "/user/joinForm", "/user/joinProc", "/user/findPw", "/user/findPwProc","/user/resetPw","/community/lounge", "/favicon.ico", "/api/loungeList", "/api/study/**","/study").permitAll()
+                .antMatchers("/user/loginForm", "/user/joinForm", "/user/joinProc", "/user/findId", "/user/findPw", "/user/findPwProc","/user/resetPw","/community/lounge", "/favicon.ico", "/api/loungeList", "/api/study/**","/study").permitAll()
                 .antMatchers("/user/**", "/community/lounge/**", "/api/study/like", "/study/**").authenticated() // 인증만 되면 들어갈 수 있는 구조(로그인 필요)
 //                .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
@@ -78,6 +78,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //
                 .exceptionHandling()
+                .and()
+                .rememberMe()
+                .rememberMeParameter("rememberMe") // checkBox 등의 name 과 일치하게
+                .tokenValiditySeconds(600) // 쿠키 만료시간, 기본 : 14일
+                .alwaysRemember(false)
+                .userDetailsService(principalDetailService)
 //                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                 .logout()

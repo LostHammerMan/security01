@@ -30,6 +30,30 @@
             height: 100%;
         }
     }
+
+    .loginForm-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .findIdAndPw {
+        display: flex;
+        gap: 8px;
+    }
+
+    .text-body {
+        color: rgb(73, 80, 87);
+        font-size: 12px;
+        border-bottom: 1px solid rgb(134, 142, 150);;
+    }
+
+    .findIdAndPwSeparator {
+        border-width: 0px 0px 0px 0.0625rem;
+        border-left-color: rgb(173, 181, 189);
+        border-left-style: solid;
+        height: auto;
+    }
 </style>
 
 <section class="vh-100">
@@ -61,15 +85,20 @@
                         </div>
                     </c:if>
 
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="loginForm-footer">
                         <!-- Checkbox -->
                         <div class="form-check mb-0">
-                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3"/>
+                            <input class="form-check-input me-2" type="checkbox" value="" id="rememberMe" name="rememberMe"/>
                             <label class="form-check-label" for="form2Example3">
-                                Remember me
+                                로그인 유지
                             </label>
                         </div>
-                        <a href="${root}user/findPw" class="text-body">비밀번호 찾기</a>
+                        <div class="findIdAndPw">
+                            <a href="${root}user/findId" class="text-body">아이디 찾기</a>
+                            <div class="findIdAndPwSeparator"></div>
+                            <a href="${root}user/findPw" class="text-body">비밀번호 찾기</a>
+                        </div>
+                        
                     </div>
 
                     <div class="text-center text-lg-start mt-4 pt-2">

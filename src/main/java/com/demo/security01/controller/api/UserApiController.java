@@ -330,7 +330,15 @@ public class UserApiController {
     	
     	return ResponseEntity.ok("비밀번호 변경 성공하였습니다.");
     }
-
+    
+    // 아이디 찾기 메일 발송
+    @GetMapping("/sendIdEmail")
+    public ResponseEntity<?> sendIdEmail(@RequestParam String email) throws Exception{
+    	log.info("email = " + email);
+    	userService.sendIdEmail(email);
+    	
+    	return ResponseEntity.ok("이메일로 아이디를 확인해주세요");
+    }
 
 
 

@@ -95,9 +95,9 @@
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            <h2 style="font-weight: 700; font-size: 1.625rem;">비밀번호 찾기</h3>
+            <h2 style="font-weight: 700; font-size: 1.625rem;">아이디 찾기</h3>
             <span>가입한 이메일을 입력해 주세요.</span>
-            <span>이메일을 통해 비밀번호 변경 링크가 전송됩니다.</span>
+            <span>이메일을 통해 아이디를 알려드립니다.</span>
         </div>
 
         <div class="card-body">
@@ -107,7 +107,7 @@
                     <input class="form-control" type="text" id="email" name="email" placeholder="example@google.com">
                 </div>
                 <button class="btn btn-success submitBtn" type="button" data-toggle="modal" data-target="#exampleModalCenter">
-                    <span>변경 링크 전송하기</span>
+                    <span>아이디 찾기</span>
                 </button>
             </div>
         </div>
@@ -123,7 +123,7 @@ $(document).ready(function(){
 
         // const 는 값 재할당이 불가능하다는 점에 유의하여 변수 선언 위치 고려할것!
         $.ajax({
-            url : '${root}api/sendPwEmail', 
+            url : '${root}api/sendIdEmail', 
             type : 'GET',
             data : {
                 email: $('#email').val()
@@ -149,7 +149,7 @@ $(document).ready(function(){
                                     <span id="emailInput"></span>
                                 </div>
                                 <p class="modal-body-text">
-                                    위 메일로 비밀번호 설정 메일이 발송되었습니다<br>
+                                    위 메일로 아이디가 발송되었습니다<br>
                                     메일이 확인되지 않을 경우, 스팸함을 확인해주세요<br>
                                 </p>
                             </div>
@@ -179,7 +179,7 @@ $(document).ready(function(){
                         <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">비밀번호 재설정 메일 발송</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">아이디 찾기</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
