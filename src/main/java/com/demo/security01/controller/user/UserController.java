@@ -1,5 +1,6 @@
 package com.demo.security01.controller.user;
 
+import com.demo.security01.entity.tag.User_Skilltag;
 import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.user.JoinUserDto;
 import com.demo.security01.model.dto.user.modifyUser.ModifyUserDto;
@@ -120,7 +121,12 @@ public class UserController {
         String username = principal.getName();
         User loginUser =  userService.userDetailsByUsername(username);
         log.info("========= modifyForm ==============");
-        log.info("loginUser = {}", loginUser);
+        log.info("loginUser = {}", loginUser.getUser_skillTag());
+        
+        for(User_Skilltag tags : loginUser.getUser_skillTag()) {
+        	log.info("tags.getSkillTag() = " + tags.getSkillTag().getIdx());
+        }
+        
         model.addAttribute("loginUser", loginUser);
 //        User findUser = userService.userDetails(userId);
 //        log.info("findUser = {}", findUser);

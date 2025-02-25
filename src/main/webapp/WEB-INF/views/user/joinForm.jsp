@@ -11,13 +11,16 @@
 <%--
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 페이지</title>
+    <title>회원가입</title>
     <link rel="stylesheet" href="${root}static/css/bootstrap.css">
     <script src="${root}static/js/jquery-3.6.4.min.js"></script>
     <script src="${root}static/js/bootstrap.js"></script>
 --%>
     <style type="text/css">
-        <%--        섹션 크기--%>
+        a {
+            text-decoration: none;
+        }
+
         .bg-light {
             height: 1053px;
             padding-top: 20px;
@@ -40,29 +43,51 @@
 
         }
 
+        h1 {
+            margin-bottom: -0.5rem;
+            margin-top: .5rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .formLabelTitle {
+            color: #333;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -.28px;
+        }
+
     </style>
 
-<%--</head>
-<body>--%>
-<h1>회원가입 페이지</h1>
-<hr/>
 <section class="bg-light">
     <div class="container py-4">
         <div class="card p-4">
             <form:form action="${root}user/joinProc" method="post" class="frm" modelAttribute="joinUserDto" cssClass="has-validation">
-<%--                <form:hidden path="email_authenticated" />--%>
                 <div class="form-group">
-                    <form:label path="username" cssClass="form-label mt-4">Username:</form:label><br>
+                    <form:label path="username" cssClass="form-label mt-4 formLabelTitle">아이디</form:label><br>
                     <form:input type="text" path="username" placeholder="username" cssClass="form-control"/><br>
                     <form:errors path="username" cssStyle="color: red"/>
                 </div>
                 <div class="form-group">
-                    <form:label path="password">Password:</form:label><br>
+                    <form:label path="password" cssClass="formLabelTitle">비밀번호</form:label><br>
                     <form:input type="password" path="password" placeholder="password" cssClass="form-control"/><br>
                     <form:errors path="password" cssStyle="color: red"/>
 
                 </div>
-                <form:label path="email_addr">Email:</form:label>
+                <div class="form-group">
+                    <form:label path="skillTagIdx" cssClass="formLabelTitle">관심분야</form:label><br>
+                    <form:select path="skillTagIdx" id="skillTag" cssClass="form-control" multiple="multiple">
+                        <form:option value="1">Spring</form:option>
+                        <form:option value="2">Python</form:option>
+                        <form:option value="3">AWS</form:option>
+                    </form:select>
+                    <br>
+                    <br>
+                    <form:errors path="skillTagIdx" cssStyle="color: red"/><br>
+                </div>
+
+                <form:label path="email_addr" cssClass="formLabelTitle">이메일</form:label>
                 <div class="form-row" style="justify-content: space-between;">
                     <div class="col-auto">
                         <form:input path="email_id" id="email_id" placeholder="email" cssClass="form-control" readonly="false"/>
@@ -73,7 +98,7 @@
                     <div class="col-auto">
                         <form:select path="email_domain" placeholder="email" cssClass="form-control" disabled="false">
                             <form:option value="@naver.com">네이버</form:option>
-                            <form:option value="@google.co.kr">구글</form:option>
+                            <form:option value="@google.com">구글</form:option>
                             <form:option value="etc" id="etc2">기타</form:option>
                         </form:select>
                     </div>
@@ -88,31 +113,40 @@
                         <form:input path="auth_code" class="form-control" placeholder="인증코드 입력하세요"/>
                     </div>
                 </div>
+                
+
                 <div class="form-row">
                     <div class="col-auto w-100">
                         <form:hidden path="email_addr" id="email_addr"/>
-                        <form:errors path="email_addr" cssStyle="color: red"/>
                         <span id="email_check_warn"></span>
                     </div>
                 </div>
+                <br>
+                <form:errors path="email_id" element="div" cssStyle="color: red"/><br>
+                <form:errors path="email_addr" cssStyle="color: red"/>
+
                 <div class="form-group mt-4">
                     <div style="justify-content: flex-start">
                         <form:button class="btn btn-primary" id="submitBtn">회원가입</form:button>
                         <button type="button" class="btn btn-success" onclick="location.href='${root}'">메인화면</button>
                     </div>
                 </div>
+                
             </form:form>
         </div>
-<%--        <button class="btn btn-danger" id="testBtn">TEST</button>--%>
     </div>
 </section>
 
 
-<%--<c:import url="../layout/footer.jsp"/>--%>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 
 <script type="text/javascript">
     $(function () {
+
+        // 관심분야
+        $('#skillTag').select2({
+            placeholder: "하나 이상의 관심 스킬을 선택하세요."
+        });
 
         // 기타 선택시 form:input 태그 추가
         $("#email_domain").change(function () {

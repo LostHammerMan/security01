@@ -29,7 +29,9 @@
     }
 
     input.form-control {
-        width: 700px;
+        /* width: 700px; */
+        width: auto;
+        min-width: 538px;
         /*background-color: #1c7430;*/
     }
 
@@ -102,13 +104,17 @@
         height: 80%;
     }*/
 
+    .formLabelTitle {
+            color: #333;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 20px;
+            letter-spacing: -.28px;
+        }
+
 
 </style>
 <div class="container bootstrap snippet">
-    <%--<div class="row">
-        <div class="col-sm-10"><h1>User name</h1></div>
-        <div class="col-sm-2"><a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a></div>
-    </div>--%>
     <div class="row">
         <div class="col-sm-3" id="left-header"><!--left col-->
             <div class="text-center">
@@ -125,7 +131,7 @@
 
 
                 <h6 class="mt-2">${loginUser.username}</h6>
-<%--                <input type="file" class="text-center center-block file-upload">--%>
+<!-- <%--                <input type="file" class="text-center center-block file-upload">--%> -->
             </div>
             <hr>
 
@@ -137,21 +143,13 @@
 
         </div><!--/col-3-->
         <div class="col-sm-9">
-            <%--<ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-                <li><a data-toggle="tab" href="#messages">Menu 1</a></li>
-                <li><a data-toggle="tab" href="#settings">Menu 2</a></li>
-            </ul>--%>
-
-
             <div class="tab-content">
                 <div class="tab-pane active" id="home">
                     <hr>
-                    <form class="form" action="##" method="post" id="registrationForm">
                         <div class="form-group">
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="username"><h4>Username</h4></label>
+                                    <label for="username" class="formLabelTitle">아이디</label>
                                     <div class="profile-basic">
                                         <input type="text" class="form-control" name="username" id="username"
                                                value="${loginUser.username}"/>
@@ -164,7 +162,7 @@
 
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="email"><h4>Email</h4></label>
+                                    <label for="email" class="formLabelTitle">이메일</label>
                                     <div class="profile-basic">
                                         <input type="email" class="form-control" name="email" id="email"
                                                value="${loginUser.email}">
@@ -174,18 +172,27 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="skillTagIdx" Class="formLabelTitle">관심분야</label><br>
+                                <select class="form-control skillTagIdx" id="skillTag" multiple="multiple">
+                                    <option value="1">Spring</option>
+                                    <option value="2">Python</option>
+                                    <option value="3">AWS</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="location"><h4>주소</h4></label>
+                                    <label for="location" class="formLabelTitle">주소</label>
                                     <div class="profile-addr">
                                         <input type="text" class="form-control" id="sample2_postcode"
                                                name="sample2_postcode" placeholder="우편번호"
                                                value="${loginUser.userAddr.zipCode}">
-                                        <input type="button" class="form-control btn btn-secondary" id="addrFindBtn"
+                                        <input type="button" class="btn btn-secondary" id="addrFindBtn"
                                                name="addrFindBtn" onclick="sample2_execDaumPostcode()" value="검색"><br>
                                     </div>
 
@@ -199,7 +206,6 @@
                                             <input type="text" class="form-control" id="sample2_detailAddress"
                                                    name="sample2_detailAddress" placeholder="상세주소"
                                                    value="${loginUser.userAddr.postAddr2}">
-                                            <%--                                            <input type="text" class="form-control" id="sample2_extraAddress" placeholder="참고항목">--%>
                                             <button type="button" class="form-control btn btn-primary"
                                                     id="addrModifyBtn" name="addrModifyBtn">저장
                                             </button>
@@ -217,10 +223,6 @@
                                  style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1"
                                  onclick="closeDaumPostcode()" alt="닫기 버튼">
                         </div>
-
-                    </form>
-
-
                 </div>
 
             </div><!--/tab-pane-->
@@ -230,7 +232,7 @@
 </div>
 <!--/row-->
 
-<%-- modal --%>
+ <!-- modal -->
 <div id="EmailModal" class="form-group modal">
     <div class="form-group contact_edit_title">
         <h4><strong>${loginUser.username}님</strong>의 이메일을 수정하기 위해 인증절차가 필요합니다.</h4>
@@ -268,7 +270,7 @@
     </form>
 
 </div>
-<%-- modal end --%>
+<!-- modal end  -->
 
 
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
@@ -363,9 +365,22 @@
     }
 </script>
 <script>
-    <%--    주소 수정 이벤트--%>
     $(function () {
 
+        /* select2 start*/
+        // 초기화
+        $('#skillTag').select2();
+
+        // 초기값 설정
+        let select2Val = [1,3];
+        // let select2Val2 = ${loginUser.user_skillTag.skillTag};
+        let select2Val2 = "<c:out value='${loginUser.user_skillTag.skillTag}' />";
+        console.log(select2Val2);
+        $('#skillTag').val(select2Val).trigger('change');
+
+        /* select2 end */
+
+        /*주소 수정 이벤트*/
         $("#addrModifyBtn").on("click", function () {
             let zipcodeVal = $("input[name=sample2_postcode]").val();
             let postAddr1Val = $("input[name=sample2_address]").val();
@@ -394,7 +409,7 @@
             })
         });
 
-        <!-- 이메일 수정버튼 이벤트 - modal -->
+        /* 이메일 수정버튼 이벤트 - modal*/
         $("#emailModifyBtn").on("click", function (e) {
             // modal 창 열 때 초기화
             document.forms['email_form'].reset();
@@ -405,7 +420,7 @@
         });
     });
 
-    <!-- 이메일 인증 이벤트 - modal -->
+    /* 이메일 인증 이벤트 - modal */
     $("#emailAuthBtn").on("click", function (e) {
         let modifiedEmailAddrVal = $("#modifiedEmailAddr").val();
         let data2 = {
@@ -429,7 +444,7 @@
         })
     });
 
-    <!-- 인증번호 확인 이벤트-->
+    /* 인증번호 확인 이벤트 */
     $("#authCode").blur(function () {
         let inputAuthNum = $("#authCode").val();
         let $email_check_warn = $("#email_check_warn");

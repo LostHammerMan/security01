@@ -68,7 +68,7 @@
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="username">Username</label>
+                        <label class="form-label" for="username">Id</label>
                         <input type="text" id="username" name="username" class="form-control form-control-lg"
                                placeholder="당신의 ID를 입력하세요"/>
                     </div>
@@ -88,7 +88,7 @@
                     <div class="loginForm-footer">
                         <!-- Checkbox -->
                         <div class="form-check mb-0">
-                            <input class="form-check-input me-2" type="checkbox" value="" id="rememberMe" name="rememberMe"/>
+                            <input class="form-check-input me-2" type="checkbox" id="rememberMe" name="rememberMe"/>
                             <label class="form-check-label" for="form2Example3">
                                 로그인 유지
                             </label>

@@ -304,7 +304,7 @@ public class UserService {
     	
     }
     
-    // 회원 관심 스킬 추천 조회
+    // 회원 관심 스킬 추천 조회 --> 스터디 서비스로
     @Transactional(readOnly = true)
     public List<StudyResponseDto> recommendStudy(){
     	return null;

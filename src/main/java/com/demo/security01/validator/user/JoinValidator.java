@@ -39,6 +39,7 @@ public class JoinValidator implements Validator {
 
         checkUsername(joinUserDto, errors);
         checkPwd(joinUserDto.getPassword(), errors);
+        checkSkill(joinUserDto, errors);
         checkEmail(joinUserDto, errors);
     }
 
@@ -74,15 +75,18 @@ public class JoinValidator implements Validator {
         }
     }
 
+    // email
     private void checkEmail(JoinUserDto joinUserDto, Errors errors) {
         log.info("========= checkEmail ==========");
 
         if (!StringUtils.hasText(joinUserDto.getEmail_id())){
-            errors.rejectValue("email_addr", "id_NotBlank");
+            errors.rejectValue("email_id", "id_NotBlank");
             return;
         }
+        
+        
         if (!StringUtils.hasText(joinUserDto.getEmail_domain())){
-            errors.rejectValue("email_addr","domain_NotBlank");
+            errors.rejectValue("email_domain","domain_NotBlank");
             return;
         }
 
@@ -100,8 +104,6 @@ public class JoinValidator implements Validator {
         Map<String, String> emailCheck = (Map<String, String>) session.getAttribute("emailCheck");
         log.info("emailCheck = {}", emailCheck);
 
-
-
         if (!emailCheck.containsKey(email_addr)) {
             errors.rejectValue("email_addr", "NeedAuth");
             return;
@@ -115,6 +117,13 @@ public class JoinValidator implements Validator {
         }
     }
 
+    // skill
+    private void checkSkill(JoinUserDto joinUserDto, Errors error) {
+    	if(joinUserDto.getSkillTagIdx().isEmpty()) {
+    		error.rejectValue("skillTagIdx", "NotEmpty");
+    		return;
+    	}
+    }
 
 
     // Controller 가 아닌 곳에서 request session 정보 가져오기
