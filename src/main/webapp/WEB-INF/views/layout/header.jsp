@@ -45,6 +45,10 @@
             width: 100%;
             clear: both;
         }
+
+        .index_header {
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>

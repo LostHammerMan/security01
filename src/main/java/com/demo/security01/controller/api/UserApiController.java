@@ -113,9 +113,6 @@ public class UserApiController {
                 .message("인증 성공!!").build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseEntityDto);
-
-
-
 //        Response response = new Response();
 
        /* if (auth_code == null) {
@@ -150,8 +147,17 @@ public class UserApiController {
         log.info("postAddr1 = {}", modifyUserDto.getPostAddr1());
         log.info("postAddr2 = {}", modifyUserDto.getPostAddr2());
         userService.addrModify(modifyUserDto, principal.getName());
-
         return "전송완료";
+    }
+    
+    // 회원수정 - 관심스킬
+    @GetMapping("/modifySkill")
+    public ResponseEntity<?> modifySkill(ModifyUserDto modifyUserDto, Principal principal){
+    	log.info("========= userApiController - modifySkill called. ==========");
+    	log.info("modifyUserDto.getSkillTagId() = " + modifyUserDto.getSkillTagId());
+    	userService.skillTagModify(modifyUserDto.getSkillTagId(), principal.getName());
+    	
+    	return ResponseEntity.ok("관심 분야가 변경되었습니다");
     }
 
     // 회원가입시 이메일 인증

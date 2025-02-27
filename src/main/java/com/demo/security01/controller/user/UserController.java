@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/user")
@@ -116,21 +118,20 @@ public class UserController {
     }
 
     // 회원수정 form
+//    public String modifyForm(Principal principal, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, Model model){
     @GetMapping("/modifyForm")
-    public String modifyForm(Principal principal, @ModelAttribute("modifyUserDto") ModifyUserDto modifyUserDto, Model model){
+	public String modifyForm(Principal principal, Model model){
+    	log.info("========= modifyForm ==============");
         String username = principal.getName();
         User loginUser =  userService.userDetailsByUsername(username);
-        log.info("========= modifyForm ==============");
-        log.info("loginUser = {}", loginUser.getUser_skillTag());
-        
+        List<Long> tagId = new ArrayList<>(); 
         for(User_Skilltag tags : loginUser.getUser_skillTag()) {
-        	log.info("tags.getSkillTag() = " + tags.getSkillTag().getIdx());
+        	log.info("tagId = " + tags.getSkillTag().getIdx()); 
+        	tagId.add(tags.getSkillTag().getIdx());
         }
-        
+        model.addAttribute("tagId" ,tagId);
         model.addAttribute("loginUser", loginUser);
-//        User findUser = userService.userDetails(userId);
-//        log.info("findUser = {}", findUser);
-//        model.addAttribute("findUser", findUser);
+        
         return "user/modifyForm";
     }
 

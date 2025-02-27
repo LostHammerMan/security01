@@ -35,6 +35,18 @@
         /*background-color: #1c7430;*/
     }
 
+    .select2-container {
+        width: auto;
+        min-width: 538px;
+    }
+
+    .select2-container--default .select2-selection--multiple {
+        background-color: white;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        cursor: text;
+    }
+
     /*form-control btn btn-primary*/
     button.btn.btn-primary {
         width: 70px;
@@ -116,7 +128,7 @@
 </style>
 <div class="container bootstrap snippet">
     <div class="row">
-        <div class="col-sm-3" id="left-header"><!--left col-->
+        <div class="col-sm-2" id="left-header"><!--left col-->
             <div class="text-center">
                 <c:choose>
                     <c:when test="${loginUser.userProfile.fileUrl == null}">
@@ -134,13 +146,10 @@
 <!-- <%--                <input type="file" class="text-center center-block file-upload">--%> -->
             </div>
             <hr>
-
-
             <div class="panel panel-default">
                 <div class="panel-heading"><a href="${root}user/modifyForm">내프로필</a></div>
                 <div class="panel-body"><a href="${root}user/modifyPwdForm">보안변경</a></div>
             </div>
-
         </div><!--/col-3-->
         <div class="col-sm-9">
             <div class="tab-content">
@@ -175,11 +184,16 @@
 
                             <div class="form-group">
                                 <label for="skillTagIdx" Class="formLabelTitle">관심분야</label><br>
-                                <select class="form-control skillTagIdx" id="skillTag" multiple="multiple">
-                                    <option value="1">Spring</option>
-                                    <option value="2">Python</option>
-                                    <option value="3">AWS</option>
-                                </select>
+                                <div class="profile-basic">
+                                    <select class="form-control skillTagIdx" id="skillTagIdx" multiple="multiple">
+                                        <option value="1">Spring</option>
+                                        <option value="2">Python</option>
+                                        <option value="3">AWS</option>
+                                    </select>
+                                    <button type="button" class="form-control btn btn-primary" id="skillModifyBtn"
+                                                    name="skillModifyBtn">수정
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -367,18 +381,46 @@
 <script>
     $(function () {
 
+        // let select2Val = "<c:out value='${tagId}'/>";
+        let select2Val = ${tagId};
+        console.log("select2Val = " + select2Val);
         /* select2 start*/
         // 초기화
-        $('#skillTag').select2();
+        $('#skillTagIdx').select2();
 
         // 초기값 설정
-        let select2Val = [1,3];
-        // let select2Val2 = ${loginUser.user_skillTag.skillTag};
-        let select2Val2 = "<c:out value='${loginUser.user_skillTag.skillTag}' />";
-        console.log(select2Val2);
-        $('#skillTag').val(select2Val).trigger('change');
+        // let select2Val = [1,3];
+        
+        $('#skillTagIdx').val(select2Val).trigger('change');
 
         /* select2 end */
+
+        /* 관심 분야 수정 이벤트 시작 */
+        $('#skillModifyBtn').on('click', function(){
+            let skillTagId = $('#skillTagIdx').val();
+            console.log("skilltagVal = " + skillTagId);
+
+            $.ajax({
+                url: '${root}api/modifySkill',
+                type: 'GET',
+                data: {
+                    skillTagId : skillTagId,
+                },
+                contentType: 'application/json',
+                success: function (res) {
+                    console.log('관심분야 수정 완료');
+                    alert(res);
+                    console.log(res);
+                },
+                error: function (err) {
+                    console.log('관심분야 수정 실패');
+                    console.log(err);
+                }
+            });
+        });
+
+        /* 관심 분야 수정 이벤트  끝*/
+
 
         /*주소 수정 이벤트*/
         $("#addrModifyBtn").on("click", function () {
@@ -479,7 +521,6 @@
         }
 
         console.log("%s", JSON.stringify(data3, null, "\t"));
-        // $("form").submit();
 
         $.ajax({
             url : "${root}api/modifyEmail",

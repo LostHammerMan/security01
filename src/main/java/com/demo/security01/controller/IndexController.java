@@ -44,6 +44,11 @@ public class IndexController {
         model.addAttribute("recommendResults", recommendResults);
         return "index";
     }
+    
+    @GetMapping("/index2")
+    public String index2(){
+        return "index2";
+    }
 
     @GetMapping("/user")
     public @ResponseBody String user(){

@@ -30,6 +30,7 @@
         justify-content: space-between;
         position: relative;
         width: 80%;
+        max-width: 1200px;
         height: 100%;
         gap: 1rem;
         margin-left: auto;

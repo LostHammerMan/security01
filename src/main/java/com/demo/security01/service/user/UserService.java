@@ -287,8 +287,9 @@ public class UserService {
     		
     		user_skillTagRepository.user_skillTagDeleteByUserIdx(findUser);
     		
-    		
+    		log.info("skillIdxes = " + skillIdxes);
     		for(Long skillIdx : skillIdxes) {
+    			log.info("skillIdx = " + skillIdx);
     			SkillTagEntity findSkillTag = skillTagRepository.findById(skillIdx).orElseThrow(
     						() -> new EntityNotFoundException("해당 스킬은 존재하지 않습니다")
     					);
@@ -300,6 +301,8 @@ public class UserService {
     			
     			user_skillTagRepository.save(user_Skilltag);
     		}
+    	}else {
+    		throw new RuntimeException("비정상적인 접근입니다");
     	}
     	
     }
