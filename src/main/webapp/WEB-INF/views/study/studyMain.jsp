@@ -3,10 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="root" value="${pageContext.request.contextPath}/"/>
-<%--main header--%>
+<!-- <%--main header--%> -->
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
-<%--community header--%>
-<!-- <c:import url="/WEB-INF/views/layout/studyHeader.jsp"/> -->
+<!-- <%--community header--%> -->
 <style>
     .index_container {
         display: flex;
@@ -431,7 +430,7 @@
     .category_container {
         display: flex;
         gap: 10px;
-        width: 60%;
+        width: 70%;
     }
 
     .selectedItems {
@@ -448,7 +447,7 @@
     position: relative;
     transition: 100ms;
     box-sizing: border-box;
-    width: 203.328px;
+    width: 8rem;
     height: 38px;
     background: white;
     color: #656565;
@@ -471,6 +470,7 @@
     letter-spacing: 0.03em;
     font-size: 16px;
     padding-left: 10px;
+    width: 8rem;
     }
 
     .availableItem-list {
@@ -510,6 +510,10 @@
     .toggleOn {
         border: 1px solid rgb(0, 185, 174);
         color: rgb(0, 185, 174);
+    }
+
+    .selectedPageBtn {
+        background-color: #ffe579;
     }
 
 </style>
@@ -564,34 +568,44 @@
             <div class="studyCategoryContainer">
                 <div class="css-1">
                     <div class="category_container">
-                        <div class="input-group mb-3 select-container">
+                        <select class="selectedItems" id="selectedItems_cate">
+                            <option value="">전체</option>
+                            <c:forEach var="category" items="${categoryDtos}">
+                                <c:if test="${category.categoryIdx == 2}">
+                                    <c:forEach var="subCategory" items="${category.subCategory}">
+                                        <option value="${subCategory.categoryIdx}">${subCategory.categoryName}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </c:forEach>
+                        </select>
+                        <!-- <div class="select-container"> -->
                             <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-skill" multiple="multiple">
                                 <option value="1">Spring</option>
                                 <option value="2">Python</option>
                                 <option value="3">AWS</option>
                             </select>
-                        </div>
-                        <div class="input-group mb-3 select-container">
+                        <!-- </div> -->
+                        <!-- <div class="select-container"> -->
                             <select class="js-example-placeholder-multiple js-states form-control selectedItems" id="selected-recruit" multiple="multiple">
                                 <option value="1">백엔드</option>
                                 <option value="2">프론트엔드</option>
                                 <option value="3">Manager</option>
                                 <option value="4">웹디자이너</option>
                             </select>
-                        </div>
-                        <div class="input-group mb-3 select-container">
+                        <!-- </div> -->
+                        <!-- <div class="select-container"> -->
                             <select class="selectedItems" id="process" aria-placeholder="진행 방법">
                                 <option value="온라인">온라인</option>
                                 <option value="오프라인">오프라인</option>
                                 <option value="">온라인/오프라인</option>
                             </select>
-                        </div>
-                        <div class="select-container">
+                        <!-- </div> -->
+                        <!-- <div class="select-container"> -->
                             <button class="likeCheckBtn">
                                 <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
                                         좋아요 보기
                             </button>
-                        </div>
+                        <!-- </div> -->
                     </div>
                     <div class="study_searchContainer">
                         <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
@@ -638,6 +652,13 @@
     $(document).ready(function (){
         getStudyListTop4();
         getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+
+        // 카테고리
+        $('#selectedItems_cate').on('change', function(){
+            selectedCategoryIdx = $('#selectedItems_cate').val();
+            console.log('selectedCategoryIdx = ' + selectedCategoryIdx);
+            checkLikeToggle();
+        });
 
         // 기술 스택 시작
         $("#selected-skill").select2({
@@ -927,7 +948,7 @@
 
         if(result.prev == true){
             pagingHtml += `            
-                    <button class="pagination-btn" data-page="${'${result.prevPage}'}"><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></button>
+                    <button class="pagination-btn" data-page="${'${result.prevPage -1}'}"><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></button>
                     `;
         }
         
@@ -940,7 +961,7 @@
 
         if(result.next == true){
             pagingHtml += `
-            <button class="pagination-btn" data-page=${'${result.nextPage}'}><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></button>
+            <button class="pagination-btn" data-page=${'${result.nextPage -1}'}><svg width="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></button>
             `;
         }
         pagingHtml += `
@@ -950,10 +971,15 @@
         $('.pagination').append(pagingHtml);
 
         // 페이지 버튼 클릭
-        $('.pagination-btn').on('click', function(){
+        // 동적으로 생성되는 경우 아래와 같이 이벤트 걸어야 함에 유의
+        $(document).on('click', '.pagination-btn', function(e) {
+            console.log('페이지 번호 클릭');
+           
             selectedPage = $(this).data('page');
-            getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
-
+            $('.pagination-btn').removeClass('selectedPageBtn');
+            $(this).addClass('selectedPageBtn');
+            checkLikeToggle();
+            // getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
             // $('.pagination').children.remove();
             // $('.loungeList_container').empty();
             // $('.pagination').empty();

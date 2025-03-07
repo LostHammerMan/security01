@@ -29,11 +29,15 @@ public class PageResponseDto<E> {
 		this.current = Math.max(pageable.getPageNumber() + 1, 1);
 		
 		// 보여줄 끝 번호
-//		int end = (int) (Math.ceil(pageable.getPageNumber() /5.0)) * 5;
-		end = (int) (Math.ceil((current) /5.0)) * 5;
+		
+//		end = (int) (Math.ceil((current) /5.0)) * 5;
+		// 수정
+		end = (int) (Math.ceil(current / 5.0)) * 5;
 		
 		// 실제 마지막 페이지
-		this.realEnd = (int)(Math.ceil(totalCount) / (double)pageable.getPageSize());
+//		this.realEnd = (int)(Math.ceil(totalCount) / (double)pageable.getPageSize());
+		// 수정(totalCount / pageable.getPageSize()를 먼저 계산해야 함)
+		this.realEnd = (int) Math.ceil(totalCount / (double) pageable.getPageSize());
 		
 		// end가 realEnd 를 넘지 않도록
 //		end = end > realEnd ? realEnd : end;
@@ -48,16 +52,20 @@ public class PageResponseDto<E> {
 		
 		// next 는 end < realEnd 에만 true
 //		this.next = totalCount > end * pageable.getPageSize();
-		this.next = (end == realEnd) ? false : true;
-//		this.next = end < realEnd;
+		
+		// 문제점(end 가 realEnd 보다 작은 경우에도 false 가 될수 있음)
+//		this.next = (end == realEnd) ? false : true;
+		this.next = end < realEnd;
 		
 		
 		// 페이지 각 번호
 		this.pageNumList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
 		
 		// prevPage, nextPage
-//		this.prevPage = prev ? end - 5 : 0;
-		this.prevPage = prev ? end - 6 : 0;
+//		this.prevPage = prev ? end - 6 : 0;
+//		this.nextPage = next ? end + 1 : 0;
+		// 수정
+		this.prevPage = prev ? start - 1 : 0;
 		this.nextPage = next ? end + 1 : 0;
 		
 		// 페이지가 1개 뿐인 경우

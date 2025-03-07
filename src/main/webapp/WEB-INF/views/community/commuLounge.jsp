@@ -331,9 +331,16 @@
 
     .category_container {
         display: flex;
+        width: 100%;
+        margin: 0;
+        padding: 0px 15px;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .selector {
+        display: flex;
         gap: 10px;
-        width: 60%;
-        margin: 0 25px;
     }
 
     .selectedItems {
@@ -442,15 +449,27 @@
                 <a class="btn btn-primary ml-auto" href="${root}community/lounge/write">작성하기</a>
             </header>
             <div class="category_container">
-                <select class="selectedItems">
-                    <option value="RECENT">최신순</option>
-                    <option value="VIEW">많이본순</option>
-                    <option value="LIKE">좋아요순</option>
-                </select>
-                <button class="likeCheckBtn">
-                    <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
-                            좋아요 보기
-                </button>
+                <div class="selector">
+                    <select class="selectedItems" id="selectedItems_cate">
+                        <option value="">전체</option>
+                        <c:forEach var="category" items="${categoryDtos}">
+                            <c:if test="${category.categoryIdx == 1}">
+                            <c:forEach var="subCategory" items="${category.subCategory}">
+                                <option value="${subCategory.categoryIdx}">${subCategory.categoryName}</option>
+                            </c:forEach>
+                            </c:if>
+                        </c:forEach>
+                    </select>
+                    <select class="selectedItems" id="selectedItems">
+                        <option value="RECENT">최신순</option>
+                        <option value="VIEW">많이본순</option>
+                        <option value="LIKE">좋아요순</option>
+                    </select>
+                    <button class="likeCheckBtn">
+                        <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                                좋아요 보기
+                    </button>
+                </div>
                 <div class="study_searchContainer">
                     <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
                     <input class="searchInput" id="searchInput" placeholder="제목, 내용으로 검색해보세요">
@@ -504,9 +523,16 @@
         checkLikeToggle();
         getLoungeTop4();
 
+        // 카테고리 선택
+        $('#selectedItems_cate').on('change', function(){
+            $selectedCateCode = $('#selectedItems_cate').val();
+            console.log("$selectedCateCode = " + $selectedCateCode);
+            checkLikeToggle();
+        });
+
         // 정렬 조건 선택시
-        $('.selectedItems').on('change', function(){
-            $orders = $('.selectedItems').val();
+        $('#selectedItems').on('change', function(){
+            $orders = $('#selectedItems').val();
             console.log("orders = " + $orders);
             // checkLikeToggle();
             lastIdx = null;
