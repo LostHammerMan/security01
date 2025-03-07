@@ -6,18 +6,30 @@
 <%--main header--%>
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
 <%--community header--%>
-<c:import url="/WEB-INF/views/layout/communityHeader.jsp"/>
+<!-- <c:import url="/WEB-INF/views/layout/communityHeader.jsp"/> -->
 <style>
 
-    section {
-        width: 100%;
+    .index_container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        width: 80%;
+        max-width: 1200px;
+        height: 100%;
+        gap: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        box-sizing: border-box;
+        min-height: 100%;
     }
     .container_loungeContainer {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         position: relative;
-        width: 88%;
+        width: 100%;
         height: 100%;
         gap: 1rem;
         margin-left: auto;
@@ -106,7 +118,7 @@
         position: static;
         align-items: center;
         gap: 1rem;
-        padding: 0 25px;
+        padding: 0 20px;
     }
 
     /*.container_loungeContainer {*/
@@ -119,17 +131,19 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: initial;
-        width: 97%;
+        width: 100%;
         gap: 1.5rem;
     }
 
     .loungeList_container {
         display: flex;
+        justify-content: space-between;
         grid-gap: 27px;
-        gap: 27px;
+        /* gap: 0.5rem; */
         flex-wrap: wrap;
         margin:  0 auto;
-        padding: 0 20px;
+        padding: 15px;
+        /* padding: 0 20px; */
     }
 
     .loungeList_loungeItem {
@@ -137,7 +151,7 @@
         flex-direction: column;
         justify-content: flex-start;
         padding: 20px 25px 0;
-        width: 300px;
+        width: 16.5rem;
         height: 340px;
         background: #fff;
         border: 2px solid #d1d1d1;
@@ -335,7 +349,7 @@
         position: relative;
         transition: 100ms;
         box-sizing: border-box;
-        width: 203.328px;
+        width: 9rem;
         height: 38px;
         background: white;
         color: #656565;
@@ -344,6 +358,7 @@
         font-size: 16px;
         letter-spacing: 0.03em;
         padding-left: 10px;
+        font-weight: 500;
     }
 
     .likeCheckBtn {
@@ -354,11 +369,12 @@
         letter-spacing: 0.03em;
         font-size: 16px;
         padding-left: 10px;
-        width: 140.328px;
+        width: 9rem;
         height: 38px;
         background: white;
         color: #656565;
         box-sizing: content-box;
+        font-weight: 500;
     }
 
     .carousel-inner {
@@ -379,7 +395,7 @@
 </style>
 
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
-<section class="pt-5 pb-5">
+<section class="index_container">
     <div class="container_loungeContainer">
         <!-- carousel -->
         <div class="carousel_container" style="margin-bottom: 20px;">

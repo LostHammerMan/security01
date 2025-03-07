@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<%--    수정--%>
+<!-- 수정 -->
     <!-- CSS Files -->
     <link rel="stylesheet" href="${root}static/css/bootstrap.css"/>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -49,23 +49,51 @@
         .index_header {
             margin-bottom: 30px;
         }
+
+        .navbar {
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            height: 85px;
+            align-items: center;
+            padding: 0 20px;
+            max-width: 1281px;
+            margin: 0 auto;
+            background-color: white !important;
+            /* color: #454545; */
+            font-weight: bolder;
+        }
+
+        .navbar-nav {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            padding-left: 0;
+            margin-bottom: 0;
+            list-style: none;
+            gap: 20px;
+        }
     </style>
 </head>
 <body>
-<div class="index_header">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<!-- <div class="index_header"> -->
+    <!-- <nav class="navbar navbar-expand-sm bg-dark navbar-dark"> -->
+    <nav class="navbar navbar-light bg-light">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="${root}">메인</a>
+                <a class="nav-link" href="${root}">
+                    <img src="${root}static/img/banner_img/stdyBanner.png" style="width: auto; height: 30px;">
+                </a>
             </li>
 
             <c:forEach var="categoryLists" items="${categoryDtos}">
                 <li class="nav-item">
                     <a class="nav-link" href="${root}${categoryLists.categoryPath}">${categoryLists.categoryName}</a>
                 </li>
-<%--                <a href="#">${categoryLists.categoryName}</a>--%>
             </c:forEach>
-            <%--<c:forEach var="cateDto" items="${cateDto}">
+<!-- <%--                <a href="#">${categoryLists.categoryName}</a>--%> -->
+            <!-- <%--<c:forEach var="cateDto" items="${cateDto}">
                 <li class="nav-item">
                     <a class="nav-link" href="${root}study/main">${cateDto.getCategoryName}</a>
                 </li>
@@ -76,7 +104,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="${root}community/main">커뮤니티</a>
-            </li>--%>
+            </li>--%> -->
         </ul>
         <ul class="navbar-nav ml-auto">
             <c:choose>
@@ -104,5 +132,5 @@
             </c:choose>
         </ul>
     </nav>
-</div>
+<!-- </div> -->
 
