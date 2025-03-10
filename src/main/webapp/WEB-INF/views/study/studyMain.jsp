@@ -362,34 +362,14 @@
         display: flex;
         justify-content: center;
         margin: 32px 0;
-        width: 97%;
+        width: 100%;
+        height: 40px;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
-    .pagination {
-        display: flex;
-        gap: 5px;
-    }
-
-    .pagination {
-        color: black;
-        float: left;
-        padding: 8px 16px;
-        text-decoration: none;
-    }
-
-    .pagination-btn:active {
-        background-color: #4caf50;
-        color: white;
-    }
-
-    .pagination-btn:hover:not(.active){
-        background-color: #ddd;
-    }
-
-    .pagination-btn {
-        border: 0;
-        background-color: transparent;
-    }
+    
 
     .studyCategoryContainer {
         max-width: 1300px;
@@ -512,8 +492,35 @@
         color: rgb(0, 185, 174);
     }
 
-    .selectedPageBtn {
+    .pagination {
+        display: flex;
+        gap: 5px;
+    }
+
+    .pagination {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+
+    .pagination-btn {
+        border: 0;
+        background-color: white;
+        font-size: 16px;
+    }
+
+    .pagination-btn:hover {
+        background-color: #dddddd;
+        /* width: 32px;
+        height: 32px; */
+        border-radius: 16px;
+
+    }
+
+    ._active {
         background-color: #ffe579;
+        border-radius: 16px;
     }
 
 </style>
@@ -734,6 +741,23 @@
 
         });
 
+        // 페이지 버튼 클릭
+        // 동적으로 생성되는 경우 아래와 같이 이벤트 걸어야 함에 유의
+        $(document).on('click', '.pagination-btn', function(e) {
+            console.log('페이지 번호 클릭');
+           
+            selectedPage = $(this).data('page');
+            // $('.pagination-btn').removeClass('_active');
+            // $(this).addClass('selectedPageBtn');
+            checkLikeToggle();
+            // $(this).addClass('_active');
+            // getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
+            // $('.pagination').children.remove();
+            // $('.loungeList_container').empty();
+            // $('.pagination').empty();
+            // getStudyList(selectedPage, pageSize, selectedCategoryIdx);
+        });
+
         /* 검색 끝 */
        
         /* 좋아요 모아보기 시작 */
@@ -762,7 +786,7 @@
     function getStudyListTop4(){
         const today = new Date();
         let top4Html = '';
-
+        
         $.ajax({
             url: '${root}api/study/studyListTop4',
             method: 'GET',
@@ -774,6 +798,14 @@
                 console.log("오늘 날짜 : " + today.toLocaleDateString());
 
                 result.forEach(function (item) {
+
+                let imgHtml_top = '';
+                console.log(item.categoryName);
+                if(item.categoryName == '프로젝트'){
+                    imgHtml_top = '<i class="fa-solid fa-folder-open" style="color: #FFD43B;></i>';
+                }else if(item.categoryName == '스터디'){
+                    imgHtml_top = '<i class="fa-solid fa-pencil" style="color: #FFD43B;"></i>';
+                }      
 
                 const dbDate = new Date(item.recruitDeadline);
                 const diff = dbDate - today;
@@ -789,7 +821,10 @@
                     top4Html += `
                     <a class="topViewPost-item" href='${root}study/${'${item.studyIdx}'}'>
                         <div class="topViewPost_categoryWrapper">
-                            <div class="badge_category">${'${item.categoryName}'}</div>
+                            <div class="badge_category">
+                                \${imgHtml_top}
+                                ${'${item.categoryName}'}
+                                </div>
                             <div class="badge_endDate"> 마감 </div>
                         </div>
                         <div class="loungeItem_regDate" style="margin-top: 10px;">마감일 | ${'${item.recruitDeadline}'}</div>
@@ -844,7 +879,7 @@
                 // url: '${root}api/study/studyList',
                 url: studyListUrl,
                 method: 'GET',
-                data : {page : pageNum,
+                data : {page : selectedPage,
                         size : pageSize,
                         categoryIdx : selectedCategoryIdx,
                         skillIdx : selectedSkillArr,
@@ -861,7 +896,16 @@
                     
                     // 본문
                     result.dtoList.forEach(function(item){
-
+                    
+                    // 아이콘    
+                    let imgHtml = '';
+                    console.log(item.categoryName);
+                    if(item.categoryName == '프로젝트'){
+                        imgHtml = '<i class="fa-solid fa-folder-open" style="color: #FFD43B;></i>';
+                    }else if(item.categoryName == '스터디'){
+                        imgHtml = '<i class="fa-solid fa-pencil" style="color: #FFD43B;"></i>';
+                    }    
+                    
                     let itemHtml = '';
                     let pagingHtml = '';
                     itemHtml += `
@@ -870,6 +914,7 @@
                             <div class="loungeItem_badgeWrapper">
                                 <div class="badge_categoryWrapper">
                                     <div class="badge_category">
+                                        \${imgHtml}
                                         ${'${item.categoryName}'}
                                     </div>
                                 </div>
@@ -970,22 +1015,7 @@
 
         $('.pagination').append(pagingHtml);
 
-        // 페이지 버튼 클릭
-        // 동적으로 생성되는 경우 아래와 같이 이벤트 걸어야 함에 유의
-        $(document).on('click', '.pagination-btn', function(e) {
-            console.log('페이지 번호 클릭');
-           
-            selectedPage = $(this).data('page');
-            $('.pagination-btn').removeClass('selectedPageBtn');
-            $(this).addClass('selectedPageBtn');
-            checkLikeToggle();
-            // getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, studyListUrl);
-            // $('.pagination').children.remove();
-            // $('.loungeList_container').empty();
-            // $('.pagination').empty();
-            // getStudyList(selectedPage, pageSize, selectedCategoryIdx);
-        });
-        
+        $('.pagination-btn[data-page="' + selectedPage + '"]').addClass('_active');
         // 페이징 끝
                 },
                 error: function(err){
@@ -1021,11 +1051,12 @@
     function checkLikeToggle(){
         if(likeCheckToggleBtn.hasClass('toggleOn')){
                 console.log('좋아요 토글 on!!!');
-                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, '${root}api/study/like');
+                // getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, '${root}api/study/like');
+                getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, '${root}api/study/like');
 
             }else{
                 console.log('좋아요 토글 off!!!');
-                getStudyList(0, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, "${root}api/study/studyList");
+                getStudyList(selectedPage, 12, selectedCategoryIdx, selectedCategoryIdx, selectedSkillArr, selectedRecruitArr, selectedProcess, keywords, "${root}api/study/studyList");
             }
     }
 

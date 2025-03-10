@@ -137,8 +137,8 @@
 
     .loungeList_container {
         display: flex;
-        justify-content: space-between;
-        grid-gap: 27px;
+        justify-content: flex-start;
+        grid-gap: 32px;
         /* gap: 0.5rem; */
         flex-wrap: wrap;
         margin:  0 auto;
@@ -637,17 +637,23 @@ $.ajax({
             // console.log("title = " + item.title);
             // console.log("viewCount = " + item.viewCount);
             // console.log("likeCount = " + item.likeCount);
-            
+            let imgHtml = '';
+            if(item.categoryName == '자유주제'){
+                imgHtml = '<i class="fa-solid fa-comment" style="color: #FFD43B;"></i>';
+            }else if(item.categoryName == '커리어 고민'){
+                imgHtml = '<i class="fa-solid fa-face-tired" style="color: #FFD43B;"></i>';
+            }    
+
             let loungeListHtml = '';
             let itemHtml = '';
 
             itemHtml += `
         <a class="loungeList_loungeItem" href="${root}community/lounge/${'${item.idx}'}">
-        <%--<a href="${root}community/lounge/${allLounge.idx}">--%>
             <li>
                 <div class="loungeItem_badgeWrapper">
                     <div class="badge_categoryWrapper">
                         <div class="badge_category">
+                            \${imgHtml}
                             ${'${item.categoryName}'}
                         </div>
                     </div>
@@ -663,7 +669,6 @@ $.ajax({
                         <div class="userInfo_avatar">
                             <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
                         </div>
-<%--                                    ${root}api/profileImages/${allLounge.user.userProfile.fileName}--%>
                         <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>
                     </div>
                     <div class="loungeItem_viewsAndComments">
@@ -735,6 +740,7 @@ $.ajax({
     /* 게시글 top4 시작*/
     function getLoungeTop4(){
         let top4Html = '';
+        
 
         $.ajax({
             url: '${root}api/loungeList/loungeTop4',
@@ -744,10 +750,22 @@ $.ajax({
                 $('.topViewPost-list').empty();
 
                 result.forEach(function(item){
+
+                    let imgHtml_top = '';
+                    if(item.categoryName == '자유주제'){
+                        imgHtml_top = '<i class="fa-solid fa-comment" style="color: #FFD43B;"></i>';
+                    }else if(item.categoryName == '커리어 고민'){
+                        imgHtml_top = '<i class="fa-solid fa-face-tired" style="color: #FFD43B;"></i>';
+                    }    
+
                     top4Html += `
                     <a class="topViewPost-item" href='${root}study/${'${item.studyIdx}'}'>
                         <div class="topViewPost_categoryWrapper">
-                            <div class="badge_category">${'${item.categoryName}'}</div>
+                            
+                            <div class="badge_category">
+                                \${imgHtml_top}
+                                ${'${item.categoryName}'}
+                            </div>
                         </div>
                         <div class="loungeItem_regDate" style="margin-top: 10px;">등록일 | ${'${item.regDate}'}</div>
                         <h1 class="topViewPost-title">${'${item.title}'}</h1>

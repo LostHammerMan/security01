@@ -166,12 +166,12 @@ public class LoungeService {
         // 마지막 인덱스 없는 경우
         if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
-            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri, null);
+            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 12, cri, null);
             entityToDto(allLoungeWithPaging, dtos);
             return dtos;
         }
 
-        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri, null);
+        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 12, cri, null);
         entityToDto(allLoungeWithPaging, dtos);
         return dtos;
     }
@@ -189,12 +189,12 @@ public class LoungeService {
     	
     	if (lastIdx == null) {
             Long maxId = loungeRepository.getMaxLoungeIdx();
-            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 9, cri, loginUser);
+            List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(maxId + 1, 12, cri, loginUser);
             entityToDto(allLoungeWithPaging, dtos);
             return dtos;
         }
 
-        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 9, cri, loginUser);
+        List<LoungeEntity> allLoungeWithPaging = loungeRepository.getAllLoungeWithPaging(lastIdx, 12, cri, loginUser);
 //        entityToDto(dtos, allLoungeWithPaging);
         entityToDto(allLoungeWithPaging, dtos);
         return dtos;

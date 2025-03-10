@@ -416,13 +416,16 @@
                                     <div class="swiper-slide">
                                         <a class="topViewPost-item" href='${root}study/${item.studyIdx}'>
                                             <div class="topViewPost_categoryWrapper">
-                                                <div class="badge_category">${item.categoryName}</div>
+                                                <div class="badge_category">
+                                                    <i class="fa-solid fa-pencil" style="color: #FFD43B;"></i>
+                                                    ${item.categoryName}
+                                                </div>
 												
 												<c:choose>
 													<c:when test="${item.diffInDays le 0}">
-														<div class="topViewPost_categoryWrapper">
+														<!-- <div class="topViewPost_categoryWrapper"> -->
 	                                                        <div class="badge_endDate"> 마감 </div>
-	                                                    </div>
+	                                                    <!-- </div> -->
 													</c:when>
 													<c:otherwise>
 														<div class="badge_endDate">🚨 마감 ${item.diffInDays} 일전</div>

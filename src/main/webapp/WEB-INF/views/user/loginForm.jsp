@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="root" value="${pageContext.request.contextPath}/"/>
-<c:import url="/WEB-INF/views/layout/header.jsp"/>
+<c:import url="/WEB-INF/views/layout/header2.jsp"/> 
 
 <style>
     .error-msg {
@@ -31,6 +31,16 @@
         }
     }
 
+    .loginForm-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .banner-img {
+        margin-bottom: 1.5rem;
+    }
+
     .loginForm-footer {
         display: flex;
         justify-content: space-between;
@@ -45,7 +55,13 @@
     .text-body {
         color: rgb(73, 80, 87);
         font-size: 12px;
-        border-bottom: 1px solid rgb(134, 142, 150);;
+        border-bottom: 1px solid rgb(134, 142, 150);
+    }
+
+    .text-body:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: rgb(239, 215, 250);
     }
 
     .findIdAndPwSeparator {
@@ -59,23 +75,34 @@
 <section class="vh-100">
     <div class="container-fluid h-custom">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-md-9 col-lg-6 col-xl-5">
+            <!-- <div class="col-md-9 col-lg-6 col-xl-5">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                      class="img-fluid" alt="Sample image">
-            </div>
-            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                <form action="${root}login" method="post">
+            </div> -->
+            <!-- <div class="loginForm-container">
+                <div class="banner-img">
+                    <img src="${root}static/img/banner_img/stdyBanner.png" alt="배너 이미지">
+                </div>
+
+            </div> -->
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 loginForm-container">
+                <div class="banner-img">
+                    <a href="${root}">
+                        <img src="${root}static/img/banner_img/stdyBanner.png" alt="배너 이미지">
+                    </a>
+                </div>
+                <form action="${root}login" method="post" style="width: 80%;">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="username">Id</label>
+                        <!-- <label class="form-label" for="username">Id</label> -->
                         <input type="text" id="username" name="username" class="form-control form-control-lg"
-                               placeholder="당신의 ID를 입력하세요"/>
+                               placeholder="ID를 입력하세요"/>
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-3">
-                        <label class="form-label" for="password">Password</label>
+                        <!-- <label class="form-label" for="password">Password</label> -->
                         <input type="password" id="password" name="password" class="form-control form-control-lg"
                                placeholder="비밀번호를 입력하세요"/>
                     </div>
@@ -102,7 +129,7 @@
                     </div>
 
                     <div class="text-center text-lg-start mt-4 pt-2">
-                        <button type="button" class="btn btn-primary btn-lg" id="loginBtn" name="loginBtn"
+                        <button type="button" class="btn btn-success btn-lg" id="loginBtn" name="loginBtn"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem;">Login
                         </button>
                         <p class="small fw-bold mt-2 pt-1 mb-0">회원이 아니신가요? <a href="${root}user/joinForm"
