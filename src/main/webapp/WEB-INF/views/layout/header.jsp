@@ -25,7 +25,11 @@
     <link rel="stylesheet" href="${root}static/css/bootstrap-multiselect.css"/>
     <link rel="stylesheet" href="${root}static/css/select2.css"/>
     <link rel="icon" type="image/ico" href="${root}static/img/favicon.ico"/>
-
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
     <!-- JS Files -->
     <script src="${root}static/js/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -41,12 +45,14 @@
     <script src="https://kit.fontawesome.com/5d8a0a5e4b.js" crossorigin="anonymous"></script>
     <title>Title</title>
     <style>
+        a {
+            text-decoration: none;
+        }
+
         footer {
             width: 100%;
             clear: both;
         }
-
-    
 
         .index_header {
             margin-bottom: 30px;
@@ -56,22 +62,25 @@
             width: 80%;
             display: flex;
             justify-content: space-between;
-            height: 85px !important;
+            /* height: 46px !important; */
+            min-height: 70px !important;
+            align-content: center;
             align-items: center;
-            padding: 0 !important;
-            max-width: 1281px;
             margin: 0 auto;
+            padding-top: 0 !important;
+            max-width: 70rem;
             background-color: white !important;
             /* color: #454545; */
             font-weight: bolder;
+            position: static;
         }
 
         .navbar-nav {
             display: flex;
-            -ms-flex-direction: row;
             flex-direction: row;
             padding-left: 0;
             margin-bottom: 0;
+            margin-top: 0;
             list-style: none;
             gap: 20px;
             flex-wrap: wrap;
@@ -79,6 +88,35 @@
             align-items: center;
             align-content: center;
         }
+
+        .dropdown-menu {
+            position: absolute !important;
+        }
+
+        .dropdown-toggle {
+            background-color: #fff;
+            border: none;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .fastRecruit-btn {
+            color: #fff;
+            outline: none;
+            border: none;
+            background-color: #81e1cf;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 8px 22px;
+            border-radius: 36px;
+            height: 42px;
+        }
+
     </style>
 </head>
 <body>
@@ -97,21 +135,12 @@
                     <a class="nav-link categoryBtn active" href="${root}${categoryLists.categoryPath}">${categoryLists.categoryName}</a>
                 </li>
             </c:forEach>
-<!-- <%--                <a href="#">${categoryLists.categoryName}</a>--%> -->
-            <!-- <%--<c:forEach var="cateDto" items="${cateDto}">
-                <li class="nav-item">
-                    <a class="nav-link" href="${root}study/main">${cateDto.getCategoryName}</a>
-                </li>
-            </c:forEach>--%>
-           <%-- <li class="nav-item">
-                <a class="nav-link" href="${root}study/main">스터디</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="${root}community/main">커뮤니티</a>
-            </li>--%> -->
         </ul>
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="${root}study/getStudyWriteForm"><button class="fastRecruit-btn">빠른 모집</button></a>
+            </li>
+            
             <c:choose>
                 <c:when test="${empty principal}">
                     <!-- <li class="nav-item">
@@ -127,13 +156,24 @@
                             <a class="nav-link" href="${root}admin/main">관리자</a>
                         </li>
                     </sec:authorize> -->
-                    
-                    <li class="nav-item">
+                    <li class="dropdown">
+                        <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            <img src="${root}api/profileImages/${loginUser.userProfile.fileName}" width="30" height="30" class="d-inline-block align-top" alt="">
+                        </button>
+                        <div class="dropdown-menu">
+                            <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+                                    <a class="dropdown-item" href="${root}admin/main"><i class="fa-solid fa-list-check"></i> 관리자</a>
+                            </sec:authorize>
+                          <a class="dropdown-item" href="${root}user/modifyForm"><i class="fa-solid fa-user"></i> 마이페이지</a>
+                          <a class="dropdown-item" href="${root}logout"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a>
+                        </div>
+                    </li>
+                   <!--  <li class="nav-item">
                         <a class="nav-link" href="${root}user/modifyForm">회원수정</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${root}logout">로그아웃</a>
-                    </li>
+                    </li> -->
                 </c:otherwise>
             </c:choose>
         </ul>
@@ -142,6 +182,6 @@
 <script>
     $(document).ready(function(){
 
-        $('.categoryBtn').on(cli)
+       
     });
 </script>

@@ -3,29 +3,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="root" value="${pageContext.request.contextPath}/" />
 
-<c:import url="/WEB-INF/views/layout/header.jsp"/>
+<c:import url="/WEB-INF/views/layout/header2.jsp"/>
+<style>
+.navbar-nav {
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+}
+</style>
 
+    
 
-    <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Dashboard</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
 
 <body id="page-top">
 
@@ -34,11 +30,10 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${root}">
+                <div class="sidebar-brand-icon">
+                    <img src="${root}static/img/banner_img/stdyBanner.png" style="width: auto; height: 30px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
             </a>

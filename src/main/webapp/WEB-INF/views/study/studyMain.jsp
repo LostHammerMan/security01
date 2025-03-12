@@ -3,9 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="root" value="${pageContext.request.contextPath}/"/>
-<!-- <%--main header--%> -->
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
-<!-- <%--community header--%> -->
 <style>
     .index_container {
         display: flex;
@@ -18,7 +16,7 @@
         gap: 1rem;
         margin-left: auto;
         margin-right: auto;
-        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        /* font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
         box-sizing: border-box;
         min-height: 100%;
     }
@@ -143,6 +141,7 @@
         justify-content: initial;
         width: 100%;
         gap: 1.5rem;
+        color: black;
     }
 
     .loungeList_container {

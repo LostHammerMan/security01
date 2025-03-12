@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.study.request.StudyRequestDto;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.service.study.StudyService;
@@ -30,13 +31,17 @@ public class StudyController {
 	private final UserService userService;
 
     @GetMapping("")
-    public String studyMain(){
+    public String studyMain(Principal principal, Model model){
+    	if(principal != null) {
+    		User loginUser =  userService.userDetailsByUsername(principal.getName());
+    		model.addAttribute("loginUser", loginUser);
+    	}
         return "study/studyMain";
     }
 
     @GetMapping("/getStudyWriteForm")
-    public String getStudyWriteFrom(HttpServletRequest request, Model model){
-    	if(request.getUserPrincipal() == null){
+    public String getStudyWriteFrom(Principal principal, Model model){
+    	if(principal.getName() == null){
 //    		model.addAttribute("msg", "로그인이 필요한 기능입니다");
 //    		model.addAttribute("url", request.getContextPath() + "/study");
     		return "error/loginError";

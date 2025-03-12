@@ -1,9 +1,11 @@
 package com.demo.security01.controller;
 
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.category.CategoryDto;import com.demo.security01.model.dto.crawling.StudyCrawlingResponeDto;
 import com.demo.security01.model.dto.study.response.StudyResponseDto;
 import com.demo.security01.service.category.CategoryService;
 import com.demo.security01.service.study.StudyService;
+import com.demo.security01.service.user.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class IndexController {
 
     private final CategoryService categoryService;
     private final StudyService studyService;
+    private final UserService userService;
     
     @GetMapping({"","/"})
     public String index(Model model, Principal principal) {
@@ -38,10 +41,13 @@ public class IndexController {
         	
         }else {
         	String username = principal.getName();
+        	User loginUser = userService.userDetailsByUsername(username);
         	recommendResults = studyService.getRecommendStudy(username);
+        	model.addAttribute("loginUser", loginUser);
         }
         log.info("recommendResults.size() = " + recommendResults.size());
         model.addAttribute("recommendResults", recommendResults);
+        
         return "index";
     }
     

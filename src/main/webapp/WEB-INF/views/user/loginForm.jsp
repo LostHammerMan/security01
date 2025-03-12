@@ -35,6 +35,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        height: 36rem;
+        border: 1px solid #dadce0;
+        border-radius: 10px;
     }
 
     .banner-img {
@@ -83,12 +86,13 @@
                 <div class="banner-img">
                     <img src="${root}static/img/banner_img/stdyBanner.png" alt="배너 이미지">
                 </div>
-
+    width: 30rem;
+    margin-top: 1rem;
             </div> -->
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 loginForm-container">
                 <div class="banner-img">
                     <a href="${root}">
-                        <img src="${root}static/img/banner_img/stdyBanner.png" alt="배너 이미지">
+                        <img src="${root}static/img/banner_img/stdyBanner.png" alt="배너 이미지" style="width: 30rem; margin-top: 1rem;">
                     </a>
                 </div>
                 <form action="${root}login" method="post" style="width: 80%;">

@@ -3,11 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="root" value="${pageContext.request.contextPath}/"/>
-<%--main header--%>
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
-<%--community header--%>
-<!-- <c:import url="/WEB-INF/views/layout/communityHeader.jsp"/> -->
 <style>
+    * {
+        box-sizing: border-box;
+    }
 
     .index_container {
         display: flex;
@@ -20,7 +20,7 @@
         gap: 1rem;
         margin-left: auto;
         margin-right: auto;
-        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        /* font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
         box-sizing: border-box;
         min-height: 100%;
     }
@@ -34,7 +34,7 @@
         gap: 1rem;
         margin-left: auto;
         margin-right: auto;
-        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        /* font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
         box-sizing: border-box;
         min-height: 100%;
     }
@@ -133,6 +133,7 @@
         justify-content: initial;
         width: 100%;
         gap: 1.5rem;
+        color: black;
     }
 
     .loungeList_container {
@@ -402,104 +403,105 @@
 </style>
 
 <!-- 개발자 라운지 - 자유주제, 커리어 고민-->
-<section class="index_container">
-    <div class="container_loungeContainer">
-        <!-- carousel -->
-        <div class="carousel_container" style="margin-bottom: 20px;">
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img class="d-block w-100" src="${root}static/ad_img/advertisement4.png" alt="First slide">
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block w-100" src="${root}static/ad_img/advertisement7.png" alt="Second slide">
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block w-100" src="${root}static/ad_img/advertisement6.png" alt="Third slide">
-                  </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
-        </div>
-        <div class="topViewPost-container">
-            <div class="topViewPostHeader-container">
-                <h2 class="topViewPost-header">🔥 이번주 슽디 인기글</h2>
-            </div>
-            <div class="topViewPostList-container">
-                <div class="topViewPost-list">
+<main>
+    <div class="index_container">
+        <div class="container_loungeContainer">
+            <!-- carousel -->
+            <div class="carousel_container" style="margin-bottom: 20px;">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="${root}static/ad_img/advertisement4.png" alt="First slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="${root}static/ad_img/advertisement7.png" alt="Second slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="${root}static/ad_img/advertisement6.png" alt="Third slide">
+                    </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
-        </div>
+            <div class="topViewPost-container">
+                <div class="topViewPostHeader-container">
+                    <h2 class="topViewPost-header">🔥 이번주 슽디 인기글</h2>
+                </div>
+                <div class="topViewPostList-container">
+                    <div class="topViewPost-list">
+                    </div>
+                </div>
+            </div>
 
-        <main class="loungeContainerMain">
-            <header class="loungeContainerHeader">
-                <h1 style="font-size: 16px; font-weight: bolder;">슽디 커뮤니티에서 당신의 이야기를 나눠보세요!</h1>
-                <a class="btn btn-primary ml-auto" href="${root}community/lounge/write">작성하기</a>
-            </header>
-            <div class="category_container">
-                <div class="selector">
-                    <select class="selectedItems" id="selectedItems_cate">
-                        <option value="">전체</option>
-                        <c:forEach var="category" items="${categoryDtos}">
-                            <c:if test="${category.categoryIdx == 1}">
-                            <c:forEach var="subCategory" items="${category.subCategory}">
-                                <option value="${subCategory.categoryIdx}">${subCategory.categoryName}</option>
+            <div class="loungeContainerMain">
+                <header class="loungeContainerHeader">
+                    <h1 style="font-size: 16px; font-weight: bolder;">슽디 커뮤니티에서 당신의 이야기를 나눠보세요!</h1>
+                    <a class="btn btn-primary ml-auto" href="${root}community/lounge/write">작성하기</a>
+                </header>
+                <div class="category_container">
+                    <div class="selector">
+                        <select class="selectedItems" id="selectedItems_cate">
+                            <option value="">전체</option>
+                            <c:forEach var="category" items="${categoryDtos}">
+                                <c:if test="${category.categoryIdx == 1}">
+                                <c:forEach var="subCategory" items="${category.subCategory}">
+                                    <option value="${subCategory.categoryIdx}">${subCategory.categoryName}</option>
+                                </c:forEach>
+                                </c:if>
                             </c:forEach>
-                            </c:if>
-                        </c:forEach>
-                    </select>
-                    <select class="selectedItems" id="selectedItems">
-                        <option value="RECENT">최신순</option>
-                        <option value="VIEW">많이본순</option>
-                        <option value="LIKE">좋아요순</option>
-                    </select>
-                    <button class="likeCheckBtn">
-                        <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
-                                좋아요 보기
-                    </button>
+                        </select>
+                        <select class="selectedItems" id="selectedItems">
+                            <option value="RECENT">최신순</option>
+                            <option value="VIEW">많이본순</option>
+                            <option value="LIKE">좋아요순</option>
+                        </select>
+                        <button class="likeCheckBtn">
+                            <i class="far fa-heart fas" style="width: 20px; height: auto; color: red"></i>
+                                    좋아요 보기
+                        </button>
+                    </div>
+                    <div class="study_searchContainer">
+                        <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
+                        <input class="searchInput" id="searchInput" placeholder="제목, 내용으로 검색해보세요">
+                        <i class="fa-solid fa-x seachInputCancelBtn" style="font-size: 10px; cursor: pointer;"></i>
+                    </div>
                 </div>
-                <div class="study_searchContainer">
-                    <i class="fa-solid fa-magnifying-glass" style="font-size: 12px;"></i>
-                    <input class="searchInput" id="searchInput" placeholder="제목, 내용으로 검색해보세요">
-                    <i class="fa-solid fa-x seachInputCancelBtn" style="font-size: 10px; cursor: pointer;"></i>
-                </div>
+                <ul class="loungeList_container">
+                </ul>
+
             </div>
-            <ul class="loungeList_container">
-            </ul>
+            <!-- <aside class="loungeContainerAside">
+                <div>
+                    <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
+                </div>
+                <div class="mt-lg-5">
+                    <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
+                </div>
+            </aside> -->
 
-        </main>
-           <!-- <aside class="loungeContainerAside">
-               <div>
-                   <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
-               </div>
-               <div class="mt-lg-5">
-                   <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
-               </div>
-           </aside> -->
-
+        </div>
+        <!-- <aside class="loungeContainerAside">
+            <div>
+                <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
+            </div>
+            <div class="mt-lg-5">
+                <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
+            </div>
+        </aside> -->
     </div>
-    <!-- <aside class="loungeContainerAside">
-        <div>
-            <img class="adImg" src="${root}static/img/community/01.png" alt="광고1"/>
-        </div>
-        <div class="mt-lg-5">
-            <img class="adImg" src="${root}static/img/community/42.png" alt="광고1"/>
-        </div>
-    </aside> -->
-</section>
-
+</main>
 
 
 <!-- Q&A - 이용관련, 자유질문-->

@@ -10,9 +10,7 @@
 />
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <style>
-    * {
-        box-sizing: border-box;
-    }
+    
 
     a {
         text-decoration: none;
@@ -35,7 +33,7 @@
         gap: 1rem;
         margin-left: auto;
         margin-right: auto;
-        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        /* font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
         box-sizing: border-box;
         min-height: 100%;
     }
@@ -402,7 +400,7 @@
         <div class="index_top">
             <div class="swiper-container">
                     <div class="recommend_header">
-                        <span style="font-size: 1.6rem; font-weight: bold;"> ✨ 당신만을 위한 추천 스터디 ✨</span>
+                        <span style="font-size: 1.6rem; font-weight: bold; color: black;"> ✨ 당신만을 위한 추천 스터디 ✨</span>
                         <div class="pagination-container">
                             <div class="pagination-bullets"></div>
                             <div class="pagination-fraction"></div>

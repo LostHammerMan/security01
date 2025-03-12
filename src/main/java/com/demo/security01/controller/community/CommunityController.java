@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.demo.security01.entity.lounge.LoungeEntity;
+import com.demo.security01.entity.user.User;
 import com.demo.security01.model.dto.comment.response.CommentResponseDto;
 import com.demo.security01.model.dto.community.LoungeModifyRequest;
 import com.demo.security01.model.dto.community.LoungeWriteRequest;
@@ -72,10 +73,14 @@ public class CommunityController {
 
     // 커뮤니티 메인, 개발자 라운지
     @GetMapping({"/lounge", ""})
-    public String communityLounge(Model model){
+    public String communityLounge(Model model, Principal principal){
 //        List<LoungeEntity> allLounge = loungeService.findAllLounge();
 //        model.addAttribute("allLounge", allLounge);
-
+    	if(principal != null) {
+    		User loginUser =  userService.userDetailsByUsername(principal.getName());
+    		model.addAttribute("loginUser", loginUser);
+    	}
+    	
         return "community/commuLounge";
     }
 

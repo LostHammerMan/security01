@@ -8,7 +8,6 @@
 <c:set var="root" value="${pageContext.request.contextPath}/"/>
 
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
-<c:import url="/WEB-INF/views/layout/communityHeader.jsp"/>
 
 <style>
 
