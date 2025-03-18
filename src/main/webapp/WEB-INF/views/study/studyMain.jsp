@@ -950,7 +950,7 @@
                             <section class="loungeItem_info">
                                 <div class="loungeItem_userInfo">
                                     <div class="userInfo_avatar">
-                                        <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.profileFilename}'}">
+                                        <img class="avatar_userImg" width="30px" height="30px" src="${root}api/profileImages/${'${item.userProfileImgName}'}">
                                     </div>
                                 
                                     <div style="font-weight: 800; letter-spacing: -.04em">${'${item.username}'}</div>

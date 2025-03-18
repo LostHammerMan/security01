@@ -308,6 +308,7 @@ public class StudyService {
                     .process(findStudy.getProgressMethod())
                     .recruitDeadline(findStudy.getRecruitDeadline())
                     .recruitedNumber(findStudy.getRecruitedNumber())
+                    .userProfileImgName(findStudy.getUser().getUserProfile().getFileName())
                     .skillTags(skillTagNames)
                     .recruitPositions(positionNames)
                     .regDate(findStudy.getRegDate())

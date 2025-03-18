@@ -6,15 +6,53 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="root" value="${pageContext.request.contextPath}/"/>
 
-<c:import url="/WEB-INF/views/layout/header.jsp"/>
+<c:import url="/WEB-INF/views/layout/header2.jsp"/>
 <style>
-
-    .container {
-        margin-top: 50px;
+    body {
+        font-family: pretendard, -apple-system, BlinkMacSystemFont, helvetica, "Apple SD Gothic Neo", sans-serif;
     }
 
-    #left-header {
-        background-color: #EBF5ff;
+    a {
+        text-decoration: none !important;
+        color: black;
+    }
+
+    .container {
+        width: 80% !important;
+        min-width: 1200px;
+        display: flex;
+        margin-top: 50px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: black;
+
+    }
+
+    .header-container {
+        display: flex;
+        flex-wrap: nowrap;
+        margin-right: -.75rem;
+        margin-left: -.75rem;
+        gap: 45px;
+    }
+
+    .left-header {
+        width: 25rem;
+        background-color: #fff;
+        box-shadow: 5px 1px 8px 0 rgba(0, 0, 0, .06);
+        border-left: 1px solid rgba(0, 0, 0, .08);
+        padding: 0px 35px;
+    }
+
+    .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        font-weight: 400;
+    }
+
+    .panel-body {
+        text-decoration: none;
     }
 
     .profile-basic {
@@ -33,6 +71,10 @@
         width: auto;
         min-width: 538px;
         /*background-color: #1c7430;*/
+    }
+
+    .selection {
+        font-size: 1rem;
     }
 
     .select2-container {
@@ -117,18 +159,23 @@
     }*/
 
     .formLabelTitle {
-            color: #333;
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 20px;
-            letter-spacing: -.28px;
-        }
+        color: #333;
+        font-size: 14px;
+        font-weight: 700 !important;
+        line-height: 20px;
+        letter-spacing: -.28px;
+    }
 
 
 </style>
 <div class="container bootstrap snippet">
-    <div class="row">
-        <div class="col-sm-2" id="left-header"><!--left col-->
+    <div class="row header-container">
+        <div class="col-sm-3 left-header" id="left-header"><!--left col-->
+            <div class="header-name">
+                <a><img src="${root}static/img/banner_img/stdyBanner.png" style="width: auto; height: 30px;"></a>
+                <a><span>마이페이지</span></a>
+
+            </div>
             <div class="text-center">
                 <c:choose>
                     <c:when test="${loginUser.userProfile.fileUrl == null}">
@@ -137,24 +184,20 @@
                     </c:when>
                     <c:otherwise>
                         <a href="${root}user/modifyProfile" ><img src="${root}api/profileImages/${loginUser.userProfile.fileName}" class="avatar img-circle img-thumbnail"
-                                                                  alt="avatar"></a>
+                                                                  alt="avatar" style="width: 12rem; height: auto;"></a>
                     </c:otherwise>
                 </c:choose>
-
-
                 <h6 class="mt-2">${loginUser.username}</h6>
-<!-- <%--                <input type="file" class="text-center center-block file-upload">--%> -->
             </div>
             <hr>
             <div class="panel panel-default">
-                <div class="panel-heading"><a href="${root}user/modifyForm">내프로필</a></div>
+                <div class="panel-body"><a href="${root}user/modifyForm">내프로필</a></div>
                 <div class="panel-body"><a href="${root}user/modifyPwdForm">보안변경</a></div>
             </div>
         </div><!--/col-3-->
         <div class="col-sm-9">
             <div class="tab-content">
                 <div class="tab-pane active" id="home">
-                    <hr>
                         <div class="form-group">
                             <div class="form-group">
                                 <div class="col-xs-6">

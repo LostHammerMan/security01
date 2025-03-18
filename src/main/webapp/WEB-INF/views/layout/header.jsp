@@ -64,11 +64,13 @@
             justify-content: space-between;
             /* height: 46px !important; */
             min-height: 70px !important;
+            max-height: 70px !important;
             align-content: center;
             align-items: center;
             margin: 0 auto;
             padding-top: 0 !important;
-            max-width: 70rem;
+            padding-bottom: 0 !important;
+            max-width: 74rem;
             background-color: white !important;
             /* color: #454545; */
             font-weight: bolder;

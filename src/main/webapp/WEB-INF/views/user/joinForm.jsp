@@ -58,6 +58,13 @@
             letter-spacing: -.28px;
         }
 
+        .select2-selection__rendered {
+            vertical-align: middle;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            border: 1px solid #d1d3e2;
+        }   
     </style>
 
 <section class="bg-light">
@@ -88,7 +95,7 @@
                 </div>
 
                 <form:label path="email_addr" cssClass="formLabelTitle">이메일</form:label>
-                <div class="form-row" style="justify-content: space-between;">
+                <div class="form-row" style="justify-content: space-between; flex-wrap: nowrap; align-items: center;">
                     <div class="col-auto">
                         <form:input path="email_id" id="email_id" placeholder="email" cssClass="form-control" readonly="false"/>
                     </div>
@@ -125,7 +132,7 @@
                 <form:errors path="email_id" element="div" cssStyle="color: red"/><br>
                 <form:errors path="email_addr" cssStyle="color: red"/>
 
-                <div class="form-group mt-4">
+                <div class="form-group mt-2">
                     <div style="justify-content: flex-start">
                         <form:button class="btn btn-primary" id="submitBtn">회원가입</form:button>
                         <button type="button" class="btn btn-success" onclick="location.href='${root}'">메인화면</button>

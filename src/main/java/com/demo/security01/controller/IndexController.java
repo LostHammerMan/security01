@@ -41,9 +41,9 @@ public class IndexController {
         	
         }else {
         	String username = principal.getName();
-        	User loginUser = userService.userDetailsByUsername(username);
+//        	User loginUser = userService.userDetailsByUsername(username);
         	recommendResults = studyService.getRecommendStudy(username);
-        	model.addAttribute("loginUser", loginUser);
+//        	model.addAttribute("loginUser", loginUser);
         }
         log.info("recommendResults.size() = " + recommendResults.size());
         model.addAttribute("recommendResults", recommendResults);

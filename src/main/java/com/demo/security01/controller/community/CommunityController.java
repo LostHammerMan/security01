@@ -73,13 +73,13 @@ public class CommunityController {
 
     // 커뮤니티 메인, 개발자 라운지
     @GetMapping({"/lounge", ""})
-    public String communityLounge(Model model, Principal principal){
+    public String communityLounge(Model model){
 //        List<LoungeEntity> allLounge = loungeService.findAllLounge();
 //        model.addAttribute("allLounge", allLounge);
-    	if(principal != null) {
-    		User loginUser =  userService.userDetailsByUsername(principal.getName());
-    		model.addAttribute("loginUser", loginUser);
-    	}
+//    	if(principal != null) {
+//    		User loginUser =  userService.userDetailsByUsername(principal.getName());
+//    		model.addAttribute("loginUser", loginUser);
+//    	}
     	
         return "community/commuLounge";
     }

@@ -31,11 +31,12 @@ public class StudyController {
 	private final UserService userService;
 
     @GetMapping("")
-    public String studyMain(Principal principal, Model model){
-    	if(principal != null) {
-    		User loginUser =  userService.userDetailsByUsername(principal.getName());
-    		model.addAttribute("loginUser", loginUser);
-    	}
+    public String studyMain(Model model){
+		/*
+		 * if(principal != null) { User loginUser =
+		 * userService.userDetailsByUsername(principal.getName());
+		 * model.addAttribute("loginUser", loginUser); }
+		 */
         return "study/studyMain";
     }
 
