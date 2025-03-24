@@ -1,4 +1,4 @@
-// 1. queryDsl version 정보 추가
+
 buildscript {
 	ext {
 		queryDslVersion = "5.0.0"
@@ -14,6 +14,7 @@ plugins {
 	// 2. querydsl plugins 추가
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
+
 bootWar {
 	enabled = true
 }
@@ -22,6 +23,7 @@ bootWar {
 
 group = 'com.demo'
 version = '0.0.1-SNAPSHOT'
+
 sourceCompatibility = '11'
 targetCompatibility = '11'
 
@@ -33,6 +35,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	
 }
 
 dependencies {
@@ -108,14 +111,13 @@ dependencies {
 	implementation group: 'org.springframework.batch', name: 'spring-batch-core', version: '4.3.10'
 	
 
-
-
-
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	// test 에서 롬복 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
+
+
 
 tasks.named('test') {
 	useJUnitPlatform()

@@ -280,6 +280,10 @@
         overflow: hidden;
     }
 
+    .striped {
+        background-color: #f9f9f962;
+    }
+
     .scrap_item_lounge {
         overflow: hidden;
         display: flex;
@@ -351,10 +355,10 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: 20px 25px;
+        padding: 16px 12px;
         gap: 10px;
         border-radius: 20px;
-        border: 2px solid rgb(209, 209, 209);
+        border: 1px solid rgb(209, 209, 209);
         background: rgb(255, 255, 255);
     }
     
@@ -487,6 +491,8 @@
         getSCrapStudyList();
         getLoungeList();
         initSwiper();
+
+        
         
         $('.site_ex').on('click', function(){
             console.log('사이트 클릭');
@@ -540,7 +546,7 @@
                                             </div>
                                             <div class="scrap_titleAndContent">
                                                 <div class="scrap_titleAndContent_title">
-                                                    <p style="margin: 0; font-weight: bold; font-size:16px;">\${item.title}</p>
+                                                    <p style="margin: 0; font-weight: bold; font-size:16px; color:black;">\${item.title}</p>
                                                 </div>
                                                 <div class="scrap_titleAndContent_content">
                                                     <p class="scrap_content" style="color: gray;">\${item.content}</p>
@@ -560,6 +566,7 @@
                         }
 
                         $('.scrap_list').append(itemHtml);
+                        
                     },
                     error: function(xhr){
                         console.log('사이트 크롤링 결과 불러오기 실패!');
@@ -616,6 +623,13 @@
                     });
                     lastIdx = result[result.length -1].idx;
                     $('.lounge_list').append(loungeHtml);
+
+                    // 짝수 stripe 추가
+                    $('.scrap_item_lounge').each(function(index){
+                        if((index +1) % 2 === 0){
+                            $(this).addClass('striped');
+                        }
+                    });
                 },
                 error: function(xhr){
                     console.log('라운지 리스트 불러오기 실패');
@@ -651,9 +665,10 @@
         } */
 
         /* 추천 스터디 목록  끝 */
+
+        /* swiper 시작 */ 
         function initSwiper(){
 
-            /* swiper 시작 */ 
             const swiper = new Swiper(".swiper", {
             direction: 'horizontal',
             loop: true,
